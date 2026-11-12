@@ -758,6 +758,35 @@ body{letter-spacing:0;font-feature-settings:normal}
 .poal.off{background:var(--surface-2);color:var(--ink-3)}
 .poal button{border:0;background:var(--surface);border-radius:999px;padding:2px 10px;font-size:12.5px;font-weight:700;color:var(--ink)}
 .pogen{margin-top:10px;padding-top:8px;border-top:1px dashed var(--line)}
+/* 1.15.0 pass-on index: one bar per pass-on, tap to open */
+.posearch{display:flex;align-items:center;gap:8px;flex:1 1 220px;min-width:0;position:relative}
+.posearch svg{position:absolute;left:12px;width:18px;height:18px;color:var(--ink-3);pointer-events:none}
+.posearch input{flex:1;min-width:0;font:inherit;font-size:16px;padding:10px 12px 10px 38px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--ink)}
+.pofound{font-size:13px;color:var(--ink-2);margin:-4px 2px 0}
+#poList{gap:8px}
+.card.po{padding:0;overflow:hidden}
+.pobar{display:flex;align-items:center;gap:10px;width:100%;border:0;background:none;margin:0;padding:11px 14px;text-align:left;color:inherit;font:inherit;cursor:pointer;min-height:56px;-webkit-tap-highlight-color:transparent}
+.pobar:hover{background:color-mix(in srgb,var(--ink) 4%,transparent)}
+.pobar:focus-visible{outline:2px solid var(--accent);outline-offset:-2px}
+.pbtime{flex-shrink:0;width:64px;font-size:12.5px;font-weight:700;color:var(--ink-2);line-height:1.25}
+.pbmain{flex:1;min-width:0}
+.pbtop{display:flex;align-items:center;gap:6px;min-width:0}
+.pbwho{font-weight:700;font-size:14.5px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.pbtag{flex-shrink:0;font-size:11.5px;font-weight:700;padding:1px 8px;border-radius:999px;background:var(--handoff);color:#5B3FD9;box-shadow:inset 0 0 0 1px var(--handoff-line)}
+[data-theme="dark"] .pbtag{color:#C9BEFF}
+.pbprev{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;margin-top:2px;font-size:14px;line-height:1.35;color:var(--ink-2);word-break:break-word}
+.pbmeta{display:flex;flex-direction:column;align-items:flex-end;gap:3px;flex-shrink:0;font-size:12px;font-weight:600;color:var(--ink-3)}
+.pbmeta span{white-space:nowrap}
+.pbmeta .ring{color:#C2410C}
+.pbchev{flex-shrink:0;font-size:20px;line-height:1;color:var(--ink-3);transition:transform .15s}
+.po.open .pbchev{transform:rotate(90deg)}
+.po.open .pobar{border-bottom:1px solid var(--line)}
+.pobody{padding:10px 14px 14px}
+.pobody .pohead{justify-content:flex-end}
+.po.alarm{box-shadow:inset 0 0 0 2px #F97316}
+mark.pohl{background:color-mix(in srgb,#F5B800 45%,transparent);color:inherit;border-radius:3px;padding:0 1px}
+@media (max-width:420px){.pbtime{width:52px}.pobar{padding:10px 12px;gap:8px}}
+@media (prefers-reduced-motion:reduce){.pbchev{transition:none}}
 .chips{display:flex;gap:6px;flex-wrap:wrap;margin:6px 0 10px}
 .chips button{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:6px 12px;font-size:13.5px;font-weight:600;color:var(--ink)}
 .chips button[aria-pressed="true"]{background:#F97316;border-color:#F97316;color:#fff}
@@ -1355,7 +1384,8 @@ body{background:var(--bg)}
       <div class="field"><textarea id="poText" rows="4" maxlength="1000" aria-label="Pass-on" placeholder="305 late checkout at 2 PM&#10;Guest in 210 waiting for a refund&#10;Call Spectrum about the Wi-Fi"></textarea></div>
       <div class="btnrow" style="margin-top:8px"><button class="btn pri" type="submit">Post pass-on</button></div>
     </form>
-    <div class="potools"><div class="seg" role="group" id="poFilter"><button type="button" data-v="fd">Front desk</button><button type="button" data-v="all">Everyone</button></div></div>
+    <div class="potools"><label class="posearch"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg><input id="poSearch" type="search" placeholder="Search room, guest, word or name" aria-label="Search pass-ons" autocomplete="off" enterkeyhint="search"></label><div class="seg" role="group" id="poFilter"><button type="button" data-v="fd">Front desk</button><button type="button" data-v="all">Everyone</button></div></div>
+    <div class="pofound" id="poFound" data-noi18n hidden></div>
     <div id="poList"><div class="small">Loading…</div></div>
     <div class="btnrow" style="justify-content:center"><button class="btn" type="button" id="poMore">Show 2 more weeks</button></div>
   </div></section>
@@ -1425,7 +1455,7 @@ body{background:var(--bg)}
       <button class="btn pri" type="submit">Add to team</button>
     </form>
     <div class="card" id="menuRoles"><div data-noi18n id="mrBody"></div></div>
-    <div class="card"><h2>Team at <span id="teamHotel"></span></h2><p class="small" style="margin:-4px 0 10px">Each person signs in with their user and PIN. New users and PIN resets get a 6-digit start code from you that works once for 3 days.</p><div class="btnrow" style="margin-bottom:10px"><button class="btn sm pri" id="usersCodes">Start codes for who is not active</button><button class="btn sm" id="usersCsv">Download user list</button></div><div class="devsum" id="devSum" hidden></div><div class="tsearch"><input id="teamSearch" type="search" placeholder="Search name or user" aria-label="Search the team" autocomplete="off"><span class="small" id="teamFound"></span></div><div class="list" id="staffList"></div></div>
+    <div class="card"><h2>Team at <span id="teamHotel"></span></h2><p class="small" style="margin:-4px 0 10px">Each person signs in with their user and PIN. New users and PIN resets get a 6-digit start code from you that works once for 3 days.</p><div class="btnrow" style="margin-bottom:10px"><button class="btn sm pri" id="usersCodes">Start codes for who is not active</button><button class="btn sm" id="usersCsv">Download user list</button></div><div class="devsum" id="devSum" hidden></div><p class="small" id="accHint" data-noi18n hidden style="margin:-2px 0 10px"></p><div class="tsearch"><input id="teamSearch" type="search" placeholder="Search name or user" aria-label="Search the team" autocomplete="off"><span class="small" id="teamFound"></span></div><div class="list" id="staffList"></div></div>
   </div></section>
 </div>
 
@@ -2045,6 +2075,8 @@ const ES = {
 "Show 2 more weeks": "Ver 2 semanas más",
 "Copy": "Copiar",
 "Copy day": "Copiar el día",
+"Search room, guest, word or name": "Busca habitación, huésped, palabra o nombre",
+"Search pass-ons": "Buscar entregas",
 "Comment": "Comentar",
 "Set an alarm": "Poner alarma",
 "Today": "Hoy",
@@ -3403,6 +3435,8 @@ async function loadTeam(){
     MR.rules = rules || {roles: {}, staff: {}};
     $('#sfRole').innerHTML = rolesICanGive().map(r => `<option value="${r.id}">${r.label}</option>`).join('');
     menuRolesRender();
+    const ah = $('#accHint'); if (ah) { const one = !accTop() && (S.hotels || []).length < 2; ah.hidden = !one;
+      if (one) ah.textContent = L2('To give someone another hotel, you need to use that hotel too. Ask the superuser to add it to your account.', 'Para darle otro hotel a alguien, tú también tienes que usar ese hotel. Pídele al superusuario que lo agregue a tu cuenta.'); }
     S.dev = {}; (dev || []).forEach(d => { S.dev[d.id] = d; });
     if (rep) $('#repTable').innerHTML = '<tr><th>Hotel</th><th>Open now</th><th>New</th><th>Done</th><th>Avg time</th><th>Lost items</th><th>90+ days</th></tr>' +
       rep.map(r => `<tr><td>${esc(r.hotel)}</td><td>${r.open}</td><td>${r.created}</td><td>${r.done}</td><td>${r.avg_minutes == null ? '–' : r.avg_minutes + ' min'}</td><td>${r.lost_held}</td><td>${r.lost_over_90}</td></tr>`).join('');
@@ -3425,7 +3459,7 @@ function staffCtl(s){
   const menuBtn = !self && s.active ? `<button class="btn sm" data-menu data-noi18n>${esc(L2('Menu', 'Menú') + (own ? ' ✓' : ''))}</button>` : '';
   const codeBtn = s.active && !s.pin_set ? '<button class="btn sm pri" data-code>Start code</button>' : s.active ? '<button class="btn sm pri" data-share>Share</button>' : '';
   const resetBtn = !self && (s.pin_set || s.locked || s.reset_requested) ? `<button class="btn sm ${s.reset_requested ? 'pri' : ''}" data-reset>Reset PIN</button>` : '';
-  if (sub) return `<div class="btnrow" style="margin-top:6px">${resetBtn}${codeBtn}${menuBtn}</div>`;
+  if (sub) return `<div class="btnrow" style="margin-top:6px">${resetBtn}${codeBtn}${menuBtn}</div>${accessHtml(s)}`;
   const roles = ROLES.filter(r => S.owner || (r.id !== 'mgr' && r.id !== 'sub') || r.id === s.role);
   return `<div class="btnrow" style="margin-top:6px"><select class="btn sm" data-role ${self ? 'disabled' : ''}>${roles.map(r => `<option value="${r.id}" ${r.id === s.role ? 'selected' : ''}>${r.label}</option>`).join('')}</select>
         <button class="btn sm" data-save>Save</button>${resetBtn}
@@ -3494,10 +3528,14 @@ function devSummary(){
     + `<button class="btn sm ${S.devMissing ? 'pri' : ''}" id="devMissing">${S.devMissing ? 'Show everyone' : 'Show who is missing alerts'}</button>`;
   $('#devMissing').onclick = () => { S.devMissing = !S.devMissing; devSummary(); filterTeam(); };
 }
-const hotelShort = id => { const h = (S.hotels || []).find(x => x.id === id); return h ? h.name.replace(/^Developer Inn\s+/i, '') : id; };
+const hotelShort = id => { const h = (S.hotels || []).find(x => x.id === id); return h ? h.name.replace(/^Developer Inn\s+/i, '') : ({MGT: 'Maingate', FDT: 'Fundamental', HWY: 'Highway'})[id] || id; };
+// who may pick the hotels a person can use: the superuser and a manager over all hotels (any hotel), or a Sub Manager / manager (only hotels they use themselves). The server checks the same
+const accTop = () => !!(S.owner || (S.me && S.me.role === 'mgr' && S.me.all_hotels));
 function accessHtml(s){
-  if (S.me.role !== 'mgr' || !S.me.all_hotels || (S.hotels || []).length < 2 || s.all_hotels || !s.active) return '';
-  return `<div class="acc"><span>Can use:</span>${S.hotels.map(h => h.id === s.home
+  if (!isAdmin() || (S.hotels || []).length < 2 || s.all_hotels || !s.active) return '';
+  if (!accTop() && (s.id === S.me.id || s.can_edit === false)) return '';
+  const extra = (S.hotels.some(h => h.id === s.home) ? [] : [s.home]).concat((s.hotels || []).filter(id => id !== s.home && !S.hotels.some(h => h.id === id)));
+  return `<div class="acc"><span>Can use:</span>${extra.map(id => `<label class="home" title="${esc(L2('Only the superuser can change this one', 'Solo el superusuario puede cambiar este'))}"><input type="checkbox" checked disabled><span data-noi18n>${esc(hotelShort(id))}</span></label>`).join('')}${S.hotels.map(h => h.id === s.home
       ? `<label class="home"><input type="checkbox" checked disabled><span data-noi18n>${esc(hotelShort(h.id))}</span></label>`
       : `<label><input type="checkbox" data-acc="${esc(h.id)}" ${(s.hotels || []).includes(h.id) ? 'checked' : ''}><span data-noi18n>${esc(hotelShort(h.id))}</span></label>`).join('')}</div>`;
 }
@@ -3508,8 +3546,10 @@ $('#staffList').addEventListener('change', async e => {
   try {
     const got = await call('sc_staff_access', {p_staff: s.id, p_hotels: list});
     s.hotels = got;
-    toast(list.length ? `${esc(s.first_name)} can now use ${esc([hotelShort(s.home)].concat(list.map(hotelShort)).join(', '))}` : `${esc(s.first_name)} can only use ${esc(hotelShort(s.home))}`);
-  } catch (err) { e.target.checked = !e.target.checked; toast(esc(err.message)); }
+    toast(got.length ? `${esc(s.first_name)} can now use ${esc([hotelShort(s.home)].concat(got.map(hotelShort)).join(', '))}` : `${esc(s.first_name)} can only use ${esc(hotelShort(s.home))}`);
+  } catch (err) { e.target.checked = !e.target.checked;
+    const m = {OWNER_ONLY: L2('Only the superuser can change this person.', 'Solo el superusuario puede cambiar a esta persona.'), NOT_ALLOWED: L2('You can only give the hotels you use yourself.', 'Solo puedes dar los hoteles que tú mismo usas.'), NOT_YOURSELF: L2("You can't change your own hotels.", 'No puedes cambiar tus propios hoteles.')}[err.message];
+    toast(esc(m || err.message)); }
 });
 function filterTeam(){
   const q = norm(($('#teamSearch').value || '').trim());
@@ -3959,7 +3999,7 @@ function enterApp(){
 }
 
 /* ===== pass-on log: comments and alarms on a pass-on or one of its points ===== */
-Object.assign(S, { po: [], poDays: 7, poAt: 0, poFilter: ls.get('sc.poFilter', 'fd'), alarms: [], alarmAt: 0, alarmRung: new Map() });
+Object.assign(S, { poQ: '', poOpen: new Set(), poShut: new Set(), po: [], poDays: 7, poAt: 0, poFilter: ls.get('sc.poFilter', 'fd'), alarms: [], alarmAt: 0, alarmRung: new Map() });
 const poPoints = body => String(body || '').split('\n').map(l => l.trim()).filter(Boolean).map(l => l.replace(/^([-•*·]|\d+[.)])\s*/, ''));
 const poDay = ms => new Date(ms).toLocaleDateString(LANG === 'es' ? 'es-US' : 'en-US', {weekday:'long', month:'short', day:'numeric', timeZone: TZ});
 const poWhen = ms => dayNY(ms) === dayNY(Date.now()) ? fmtTime(ms) : fmtDate(ms) + ', ' + fmtTime(ms);
@@ -3971,6 +4011,7 @@ async function loadPassons(){
   S.poAt = Date.now();
   try { const d = await call('sc_passons', {p_days: S.poDays});
     S.po = (d || []).map(x => ({...x, created_at: T(x.created_at), comments: x.comments || [], alarms: (x.alarms || []).map(a => ({...a, due_at: T(a.due_at)}))}));
+    if (S.poOpenNext && S.me) { S.poOpenNext = false; const mine = S.po.filter(x => x.staff_id === S.me.id).sort((a, b) => b.created_at - a.created_at)[0]; if (mine) S.poOpen.add(mine.id); }
     renderPassons(); }
   catch (e) { if (!S.po.length) $('#poList').innerHTML = `<div class="small">${esc(e.message)}</div>`; }
 }
@@ -3985,20 +4026,66 @@ function poCard(x){
       return `<div class="poal ${isOpenAl(a) ? (due ? 'ring' : '') : 'off'}">⏰ <span>${esc(poWhen(a.due_at))}</span>${a.note ? ` · <span>${esc(a.note)}</span>` : ''} · <span>${esc(a.author)}</span>`
         + (isOpenAl(a) ? `<button type="button" data-al="done" data-aid="${a.id}">Done</button>${mine ? `<button type="button" data-al="cancel" data-aid="${a.id}">Cancel</button>` : ''}`
           : ` · <span>${a.status === 'done' ? 'Done' : 'Cancelled'}</span> <span>${esc(a.closed_by || '')}</span>`) + `</div>`; }).join('');
-  const gen = extra(null);
-  return `<div class="card po" data-pid="${x.id}">
-    <div class="pohead"><span class="who">${esc(x.author)}</span><span class="small">${esc(fmtTime(x.created_at))}</span><span class="grow"></span>
+  const gen = extra(null), open = poIsOpen(x);
+  return `<div class="card po${open ? ' open' : ''}${poRinging(x) ? ' alarm' : ''}" data-pid="${x.id}">${poBar(x, open)}${open ? `<div class="pobody">
+    <div class="pohead">
       ${edTag(x)}${canEditMsg(x) ? `<button type="button" class="btn sm" data-po="edit" data-id="${x.id}">Edit</button>` : ''}<button type="button" class="btn sm" data-po="copy" data-id="${x.id}">Copy</button>${acts(null)}</div>
     ${srIsReport(x.body) ? srPoBody(x, acts, extra) : `<ol class="popts">${pts.map((t, i) => `<li><div class="poline"><div class="ptxt">${roomLinks(t)}</div>${acts(i)}</div>${extra(i)}</li>`).join('')}</ol>`}
-    ${gen ? `<div class="pogen">${gen}</div>` : ''}</div>`;
+    ${gen ? `<div class="pogen">${gen}</div>` : ''}</div>` : ''}</div>`;
+}
+/* 1.15.0: pass-on index. Each pass-on is a bar (who, when, short preview); tap opens the whole pass-on. A ringing alarm opens it by itself */
+const poOpenAl = x => x.alarms.filter(isOpenAl);
+const poRinging = x => poOpenAl(x).some(a => a.due_at <= Date.now());
+const poIsOpen = x => S.poOpen.has(x.id) || (poRinging(x) && !S.poShut.has(x.id));
+const poWords = () => norm(S.poQ || '').split(/\s+/).filter(Boolean);
+const poHay = x => norm([x.author, x.body].concat(x.comments.map(c => c.author + ' ' + c.body), x.alarms.map(a => a.note || '')).join('\n'));
+const poMatch = x => { const w = poWords(); if (!w.length) return true; const hay = poHay(x); return w.every(z => hay.includes(z)); };
+function poMark(t){
+  const w = poWords(); let s = String(t || ''); if (!w.length) return esc(s);
+  const n = norm(s), hit = new Array(s.length).fill(false);
+  // norm keeps one char per char for letters with accents (NFD then strip marks), so positions line up
+  if (n.length === s.length) w.forEach(z => { let i = n.indexOf(z); while (i >= 0) { for (let k = i; k < i + z.length; k++) hit[k] = true; i = n.indexOf(z, i + z.length); } });
+  let out = '', on = false;
+  for (let i = 0; i < s.length; i++) { if (hit[i] !== on) { out += on ? '</mark>' : '<mark class="pohl">'; on = hit[i]; } out += esc(s[i]); }
+  return out + (on ? '</mark>' : '');
+}
+function poLines(x){
+  // the lines worth previewing: for a Shift Report, what is under its sections; for a normal pass-on, its points
+  if (!srIsReport(x.body)) return poPoints(x.body);
+  const out = []; let sec = false;
+  String(x.body || '').split('\n').forEach(raw => { const l = raw.trim(); if (!l || /^─+$/.test(l)) return;
+    if (/^(COMMENTS\b|INCIDENTS & TRANSACTIONS$|METRICS$)/.test(l)) { sec = !l.startsWith('METRICS') ; return; }
+    if (/^No-Shows: \d+$/.test(l)) { sec = true; out.push(l); return; }
+    if (sec) out.push(l.replace(/^•\s*/, '')); });
+  return out;
+}
+function poBar(x, open){
+  const rep = srIsReport(x.body), lines = poLines(x), w = poWords();
+  let shown = lines;
+  if (w.length) { const hits = lines.filter(l => w.some(z => norm(l).includes(z))); if (hits.length) shown = hits.concat(lines.filter(l => !hits.includes(l))); }
+  const shift = rep ? ((String(x.body).match(/\nShift: ([^|\n]+)/) || [])[1] || '').trim() : '';
+  const shiftL = shift ? (Object.values(SR_SHIFTS).find(v => v.full.startsWith(shift)) || {})[LANG === 'es' ? 'es' : 'en'] || shift : '';
+  const prev = shown.slice(0, 3).map(poMark).join(' · ') || esc(L2('(no text)', '(sin texto)'));
+  const nC = x.comments.length, nA = poOpenAl(x).length, ring = poRinging(x), nP = rep ? 0 : lines.length;
+  const meta = [nP > 1 ? `<span>${nP} ${esc(L2('points', 'puntos'))}</span>` : '', nC ? `<span>💬 ${nC}</span>` : '', nA ? `<span class="${ring ? 'ring' : ''}">⏰ ${nA}</span>` : ''].join('');
+  return `<button type="button" class="pobar" data-po="toggle" data-id="${x.id}" aria-expanded="${open}" data-noi18n>
+    <span class="pbtime">${esc(fmtTime(x.created_at))}</span>
+    <span class="pbmain"><span class="pbtop"><span class="pbwho">${poMark(x.author)}</span>${rep ? `<span class="pbtag">${esc(L2('Shift Report', 'Reporte de turno'))}${shiftL ? ' · ' + esc(shiftL) : ''}</span>` : ''}</span>
+      <span class="pbprev">${prev}</span></span>
+    ${meta ? `<span class="pbmeta">${meta}</span>` : ''}<span class="pbchev" aria-hidden="true">›</span></button>`;
 }
 function renderPassons(){
   document.querySelectorAll('#poFilter button').forEach(b => b.setAttribute('aria-pressed', b.dataset.v === S.poFilter));
-  const list = S.po.filter(x => S.poFilter === 'all' || x.role === 'fd' || x.role === 'mgr');
+  const all = S.po.filter(x => S.poFilter === 'all' || x.role === 'fd' || x.role === 'mgr'), q = poWords().length;
+  const list = all.filter(poMatch), found = $('#poFound');
+  if (found) { found.hidden = !q;
+    if (q) found.textContent = (list.length === 1 ? L2('1 pass-on found', '1 entrega encontrada') : L2(list.length + ' pass-ons found', list.length + ' entregas encontradas'))
+      + ' · ' + L2(`last ${S.poDays} days`, `últimos ${S.poDays} días`) + (S.poDays < 60 ? ' · ' + L2('"Show 2 more weeks" searches further back', '"Mostrar 2 semanas más" busca más atrás') : ''); }
   const days = []; list.forEach(x => { const k = dayNY(x.created_at); let d = days.find(z => z.k === k); if (!d) days.push(d = {k, at: x.created_at, items: []}); d.items.push(x); });
   const today = dayNY(Date.now()), yest = dayNY(Date.now() - 864e5);
   $('#poList').innerHTML = days.length ? days.map(d => `<div class="poday"><h3>${d.k === today ? 'Today' : d.k === yest ? 'Yesterday' : esc(poDay(d.at))}</h3><button type="button" class="btn sm" data-po="copyday" data-day="${esc(d.k)}">Copy day</button></div>`
     + d.items.map(poCard).join('')).join('')
+    : q ? `<div class="card"><div class="small" data-noi18n>${esc(L2('Nothing matches your search in these days.', 'Nada coincide con tu búsqueda en estos días.'))}</div></div>`
     : `<div class="card"><div class="small">No pass-ons in these days. Write the first one above.</div></div>`;
   $('#poMore').hidden = S.poDays >= 60;
 }
@@ -4105,22 +4192,28 @@ document.addEventListener('click', async e => {
 $('#view-passon').addEventListener('click', e => {
   const f = e.target.closest('#poFilter button'); if (f) { S.poFilter = f.dataset.v; ls.set('sc.poFilter', S.poFilter); renderPassons(); return; }
   const b = e.target.closest('[data-po]'); if (!b) return;
-  if (b.dataset.po === 'copyday') { const items = S.po.filter(x => dayNY(x.created_at) === b.dataset.day && (S.poFilter === 'all' || x.role === 'fd' || x.role === 'mgr'));
+  if (b.dataset.po === 'copyday') { const items = S.po.filter(x => dayNY(x.created_at) === b.dataset.day && (S.poFilter === 'all' || x.role === 'fd' || x.role === 'mgr') && poMatch(x));
     return copyText(`${tr('Shift pass-on')}${S.hotel ? ' · ' + S.hotel.name : ''}\n\n` + items.slice().reverse().map(x => poText(x, false)).join('\n\n')); }
   const x = poFind(b.dataset.id); if (!x) return;
   const pt = b.dataset.pt === '' || b.dataset.pt == null ? null : +b.dataset.pt;
+  if (b.dataset.po === 'toggle') {
+    if (poIsOpen(x)) { S.poOpen.delete(x.id); S.poShut.add(x.id); } else { S.poOpen.add(x.id); S.poShut.delete(x.id); }
+    const card = b.closest('.card.po'); if (card) { card.outerHTML = poCard(x); const nb = document.querySelector(`.card.po[data-pid="${x.id}"] .pobar`); if (nb) nb.focus({preventScroll: true}); }
+    return; }
   if (b.dataset.po === 'copy') return copyText(poText(x));
   if (b.dataset.po === 'edit') return editMessage({...x, kind: 'handoff'});
   if (b.dataset.po === 'comment') return poCommentModal(x, pt);
   if (b.dataset.po === 'alarm') return poAlarmModal(x, pt);
 });
 $('#poMore').onclick = () => { S.poDays = Math.min(60, S.poDays + 14); loadPassons(); };
+{ let poT = 0; $('#poSearch').addEventListener('input', e => { clearTimeout(poT); poT = setTimeout(() => { S.poQ = e.target.value; renderPassons(); }, 120); });
+  $('#poSearch').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); e.target.blur(); } else if (e.key === 'Escape') { e.target.value = ''; S.poQ = ''; renderPassons(); } }); }
 $('#poForm').addEventListener('submit', async e => {
   e.preventDefault(); const body = $('#poText').value.trim();
   if (!body) return toast('Write the pass-on first.');
   const btn = e.submitter || $('#poForm button[type=submit]'); btn.disabled = true;
   try { await call('sc_post', {p_kind: 'handoff', p_body: body, p_rooms: findRooms(' ' + norm(body) + ' ').map(x => x.room), p_orders: [], p_mentions: {}});
-    $('#poText').value = ''; toast('Pass-on posted', 'new'); loadPassons(); refresh(); }
+    $('#poText').value = ''; toast('Pass-on posted', 'new'); S.poOpenNext = true; loadPassons(); refresh(); }
   catch (err) { toast(esc(err.message)); } finally { btn.disabled = false; }
 });
 
@@ -4496,8 +4589,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.14.0';
+const APP_VERSION = '1.15.0';
 const CHANGES = [
+  {v: '1.15.0', d: '2026-11-12', en: ['Pass-on is now a list you can scan: each pass-on is one bar with who, when and a short preview of what was reported. Tap it to open the whole pass-on, tap again to close it', 'New search box in Pass-on: find a room, a guest, a word or who wrote it, in the pass-ons and their comments', 'Sub Managers can choose which hotels a person can use (only the hotels they can use themselves), besides the Menu each person sees'],
+    es: ['Entregas ahora es una lista fácil de revisar: cada entrega es una barra con quién, cuándo y un resumen corto de lo que reportaron. Tócala para abrir la entrega completa y otra vez para cerrarla', 'Buscador nuevo en Entregas: encuentra una habitación, un huésped, una palabra o quién la escribió, en las entregas y sus comentarios', 'El Sub gerente puede elegir qué hoteles usa cada persona (solo los hoteles que él mismo usa), además del Menú que ve cada uno']},
   {v: '1.14.0', d: '2026-11-12', en: ['New Board in the Menu. The HK supervisor gives each housekeeper her rooms for the day, as Check-out or Stayover', 'Check-outs go first to the houseman, who sees only the rooms to strip and taps Stripped. Then the room is Ready to clean', 'The housekeeper taps Start when she goes in, Pause if she steps out, and the green Ready when she finishes. That gives the MPR, minutes per room, without the pauses', 'The supervisor and the managers see every room live. Rooms ready to be inspected show in yellow, and the supervisor closes them as Vacant/Ready', 'New roles: HK Supervisor and Sub Manager. A sub manager adds people, resets PINs and gives start codes, with no bigger changes', 'Managers choose which Menu sections each role sees, and can set one person on their own'],
     es: ['Nuevo Board en el Menú. La supervisora de HK le da a cada housekeeper sus cuartos del día, como Check-out o Stayover', 'Los check-out pasan primero al houseman, que ve solo los cuartos por stripear y toca Stripeado. Ahí el cuarto queda Listo para limpiar', 'La housekeeper toca Start al entrar, Pausa si sale, y el Ready verde al terminar. Eso da el MPR, minutos por cuarto, sin contar las pausas', 'La supervisora y los gerentes ven cada cuarto en vivo. Los listos para inspección salen en amarillo, y la supervisora los cierra como Vacante/Lista', 'Roles nuevos: Supervisora HK y Sub gerente. El sub gerente agrega personas, reinicia PINs y da códigos de entrada, sin cambios mayores', 'Los gerentes eligen qué secciones del Menú ve cada rol, y pueden ajustar a una persona sola']},
   {v: '1.13.0', d: '2026-11-12', en: ['Laundry: when you start a load, pick what is in it: flats, fitted sheet, pillow case, duvet, towels, face towel, hand towel, floor mat, wash cloth, general or other. It shows on the machine and in Last loads. A dryer starts with what the last washer load had', 'Maingate and Fundamental now share one Laundry, because they use the same machines. A running machine takes the color of the hotel washing: red for Maingate, green for Fundamental', 'Highway keeps its own machines'],
