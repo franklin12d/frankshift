@@ -942,6 +942,69 @@ header.top .brand .bt.hpkon{cursor:pointer}
 /* 1.14.0: Board and Menu permissions */
 #view-board .inner{padding-bottom:90px}
 .menuoff{display:none!important}
+/* 1.16.0 Menu categories and Reservations */
+.catoff{display:none!important}
+.tabs .mcats{display:flex;gap:4px;padding:4px;margin:0 4px 6px;border-radius:14px;background:var(--surface-2);flex:none}
+.tabs .mcats[hidden]{display:none!important}
+.app .tabs .mcats .mcat{flex:1 1 0!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:6px!important;width:auto!important;height:auto!important;min-height:42px!important;padding:6px 8px!important;margin:0!important;border:0!important;border-radius:10px!important;background:none!important;color:var(--ink-2)!important;box-shadow:none!important;cursor:pointer}
+.app .tabs .mcats .mcat::after{display:none!important}
+.app .tabs .mcats .mcat[aria-pressed="true"]{background:var(--surface)!important;color:var(--hotel,var(--accent))!important;box-shadow:0 1px 3px rgba(15,23,42,.14)!important}
+.app .tabs .mcats .mcat .tic{position:static!important;width:auto!important;height:auto!important;background:none!important;color:inherit!important;border-radius:0!important}
+.app .tabs .mcats .mcat .tic svg{width:18px!important;height:18px!important}
+.app .tabs .mcats .mcat .tl{font:600 14px var(--f-body)!important;flex:none!important;max-width:none!important;white-space:nowrap!important;display:inline!important}
+@media (min-width:900px){
+  .tabs .mcats{flex-direction:column;align-items:center;gap:3px;padding:3px;margin:0 0 8px;border-radius:16px;width:60px}
+  .app .tabs .mcats .mcat{flex:none!important;width:54px!important;height:40px!important;min-height:0!important;padding:0!important;border-radius:12px!important}
+  .app .tabs .mcats .mcat .tl{display:none!important}
+  .app .tabs .mcats .mcat .tic svg{width:20px!important;height:20px!important}
+}
+.btn.danger{background:var(--urgent);color:#fff;border-color:transparent}
+.rvcode{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--hotel-soft,var(--accent-soft));color:var(--hotel,var(--accent));font:700 12px var(--f-body);letter-spacing:.04em;vertical-align:middle}
+.rvimp{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
+.rvimp .grow{flex:1 1 220px;min-width:0}
+.rvimp .small{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.rvfile{cursor:pointer;white-space:nowrap}
+.rvgrid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:0 12px}
+.rvgrid .field{margin-bottom:10px;min-width:0}
+.rvgrid input[type=date]{min-height:44px}
+@media (max-width:480px){.rvgrid{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.rvgrid .field:nth-child(2){grid-column:1/-1;order:-1}.rvgrid .field:nth-child(1){grid-column:1/-1;order:-2}.rvgrid .field:nth-child(6){grid-column:1/-1}}
+.rvchips{display:flex;flex-wrap:wrap;gap:6px;margin:0 0 10px}
+.rvchips button{border:1px solid var(--line);background:var(--surface);color:var(--ink-2);border-radius:999px;padding:6px 11px;font:600 13px var(--f-body);cursor:pointer;min-height:34px}
+.rvchips button[aria-pressed="true"]{background:var(--hotel-soft,var(--accent-soft));color:var(--hotel,var(--accent));border-color:color-mix(in srgb,var(--hotel,var(--accent)) 35%,transparent)}
+.rvcalc{font-size:13.5px;color:var(--ink-2);font-weight:600;min-height:18px;margin:0 0 10px}
+.rvsearch{margin:0 0 10px}
+.rvcount{font-size:12.5px;color:var(--ink-3);margin:0 2px 8px}
+.rvrow{border-top:1px solid var(--line);padding:11px 2px;display:flex;flex-direction:column;gap:3px}
+.rvrow:first-of-type{border-top:0}
+.rvtop{display:flex;align-items:baseline;gap:8px;min-width:0}
+.rvtop .grow{flex:1}
+.rvconf{font:700 15px var(--f-body);letter-spacing:.02em;overflow-wrap:anywhere}
+.rvsrc{font-size:12px;font-weight:600;color:var(--hotel,var(--accent));background:var(--hotel-soft,var(--accent-soft));border-radius:999px;padding:1px 8px;white-space:nowrap;max-width:45%;overflow:hidden;text-overflow:ellipsis}
+.rvrate{font-weight:700;white-space:nowrap}
+.rvrate small{font-weight:500;color:var(--ink-3);font-size:11.5px}
+.rvname{font-size:15px;color:var(--ink);overflow-wrap:anywhere}
+.rvdates{font-size:13px;color:var(--ink-2)}
+.rvmeta{display:flex;align-items:center;flex-wrap:wrap;gap:6px;font-size:12px;color:var(--ink-3)}
+.rvmeta .grow{flex:1}
+.rvimpm h2{margin-top:0}
+.rvall{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 10px;font-size:13px;color:var(--ink-2)}
+.rvall input{flex:1 1 140px;min-width:0;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:8px 10px;font-size:16px}
+.rvirs{display:flex;flex-direction:column;gap:8px;max-height:min(55vh,520px);overflow:auto;padding:2px}
+.rvir{display:flex;flex-wrap:wrap;align-items:flex-start;gap:6px 8px;border:1px solid var(--line);border-radius:12px;padding:8px}
+.rvir.warn{border-color:color-mix(in srgb,var(--urgent) 45%,var(--line))}
+.rvir.off{opacity:.5}
+.rvir.off.warn{border-color:var(--line)}
+.rvirck{display:flex;align-items:center;gap:6px;font-size:12px;color:var(--ink-3);padding-top:9px}
+.rvirck input{width:20px;height:20px}
+.rvirg{flex:1 1 0;min-width:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:6px}
+.rvirg input{min-width:0;width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:9px;padding:7px 8px;font-size:16px;color:var(--ink)}
+.rvirg input.bad{border-color:var(--urgent);background:color-mix(in srgb,var(--urgent) 8%,var(--surface))}
+.rvirg .c{font-weight:700}
+.rvirg .g{grid-column:span 2}
+@media (max-width:600px){.rvirg{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.rvirg .g{grid-column:1/-1}}
+.rvirmsg{flex-basis:100%;font-size:12px;color:var(--ink-3);padding-left:34px}
+.rvir.warn:not(.off) .rvirmsg{color:var(--urgent)}
+.rvisum{font-size:13px;font-weight:600;color:var(--ink-2);margin-top:8px}
 .bddate{min-height:40px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:600 14px var(--f-body);padding:0 8px}
 .bdday{font-size:13px;color:var(--ink-2);margin:8px 0 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .bdmine,.bdstrip,.bdmaster{margin-top:12px}
@@ -1328,6 +1391,7 @@ body{background:var(--bg)}
     <button role="tab" data-tab="punch" aria-selected="false" id="mpTab"><span class="tic"><span class="cnt" id="mpCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4"/><path d="M12 16.5h.01"/><path d="M9 2h6"/></svg></span><span class="tl" data-noi18n>Missing Punch</span></button>
     <button role="tab" data-tab="hkplan" aria-selected="false" id="hkTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg></span><span class="tl" data-noi18n>HK Game Plan</span></button>
     <button role="tab" data-tab="board" aria-selected="false" id="boardTab"><span class="tic"><span class="cnt" id="bdCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span><span class="tl" data-noi18n>Board</span></button>
+    <button role="tab" data-tab="resv" aria-selected="false" id="resvTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg></span><span class="tl">Reservations</span></button>
     <button role="tab" data-tab="team" aria-selected="false" id="teamTab" hidden><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnt" id="teamCnt"></span></span><span class="tl">Manager</span></button>
   </nav>
   <div class="banner" id="pushBanner" hidden><span class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><span class="grow" id="pushText"></span><button class="btn sm pri" id="pushBtn">Turn on</button><button class="linkbtn" id="pushLater">Not now</button></div>
@@ -1394,6 +1458,7 @@ body{background:var(--bg)}
   <section class="view" id="view-punch" hidden data-noi18n aria-label="Missing Punch"><div class="inner" id="mpBody"></div></section>
   <section class="view" id="view-hkplan" hidden data-noi18n aria-label="HK Game Plan"><div class="inner" id="hkBody"></div></section>
   <section class="view" id="view-board" hidden data-noi18n aria-label="Board"><div class="inner" id="bdBody"></div></section>
+  <section class="view" id="view-resv" hidden data-noi18n aria-label="Reservations"><div class="inner" id="rvBody"></div></section>
 
   <section class="view" id="view-lost" hidden><div class="inner">
     <div><button type="button" class="btn sm" id="lfBack">‹ Pass-on</button></div>
@@ -2066,6 +2131,7 @@ const ES = {
 "Pool": "Piscina"
 ,
 "Pass-on": "Entregas",
+"Reservations": "Reservaciones",
 "New pass-on": "Nueva entrega de turno",
 "One point per line. Anyone can comment on a point or set an alarm on it.": "Un punto por línea. Cualquiera puede comentar un punto o ponerle una alarma.",
 "305 late checkout at 2 PM Guest in 210 waiting for a refund Call Spectrum about the Wi-Fi": "305 salida tarde a las 2 PM\nHuésped de la 210 espera un reembolso\nLlamar a Spectrum por el Wi-Fi",
@@ -3475,6 +3541,7 @@ function menuSet(d){
   const hid = new Set(S.menuHid);
   document.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('menuoff', hid.has(b.dataset.tab)));
   if (S.tab && hid.has(S.tab === 'lost' ? 'passon' : S.tab)) setTab('chat');
+  try { catPaint(); } catch {}
 }
 async function menuFetch(){ if (!S.token || !S.me) return; try { menuSet(await call('sc_menu', {})); } catch {} }
 const menuChecks = hidden => `<div class="mnchk">${MENU_SECS.map(([k, en, es]) => `<label><input type="checkbox" data-mn="${k}" ${hidden.includes(k) ? '' : 'checked'}><span>${esc(L2(en, es))}</span></label>`).join('')}</div>`;
@@ -3994,6 +4061,7 @@ function enterApp(){
   if (location.hash === '#laundry') setTab('laundry');
   if (location.hash === '#team' && isAdmin()) setTab('team');
   if (location.hash === '#board') setTab('board');
+  if (location.hash === '#resv') setTab('resv');
   menuFetch(); if (bdWatch()) bdFetch(true);
   setTimeout(() => { if (location.hash === '#eng' || ((!location.hash || location.hash === '#orders') && engIsMe())) setTab('eng'); });
 }
@@ -4226,13 +4294,15 @@ function openMap(o){
 }
 function setTab(t){
   if ((S.menuHid || []).includes(t === 'lost' ? 'passon' : t)) t = 'chat';
-  S.tab = t; document.querySelectorAll('#tabs button').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t || (t === 'lost' && b.dataset.tab === 'passon')));
+  S.tab = t; try { const c = catOf(t); if (c !== S.cat) { S.cat = c; ls.set('sc.cat', c); catPaint(); } } catch {}
+  document.querySelectorAll('#tabs button[data-tab]').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t || (t === 'lost' && b.dataset.tab === 'passon')));
   const desktop = window.matchMedia('(min-width:900px)').matches;
   const inMain = t === 'chat' || t === 'orders', dash = desktop && t === 'orders';
   $('#main').hidden = !inMain || dash; $('#main').dataset.tab = t; $('#view-dash').hidden = !dash;
   if (dash) dashLoad();
-  ['passon','lost','rooms','team','map','laundry','eng','srep','punch','hkplan','board'].forEach(v => $('#view-' + v).hidden = t !== v);
+  ['passon','lost','rooms','team','map','laundry','eng','srep','punch','hkplan','board','resv'].forEach(v => $('#view-' + v).hidden = t !== v);
   if (t === 'board') setTimeout(bdShow);
+  if (t === 'resv') setTimeout(rvShow);
   if (t === 'srep') setTimeout(srShow);
   if (t === 'punch') setTimeout(mpShow);
   if (t === 'hkplan') setTimeout(hkShow);
@@ -4589,8 +4659,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.15.0';
+const APP_VERSION = '1.16.0';
 const CHANGES = [
+  {v: '1.16.0', d: '2026-11-13', en: ['The Menu now has two categories: Operations, with everything you had, and Reservations', 'New Reservations: the front desk logs the reservations made by hand under rate code LP01, with confirmation number, guest name, check-in, check-out, rate per night and extranet source. Nights and total add up by themselves', 'Import a PDF, Excel or CSV and FrankShift reads the reservations in it. Check every line, fix or leave out any, and save them all at once. You can still add one by hand', 'Search by confirmation, name, source or date. Whoever entered a reservation, or a manager, can edit or delete it. Each hotel has its own list', 'For now only the owner sees Reservations'],
+    es: ['El Menú ahora tiene dos categorías: Operaciones, con todo lo que ya tenías, y Reservaciones', 'Nuevo Reservaciones: el front desk anota las reservaciones hechas a mano bajo el rate code LP01, con número de confirmación, nombre del huésped, entrada, salida, tarifa por noche y fuente (extranet). Las noches y el total se calculan solos', 'Importa un PDF, Excel o CSV y FrankShift lee las reservaciones que trae. Revisa cada línea, corrige o deja fuera las que quieras y guárdalas todas de una vez. También puedes agregar una a mano', 'Busca por confirmación, nombre, fuente o fecha. Quien anotó la reservación, o un gerente, puede editarla o borrarla. Cada hotel tiene su propia lista', 'Por ahora solo el dueño ve Reservaciones']},
   {v: '1.15.0', d: '2026-11-12', en: ['Pass-on is now a list you can scan: each pass-on is one bar with who, when and a short preview of what was reported. Tap it to open the whole pass-on, tap again to close it', 'New search box in Pass-on: find a room, a guest, a word or who wrote it, in the pass-ons and their comments', 'Sub Managers can choose which hotels a person can use (only the hotels they can use themselves), besides the Menu each person sees'],
     es: ['Entregas ahora es una lista fácil de revisar: cada entrega es una barra con quién, cuándo y un resumen corto de lo que reportaron. Tócala para abrir la entrega completa y otra vez para cerrarla', 'Buscador nuevo en Entregas: encuentra una habitación, un huésped, una palabra o quién la escribió, en las entregas y sus comentarios', 'El Sub gerente puede elegir qué hoteles usa cada persona (solo los hoteles que él mismo usa), además del Menú que ve cada uno']},
   {v: '1.14.0', d: '2026-11-12', en: ['New Board in the Menu. The HK supervisor gives each housekeeper her rooms for the day, as Check-out or Stayover', 'Check-outs go first to the houseman, who sees only the rooms to strip and taps Stripped. Then the room is Ready to clean', 'The housekeeper taps Start when she goes in, Pause if she steps out, and the green Ready when she finishes. That gives the MPR, minutes per room, without the pauses', 'The supervisor and the managers see every room live. Rooms ready to be inspected show in yellow, and the supervisor closes them as Vacant/Ready', 'New roles: HK Supervisor and Sub Manager. A sub manager adds people, resets PINs and gives start codes, with no bigger changes', 'Managers choose which Menu sections each role sees, and can set one person on their own'],
@@ -6115,6 +6187,384 @@ setInterval(() => {
   hkFetch(true);
 }, 30000);
 window.addEventListener('beforeunload', e => { if (HKDirty && S.tab === 'hkplan') { e.preventDefault(); e.returnValue = ''; } });
+
+/* ===== 1.16.0 Reservations: the second category of the Menu. Front desk logs the reservations made by hand under rate code LP01:
+   confirmation, guest name, check-in, check-out, rate and extranet source. They can type one, or import a PDF, Excel or CSV,
+   check every line, and save. Each hotel has its own list. ===== */
+const RV_CODE = 'LP01';
+const RV_SOURCES = ['Expedia', 'Booking.com', 'Airbnb', 'Hotels.com', 'Agoda', 'Priceline', 'Trip.com', 'Hotelbeds'];
+const RV_ERR = {BAD_CONFIRMATION: ['Write the confirmation number.', 'Escribe el número de confirmación.'], BAD_NAME: ['Write the guest name.', 'Escribe el nombre del huésped.'],
+  BAD_DATES: ['Check the dates: check-out must be after check-in (up to 90 nights).', 'Revisa las fechas: la salida debe ser después de la entrada (hasta 90 noches).'],
+  BAD_RATE: ['Write the rate per night.', 'Escribe la tarifa por noche.'], BAD_SOURCE: ['Pick the extranet source.', 'Elige la fuente (extranet).'],
+  DUPLICATE: ['That confirmation number is already in the list.', 'Ese número de confirmación ya está en la lista.'],
+  NOT_ALLOWED: ['You can’t do that here. Ask your manager.', 'No puedes hacer eso aquí. Pregúntale a tu gerente.'], NOT_FOUND: ['That reservation is no longer here.', 'Esa reservación ya no está.'],
+  TOO_MANY: ['Too many reservations from you today. Talk to your manager.', 'Demasiadas reservaciones tuyas hoy. Habla con tu gerente.']};
+const rvErr = e => { const m = (e && e.message) || ''; const x = RV_ERR[m]; return x ? L2(x[0], x[1]) : m; };
+let RV = {list: null, days: 60, q: '', busy: false, form: null, imp: null, at: 0};
+const rvBlank = () => ({id: null, confirmation: '', guest: '', arrival: mpToday(), departure: '', rate: '', source: ''});
+const rvAddDays = (d, n) => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10); };
+const rvNights = (a, b) => (a && b) ? Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 864e5) : 0;
+const rvDay = d => d ? new Date(d + 'T12:00:00').toLocaleDateString(LANG === 'es' ? 'es-US' : 'en-US', {weekday: 'short', month: 'short', day: 'numeric', year: 'numeric'}) : '';
+const rvShort = d => d ? new Date(d + 'T12:00:00').toLocaleDateString(LANG === 'es' ? 'es-US' : 'en-US', {month: 'short', day: 'numeric'}) : '';
+const rvMoney = n => (n == null || n === '' || isNaN(+n)) ? '' : (+n).toLocaleString('en-US', {style: 'currency', currency: 'USD'});
+const rvNum = v => { if (v == null || v === '') return null; const s = String(v).replace(/[$€£,\s]|USD/gi, ''); const n = parseFloat(s); return isNaN(n) ? null : Math.round(n * 100) / 100; };
+const rvCan = r => !!(S.me && (r.staff_id === S.me.id || S.me.role === 'mgr' || S.me.role === 'sub' || S.owner));
+const rvNights2 = r => rvNights(r.arrival, r.departure);
+const rvNightsTxt = n => n === 1 ? L2('1 night', '1 noche') : L2(n + ' nights', n + ' noches');
+// a date written many ways: 2026-11-14, 11/14/2026, 11/14/26, 14-Nov-2026, Nov 14 2026, 14 Nov 2026, Thu, Nov 14, 2026
+const RV_MON = {jan: 1, ene: 1, feb: 2, mar: 3, apr: 4, abr: 4, may: 5, jun: 6, jul: 7, aug: 8, ago: 8, sep: 9, set: 9, oct: 10, nov: 11, dec: 12, dic: 12};
+function rvDate(v){
+  if (v == null) return ''; if (v instanceof Date && !isNaN(v)) return v.toISOString().slice(0, 10);
+  const s = String(v).trim().toLowerCase(); let m, y, mo, d;
+  if ((m = /^(\d{4})-(\d{1,2})-(\d{1,2})/.exec(s))) { y = +m[1]; mo = +m[2]; d = +m[3]; }
+  else if ((m = /^(\d{1,2})[\/.](\d{1,2})[\/.](\d{2,4})\b/.exec(s))) { mo = +m[1]; d = +m[2]; y = +m[3]; if (mo > 12 && d <= 12) [mo, d] = [d, mo]; }
+  else if ((m = /^(\d{1,2})[\s\-\/.]+([a-z]{3})[a-z]*\.?[\s\-\/.,]+(\d{2,4})\b/.exec(s.replace(/^[a-z]+,?\s+(?=\d)/, '')))) { d = +m[1]; mo = RV_MON[m[2]]; y = +m[3]; }
+  else if ((m = /([a-z]{3})[a-z]*\.?\s+(\d{1,2})(?:st|nd|rd|th)?,?\s+(\d{4})\b/.exec(s))) { mo = RV_MON[m[1]]; d = +m[2]; y = +m[3]; }
+  else if ((m = /^(\d{5})(?:\.\d+)?$/.exec(s)) && +m[1] > 40000 && +m[1] < 60000) { const x = new Date(Date.UTC(1899, 11, 30) + +m[1] * 864e5); return x.toISOString().slice(0, 10); }
+  else return '';
+  if (y < 100) y += 2000;
+  if (!mo || mo > 12 || !d || d > 31 || y < 2000 || y > 2100) return '';
+  const x = new Date(Date.UTC(y, mo - 1, d)); if (x.getUTCDate() !== d) return '';
+  return `${y}-${String(mo).padStart(2, '0')}-${String(d).padStart(2, '0')}`;
+}
+function rvSourceOf(v){
+  const s = norm(String(v || '')).replace(/[^a-z0-9.]/g, '');
+  if (!s) return '';
+  const hit = RV_SOURCES.find(x => s.includes(norm(x).replace(/[^a-z0-9.]/g, '').replace('.com', '')));
+  return hit || String(v).trim().slice(0, 60);
+}
+/* ---- file import: CSV, Excel (read with SheetJS, loaded the first time) and PDF (pdf.js, loaded the first time; the app's own reader if that fails) ---- */
+const rvLoadScript = (src, test) => new Promise((ok, bad) => { if (test()) return ok();
+  const s = document.createElement('script'); s.src = src; s.async = true; s.onload = () => test() ? ok() : bad(new Error('load')); s.onerror = () => bad(new Error('load')); document.head.appendChild(s); });
+function rvCsv(text){
+  const first = (text.split(/\r?\n/).find(l => l.trim()) || '');
+  const del = [',', ';', '\t'].map(d => [d, first.split(d).length]).sort((a, b) => b[1] - a[1])[0][0];
+  const rows = []; let row = [], cell = '', q = false;
+  for (let i = 0; i < text.length; i++) {
+    const c = text[i];
+    if (q) { if (c === '"') { if (text[i + 1] === '"') { cell += '"'; i++; } else q = false; } else cell += c; continue; }
+    if (c === '"') q = true; else if (c === del) { row.push(cell); cell = ''; }
+    else if (c === '\n' || c === '\r') { if (c === '\r' && text[i + 1] === '\n') i++; row.push(cell); rows.push(row); row = []; cell = ''; }
+    else cell += c;
+  }
+  if (cell || row.length) { row.push(cell); rows.push(row); }
+  return rows.filter(r => r.some(x => String(x).trim()));
+}
+// which column is which: by its header words
+function rvField(h){
+  const k = norm(String(h || '')).replace(/[^a-z0-9#]/g, '');
+  if (!k) return null;
+  if (/ratecode|rateplan|ratetype|roomtype|status|hotel|property|phone|email|adults?|child|guests?count|pax|room(no|number|#)?$/.test(k) && !/guestname/.test(k)) return null;
+  if (/^(nights?|los|lengthofstay|noches)$/.test(k)) return 'nights';
+  if (/checkin|arriv|llegada|entrada|^in$|^from$|startdate|^desde$/.test(k)) return 'arrival';
+  if (/checkout|depart|salida|^out$|^to$|enddate|^hasta$/.test(k)) return 'departure';
+  if (/conf|reserv|booking(id|no|num|ref)|bookingnumber|itiner|referen|^ref|pnr|localizador|^id$|^res#?$|^resno$/.test(k)) return 'confirmation';
+  if (/source|channel|extranet|^ota$|canal|fuente|agency|partner|bookedvia|^via$/.test(k)) return 'source';
+  if (/firstname|^first$|nombre$|givenname/.test(k) && !/guestname|fullname/.test(k)) return 'first';
+  if (/lastname|^last$|apellido|surname|familyname/.test(k)) return 'last';
+  if (/guest|name|huesped|cliente|traveler|traveller|customer|booker/.test(k)) return 'guest';
+  if (/total|amount|importe|monto|revenue/.test(k) && !/rate/.test(k)) return 'total';
+  if (/rate|adr|price|tarifa|precio|nightly|pernight|avg/.test(k)) return 'rate';
+  return null;
+}
+function rvMapHeader(cells){
+  const map = {}; cells.forEach((c, i) => { const f = rvField(c); if (f && map[f] == null) map[f] = i; });
+  const n = ['confirmation', 'arrival', 'departure', 'guest', 'first', 'rate', 'total'].filter(f => map[f] != null).length;
+  return n >= 3 ? map : null;
+}
+function rvFromCells(map, cells, src){
+  const g = i => i == null ? '' : String(cells[i] == null ? '' : cells[i]).trim();
+  let guest = g(map.guest); if (!guest && (map.first != null || map.last != null)) guest = [g(map.first), g(map.last)].filter(Boolean).join(' ');
+  const arrival = rvDate(g(map.arrival)); let departure = rvDate(g(map.departure));
+  const nights = parseInt(g(map.nights), 10);
+  if (!departure && arrival && nights > 0) departure = rvAddDays(arrival, nights);
+  let rate = rvNum(g(map.rate)); const total = rvNum(g(map.total)), n = rvNights(arrival, departure);
+  if (rate == null && total != null && n > 0) rate = Math.round(total / n * 100) / 100;
+  return {confirmation: g(map.confirmation).replace(/\s+/g, ' ').slice(0, 40), guest: guest.replace(/\s+/g, ' ').slice(0, 120), arrival, departure,
+    rate: rate == null ? '' : String(rate), source: rvSourceOf(g(map.source)) || src || ''};
+}
+function rvFromTable(rows, src){
+  for (let h = 0; h < Math.min(rows.length, 25); h++) {
+    const map = rvMapHeader(rows[h]); if (!map) continue;
+    return rows.slice(h + 1).map(r => rvFromCells(map, r, src)).filter(r => r.confirmation || r.guest);
+  }
+  return null;
+}
+// a PDF line with no table header: two dates, an amount and a code with digits; the words left over are the name
+function rvFromLine(txt, src){
+  const toks = txt.split(/\s+/).filter(Boolean), dates = []; let rate = null, conf = '', used = new Set();
+  const dateRe = [/\b\d{4}-\d{1,2}-\d{1,2}\b/g, /\b\d{1,2}\/\d{1,2}\/\d{2,4}\b/g, /\b\d{1,2}[\s-](?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*[\s-]\d{2,4}\b/gi, /\b(?:jan|feb|mar|apr|may|jun|jul|aug|sep|oct|nov|dec)[a-z]*\.?\s+\d{1,2},?\s+\d{4}\b/gi];
+  let rest = txt;
+  dateRe.forEach(re => { rest = rest.replace(re, m => { const d = rvDate(m); if (d) { dates.push([txt.indexOf(m), d]); return ' '; } return m; }); });
+  dates.sort((a, b) => a[0] - b[0]);
+  rest = rest.replace(/(?:US)?\$\s?\d[\d,]*(?:\.\d{1,2})?|\b\d[\d,]*\.\d{2}\b/g, m => { if (rate == null) rate = rvNum(m); return ' '; });
+  rest = rest.replace(/\b(?=[A-Z0-9-]*\d)[A-Z0-9][A-Z0-9-]{4,39}\b/gi, m => { if (!conf) { conf = m; return ' '; } return m; });
+  RV_SOURCES.concat(src ? [src] : []).forEach(x => { rest = rest.split(x).join(' ').replace(new RegExp('\\b' + x.replace(/\.com$/i, '').replace(/[.*+?^${}()|[\]\\]/g, '\\$&') + '(?:\\.com)?\\b', 'gi'), ' '); });
+  const guest = rest.replace(/\b(?:LP01|USD|night|nights|noches?|\d+)\b/gi, ' ').replace(/[^A-Za-zÀ-ÿ,.'\- ]/g, ' ').replace(/\s+/g, ' ').replace(/^[,.\-\s]+|[,.\-\s]+$/g, '').trim();
+  if (dates.length < 2 || !conf) return null;
+  return {confirmation: conf.slice(0, 40), guest: guest.slice(0, 120), arrival: dates[0][1], departure: dates[1][1], rate: rate == null ? '' : String(rate), source: src || ''};
+}
+function rvFromPdfLines(lines, src){
+  // lines: arrays of {x, v} in reading order
+  for (let h = 0; h < Math.min(lines.length, 60); h++) {
+    const map = rvMapHeader(lines[h].map(c => c.v)); if (!map) continue;
+    const cols = lines[h].map(c => c.x), out = [];
+    for (const l of lines.slice(h + 1)) {
+      const cells = cols.map(() => '');
+      l.forEach(c => { let k = 0; cols.forEach((x, i) => { if (x <= c.x + 4) k = i; }); cells[k] = (cells[k] ? cells[k] + ' ' : '') + c.v; });
+      const r = rvFromCells(map, cells, src); if (r.confirmation && (r.arrival || r.guest)) out.push(r);
+    }
+    if (out.length) return out;
+  }
+  return lines.map(l => rvFromLine(l.map(c => c.v).join(' '), src)).filter(Boolean);
+}
+const rvGuessSource = txt => { const t = norm(txt || ''); return RV_SOURCES.find(s => t.includes(norm(s).replace('.com', ''))) || ''; };
+async function rvPdfLines(buf){
+  try {
+    await rvLoadScript('https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js', () => !!window.pdfjsLib);
+    window.pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.worker.min.js';
+    const doc = await window.pdfjsLib.getDocument({data: new Uint8Array(buf)}).promise, out = [];
+    for (let p = 1; p <= Math.min(doc.numPages, 30); p++) {
+      const tc = await (await doc.getPage(p)).getTextContent(), rows = new Map();
+      tc.items.forEach(it => { const v = String(it.str || '').trim(); if (!v) return; const y = Math.round(it.transform[5] / 3) * 3;
+        if (!rows.has(y)) rows.set(y, []); rows.get(y).push({x: it.transform[4], v}); });
+      [...rows.entries()].sort((a, b) => b[0] - a[0]).forEach(([, c]) => out.push(c.sort((a, b) => a.x - b.x)));
+    }
+    return out;
+  } catch (e) {
+    // no internet for pdf.js: the app's own reader handles simple PDFs
+    const pages = await pdfLines(new Uint8Array(buf), inflateRaw);
+    return pages.flat().map(l => l.map((v, i) => ({x: i * 100, v})));
+  }
+}
+async function rvReadFile(f){
+  const name = (f.name || '').toLowerCase(), buf = await f.arrayBuffer();
+  if (/\.pdf$/.test(name) || f.type === 'application/pdf') {
+    const lines = await rvPdfLines(buf), src = rvGuessSource(lines.map(l => l.map(c => c.v).join(' ')).join('\n'));
+    return {kind: 'PDF', rows: rvFromPdfLines(lines, src), src};
+  }
+  let table;
+  if (/\.(xlsx|xls|xlsm|ods)$/.test(name)) {
+    await rvLoadScript('https://cdn.jsdelivr.net/npm/xlsx@0.18.5/dist/xlsx.full.min.js', () => !!window.XLSX);
+    const wb = window.XLSX.read(new Uint8Array(buf), {type: 'array', cellDates: true});
+    for (const sn of wb.SheetNames) { const t = window.XLSX.utils.sheet_to_json(wb.Sheets[sn], {header: 1, raw: false, dateNF: 'yyyy-mm-dd', defval: ''});
+      const got = rvFromTable(t, ''); if (got && got.length) return {kind: 'Excel', rows: got, src: ''}; }
+    table = [];
+  } else table = rvCsv(new TextDecoder('utf-8').decode(buf).replace(/^﻿/, ''));
+  const rows = rvFromTable(table, '');
+  if (rows) return {kind: /\.(xlsx|xls|xlsm|ods)$/.test(name) ? 'Excel' : 'CSV', rows, src: ''};
+  const lines = table.map(r => r.map((v, i) => ({x: i * 100, v: String(v)})));
+  return {kind: 'CSV', rows: rvFromPdfLines(lines, ''), src: ''};
+}
+function rvCheck(r){
+  const bad = [];
+  if (String(r.confirmation || '').trim().length < 2) bad.push('confirmation');
+  if (String(r.guest || '').trim().length < 2) bad.push('guest');
+  if (!rvDate(r.arrival)) bad.push('arrival');
+  if (!rvDate(r.departure) || rvNights(r.arrival, r.departure) < 1 || rvNights(r.arrival, r.departure) > 90) bad.push('departure');
+  if (rvNum(r.rate) == null || rvNum(r.rate) < 0) bad.push('rate');
+  if (String(r.source || '').trim().length < 2) bad.push('source');
+  return bad;
+}
+/* ---- screens ---- */
+const rvSrcOpts = (v, id) => `<input id="${id}" list="rvSrcList" maxlength="60" autocomplete="off" value="${esc(v || '')}" placeholder="${esc(L2('Expedia, Booking.com…', 'Expedia, Booking.com…'))}">`;
+function rvFormHtml(){
+  const f = RV.form || (RV.form = rvBlank()), n = rvNights(f.arrival, f.departure), rate = rvNum(f.rate);
+  return `<h3 class="srh">${f.id ? L2('Edit reservation', 'Editar reservación') : L2('Add a reservation by hand', 'Agregar una reservación a mano')}</h3>
+    <div class="rvgrid">
+      <div class="field"><label for="rvConf">${L2('Confirmation #', 'Confirmación #')}</label><input id="rvConf" maxlength="40" autocomplete="off" autocapitalize="characters" value="${esc(f.confirmation)}"></div>
+      <div class="field"><label for="rvGuest">${L2('Guest name', 'Nombre del huésped')}</label><input id="rvGuest" maxlength="120" autocomplete="off" value="${esc(f.guest)}"></div>
+      <div class="field"><label for="rvIn">${L2('Check-in', 'Entrada')}</label><input id="rvIn" type="date" value="${esc(f.arrival)}"></div>
+      <div class="field"><label for="rvOut">${L2('Check-out', 'Salida')}</label><input id="rvOut" type="date" value="${esc(f.departure)}" ${f.arrival ? `min="${esc(rvAddDays(f.arrival, 1))}"` : ''}></div>
+      <div class="field"><label for="rvRate">${L2('Rate per night ($)', 'Tarifa por noche ($)')}</label><input id="rvRate" inputmode="decimal" autocomplete="off" placeholder="81.67" value="${esc(f.rate)}"></div>
+      <div class="field"><label for="rvSrc">${L2('Extranet source', 'Fuente (extranet)')}</label>${rvSrcOpts(f.source, 'rvSrc')}</div>
+    </div>
+    <div class="rvchips" role="group" aria-label="${esc(L2('Extranet source', 'Fuente (extranet)'))}">${RV_SOURCES.slice(0, 6).map(s => `<button type="button" data-rvsrc="${esc(s)}" aria-pressed="${f.source === s}">${esc(s)}</button>`).join('')}</div>
+    <div class="rvcalc" id="rvCalc">${n > 0 ? esc(rvNightsTxt(n)) + (rate != null ? ' · ' + esc(rvMoney(rate * n)) + ' ' + esc(L2('total', 'total')) : '') : ''}</div>
+    <div class="btnrow"><button type="button" class="btn pri" id="rvSave">${f.id ? L2('Save changes', 'Guardar cambios') : L2('Save reservation', 'Guardar reservación')}</button>${f.id ? `<button type="button" class="btn" id="rvCancel">${L2('Cancel', 'Cancelar')}</button>` : ''}</div>`;
+}
+function rvRow(r){
+  const n = r.nights || rvNights2(r), mine = rvCan(r);
+  return `<div class="rvrow" data-rvid="${esc(r.id)}"><div class="rvtop"><b class="rvconf">${poMark(r.confirmation)}</b><span class="rvsrc">${poMark(r.source)}</span><span class="grow"></span><span class="rvrate">${esc(rvMoney(r.rate))}<small>/${esc(L2('night', 'noche'))}</small></span></div>
+    <div class="rvname">${poMark(r.guest)}</div>
+    <div class="rvdates">${esc(rvShort(r.arrival))} → ${esc(rvShort(r.departure))} · ${esc(rvNightsTxt(n))} · ${esc(rvMoney(r.rate * n))}</div>
+    <div class="rvmeta">${poMark(r.author || '')} · ${esc(mpWhen(r.created_at))}${r.edited_at ? ' · ' + esc(L2('edited by ', 'editado por ') + (r.edited_by || '')) : ''}
+      ${mine ? `<span class="grow"></span><button type="button" class="btn sm" data-rv="edit">${L2('Edit', 'Editar')}</button><button type="button" class="btn sm" data-rv="del">${L2('Delete', 'Borrar')}</button>` : ''}</div></div>`;
+}
+const rvHay = r => norm([r.confirmation, r.guest, r.source, r.author, r.arrival, r.departure, rvShort(r.arrival), rvShort(r.departure), String(r.rate)].join(' '));
+function rvListHtml(){
+  if (!RV.list) return `<p class="hint">${L2('Loading…', 'Cargando…')}</p>`;
+  S.poQ = RV.q; // the same highlight as Pass-on
+  const w = norm(RV.q || '').split(/\s+/).filter(Boolean), list = RV.list.filter(r => !w.length || w.every(z => rvHay(r).includes(z)));
+  const head = `<div class="rvcount">${w.length ? esc(list.length === 1 ? L2('1 found', '1 encontrada') : L2(list.length + ' found', list.length + ' encontradas')) + ' · ' : ''}${esc(L2(`last ${RV.days} days`, `últimos ${RV.days} días`))}</div>`;
+  const body = list.length ? list.map(rvRow).join('') : `<p class="hint">${w.length ? L2('Nothing matches your search.', 'Nada coincide con tu búsqueda.') : L2('No reservations yet. Add the first one above.', 'Todavía no hay reservaciones. Agrega la primera arriba.')}</p>`;
+  const r = head + body + (RV.days < 365 ? `<div class="btnrow" style="justify-content:center"><button type="button" class="btn" id="rvMore">${L2('Show older', 'Ver más antiguas')}</button></div>` : '');
+  S.poQ = ''; return r;
+}
+function rvRender(){
+  const box = $('#rvBody'); if (!box) return;
+  box.innerHTML = `<div class="enghead"><div class="grow"><h2>${L2('Reservations', 'Reservaciones')} <span class="rvcode">${RV_CODE}</span></h2>
+      <div class="sub">${L2('Reservations made by hand under rate code LP01. Add one, or import a PDF, Excel or CSV and check it before saving.', 'Reservaciones hechas a mano bajo el rate code LP01. Agrega una, o importa un PDF, Excel o CSV y revísalo antes de guardar.')}</div></div></div>
+    <datalist id="rvSrcList">${RV_SOURCES.map(s => `<option value="${esc(s)}">`).join('')}</datalist>
+    <div class="card rvimp"><div class="grow"><b>${L2('Import a file', 'Importar un archivo')}</b><div class="small">${L2('PDF, Excel or CSV with confirmation, name, check-in, check-out, rate and source.', 'PDF, Excel o CSV con confirmación, nombre, entrada, salida, tarifa y fuente.')}</div></div>
+      <label class="btn pri rvfile">${RV.busy ? L2('Reading…', 'Leyendo…') : L2('Choose file', 'Elegir archivo')}<input type="file" id="rvFile" accept=".pdf,.csv,.xlsx,.xls,.xlsm,.ods,.txt,application/pdf,text/csv" hidden ${RV.busy ? 'disabled' : ''}></label></div>
+    <div class="card rvform" id="rvForm">${rvFormHtml()}</div>
+    <div class="card"><h3 class="srh">${L2('Reservations at this hotel', 'Reservaciones de este hotel')}</h3>
+      <label class="posearch rvsearch">${ICO_SEARCH}<input id="rvQ" type="search" autocomplete="off" enterkeyhint="search" value="${esc(RV.q)}" placeholder="${esc(L2('Search confirmation, name, source or date', 'Busca confirmación, nombre, fuente o fecha'))}" aria-label="${esc(L2('Search reservations', 'Buscar reservaciones'))}"></label>
+      <div id="rvList">${rvListHtml()}</div></div>`;
+}
+const rvListPaint = () => { const l = $('#rvList'); if (l) l.innerHTML = rvListHtml(); };
+const rvFormPaint = () => { const f = $('#rvForm'); if (f) f.innerHTML = rvFormHtml(); };
+async function rvFetch(quiet){
+  if (!S.token || !S.me) return;
+  try { RV.list = (await call('sc_resv', {p_days: RV.days})) || []; RV.at = Date.now(); if (S.tab === 'resv') rvListPaint(); }
+  catch (e) { if (!quiet) toast(esc(rvErr(e))); if (!RV.list) { RV.list = []; rvListPaint(); } }
+}
+function rvShow(){ rvRender(); rvFetch(); }
+function rvFormRead(){ const f = RV.form; f.confirmation = $('#rvConf').value; f.guest = $('#rvGuest').value; f.arrival = $('#rvIn').value; f.departure = $('#rvOut').value; f.rate = $('#rvRate').value; f.source = $('#rvSrc').value; return f; }
+function rvCalcPaint(){ const f = rvFormRead(), n = rvNights(f.arrival, f.departure), rate = rvNum(f.rate);
+  $('#rvCalc').textContent = n > 0 ? rvNightsTxt(n) + (rate != null ? ' · ' + rvMoney(rate * n) + ' ' + L2('total', 'total') : '') : '';
+  document.querySelectorAll('[data-rvsrc]').forEach(b => b.setAttribute('aria-pressed', b.dataset.rvsrc === f.source)); }
+const rvArgs = r => ({p_confirmation: String(r.confirmation).trim(), p_guest: String(r.guest).trim(), p_arrival: rvDate(r.arrival), p_departure: rvDate(r.departure), p_rate: rvNum(r.rate), p_source: String(r.source).trim()});
+async function rvSaveForm(){
+  const f = rvFormRead(), bad = rvCheck(f);
+  if (bad.length) { const k = {confirmation: 'BAD_CONFIRMATION', guest: 'BAD_NAME', arrival: 'BAD_DATES', departure: 'BAD_DATES', rate: 'BAD_RATE', source: 'BAD_SOURCE'}[bad[0]];
+    toast(esc(rvErr({message: k}))); const el = $({confirmation: '#rvConf', guest: '#rvGuest', arrival: '#rvIn', departure: '#rvOut', rate: '#rvRate', source: '#rvSrc'}[bad[0]]); if (el) el.focus(); return; }
+  const b = $('#rvSave'); b.disabled = true;
+  try { const r = await call('sc_resv_save', {p_id: f.id, ...rvArgs(f)});
+    RV.list = [r].concat((RV.list || []).filter(x => x.id !== r.id)); if (f.id) RV.list.sort((a, c) => String(c.created_at).localeCompare(String(a.created_at)));
+    toast(esc(f.id ? L2('Reservation updated', 'Reservación actualizada') : L2('Reservation saved: ', 'Reservación guardada: ') + (f.id ? '' : r.confirmation)), 'new');
+    RV.form = {...rvBlank(), source: f.id ? '' : f.source}; rvFormPaint(); rvListPaint(); }
+  catch (e) { b.disabled = false; toast(esc(rvErr(e))); }
+}
+/* review an import: every line can be fixed or left out before saving */
+function rvImpRow(r, i){
+  const bad = rvCheck(r), dup = r.dup, n = rvNights(rvDate(r.arrival), rvDate(r.departure)), cls = k => bad.includes(k) ? ' bad' : '';
+  return `<div class="rvir${r.skip ? ' off' : ''}${bad.length || dup ? ' warn' : ''}" data-i="${i}">
+    <label class="rvirck"><input type="checkbox" data-ri="skip" ${r.skip ? '' : 'checked'}><b>${i + 1}</b></label>
+    <div class="rvirg">
+      <input class="c${cls('confirmation')}" data-ri="confirmation" value="${esc(r.confirmation)}" maxlength="40" aria-label="${esc(L2('Confirmation #', 'Confirmación #'))}" placeholder="${esc(L2('Confirmation #', 'Confirmación #'))}">
+      <input class="g${cls('guest')}" data-ri="guest" value="${esc(r.guest)}" maxlength="120" aria-label="${esc(L2('Guest name', 'Nombre del huésped'))}" placeholder="${esc(L2('Guest name', 'Nombre del huésped'))}">
+      <input type="date" class="${cls('arrival')}" data-ri="arrival" value="${esc(rvDate(r.arrival))}" aria-label="${esc(L2('Check-in', 'Entrada'))}">
+      <input type="date" class="${cls('departure')}" data-ri="departure" value="${esc(rvDate(r.departure))}" aria-label="${esc(L2('Check-out', 'Salida'))}">
+      <input class="${cls('rate')}" data-ri="rate" value="${esc(r.rate)}" inputmode="decimal" aria-label="${esc(L2('Rate per night', 'Tarifa por noche'))}" placeholder="${esc(L2('Rate', 'Tarifa'))}">
+      <input class="${cls('source')}" data-ri="source" value="${esc(r.source)}" list="rvSrcList" maxlength="60" aria-label="${esc(L2('Extranet source', 'Fuente (extranet)'))}" placeholder="${esc(L2('Source', 'Fuente'))}">
+    </div>
+    <div class="rvirmsg">${r.err ? esc(r.err) : dup ? esc(L2('Already in the list', 'Ya está en la lista')) : bad.length ? esc(L2('Fix the red boxes or leave it out', 'Corrige las casillas en rojo o déjala fuera')) : n > 0 ? esc(rvNightsTxt(n)) : ''}</div></div>`;
+}
+function rvImpSummary(){ const I = RV.imp, on = I.rows.filter(r => !r.skip), ok = on.filter(r => !rvCheck(r).length && !r.dup);
+  return {on: on.length, ok: ok.length, bad: on.length - ok.length}; }
+function rvImpPaint(){
+  const I = RV.imp, s = rvImpSummary(), b = $('#rviSave');
+  $('#rviRows').innerHTML = I.rows.map(rvImpRow).join('');
+  $('#rviSum').textContent = L2(`${s.ok} ready to save`, `${s.ok} listas para guardar`) + (s.bad ? ' · ' + L2(`${s.bad} need a fix`, `${s.bad} por corregir`) : '');
+  if (b) { b.disabled = !s.ok || s.bad > 0; b.textContent = L2(`Save ${s.ok}`, `Guardar ${s.ok}`); }
+}
+function rvMarkDups(){
+  const have = new Set((RV.list || []).map(r => norm(r.confirmation))), seen = new Set();
+  RV.imp.rows.forEach(r => { const k = norm(String(r.confirmation || '').trim()); r.dup = !!k && !r.skip && (have.has(k) || seen.has(k)); if (k && !r.skip) seen.add(k); });
+}
+function rvImport(res, fname){
+  if (!res.rows.length) { toast(esc(L2(`I couldn’t find reservations in ${fname}. Check that it has confirmation, name, check-in, check-out and rate, or add them by hand.`, `No encontré reservaciones en ${fname}. Revisa que tenga confirmación, nombre, entrada, salida y tarifa, o agrégalas a mano.`))); return; }
+  RV.imp = {rows: res.rows.slice(0, 200).map(r => ({...r, skip: false})), fname, kind: res.kind, cut: res.rows.length > 200};
+  rvMarkDups();
+  openModal(`<div data-noi18n class="rvimpm"><h2>${L2('Check before saving', 'Revisa antes de guardar')}</h2>
+    <p class="hint">${esc(L2(`${RV.imp.rows.length} found in ${fname}.`, `${RV.imp.rows.length} encontradas en ${fname}.`))} ${L2('Fix anything wrong, untick a line to leave it out. All go under rate code LP01.', 'Corrige lo que esté mal y quita la marca de una línea para dejarla fuera. Todas van bajo el rate code LP01.')}${RV.imp.cut ? ' ' + esc(L2('Only the first 200 lines.', 'Solo las primeras 200 líneas.')) : ''}</p>
+    <div class="rvall"><label for="rviAll">${L2('Same source for all', 'Misma fuente para todas')}</label><input id="rviAll" list="rvSrcList" maxlength="60" autocomplete="off" placeholder="Expedia"><button type="button" class="btn sm" id="rviAllGo">${L2('Apply', 'Aplicar')}</button></div>
+    <div class="rvirs" id="rviRows"></div>
+    <div class="rvisum" id="rviSum" role="status"></div>
+    <div class="btnrow" style="margin-top:10px"><button type="button" class="btn pri" id="rviSave"></button><button type="button" class="btn" data-close>${L2('Cancel', 'Cancelar')}</button></div></div>`);
+  rvImpPaint();
+  const rows = $('#rviRows');
+  rows.addEventListener('input', e => { const el = e.target.closest('[data-ri]'), w = el && el.closest('.rvir'); if (!w) return; const r = RV.imp.rows[+w.dataset.i];
+    if (el.dataset.ri === 'skip') r.skip = !el.checked; else r[el.dataset.ri] = el.value; r.err = '';
+    rvMarkDups(); const s = rvImpSummary(), b = $('#rviSave');
+    // repaint the classes and messages without losing the cursor
+    RV.imp.rows.forEach((x, i) => { const row = rows.querySelector(`.rvir[data-i="${i}"]`); if (!row) return; const bad = rvCheck(x);
+      row.classList.toggle('off', !!x.skip); row.classList.toggle('warn', !!(bad.length || x.dup));
+      row.querySelectorAll('[data-ri]').forEach(inp => { if (inp.dataset.ri !== 'skip') inp.classList.toggle('bad', bad.includes(inp.dataset.ri)); });
+      const n = rvNights(rvDate(x.arrival), rvDate(x.departure));
+      row.querySelector('.rvirmsg').textContent = x.err || (x.dup ? L2('Already in the list', 'Ya está en la lista') : bad.length ? L2('Fix the red boxes or leave it out', 'Corrige las casillas en rojo o déjala fuera') : n > 0 ? rvNightsTxt(n) : ''); });
+    $('#rviSum').textContent = L2(`${s.ok} ready to save`, `${s.ok} listas para guardar`) + (s.bad ? ' · ' + L2(`${s.bad} need a fix`, `${s.bad} por corregir`) : '');
+    b.disabled = !s.ok || s.bad > 0; b.textContent = L2(`Save ${s.ok}`, `Guardar ${s.ok}`); });
+  rows.addEventListener('change', e => rows.dispatchEvent(new Event('input', {bubbles: true})) && 0);
+  $('#rviAllGo').onclick = () => { const v = $('#rviAll').value.trim(); if (!v) return; RV.imp.rows.forEach(r => { r.source = v; }); rvMarkDups(); rvImpPaint(); };
+  $('#rviSave').onclick = async () => {
+    const b = $('#rviSave'); b.disabled = true; let saved = 0, failed = 0;
+    for (const r of RV.imp.rows) {
+      if (r.skip || r.done || rvCheck(r).length || r.dup) continue;
+      b.textContent = L2(`Saving ${saved + 1}…`, `Guardando ${saved + 1}…`);
+      try { const x = await call('sc_resv_save', {p_id: null, ...rvArgs(r)}); r.done = true; r.skip = true; saved++; RV.list = [x].concat(RV.list || []); }
+      catch (e) { r.err = rvErr(e); failed++; }
+    }
+    rvListPaint();
+    if (!failed) { closeModal(); RV.imp = null; toast(esc(L2(`${saved} reservations saved`, `${saved} reservaciones guardadas`)), 'new'); return; }
+    RV.imp.rows = RV.imp.rows.filter(r => !r.done); rvMarkDups(); rvImpPaint();
+    toast(esc(L2(`${saved} saved, ${failed} could not be saved. Check them below.`, `${saved} guardadas, ${failed} no se pudieron guardar. Revísalas abajo.`)));
+  };
+}
+function rvWire(){
+  const v = $('#view-resv'); if (!v || v.dataset.w) return; v.dataset.w = '1';
+  v.addEventListener('input', e => {
+    if (e.target.id === 'rvQ') { clearTimeout(RV.qt); RV.qt = setTimeout(() => { RV.q = e.target.value; rvListPaint(); }, 120); return; }
+    if (e.target.closest('#rvForm')) rvCalcPaint();
+  });
+  v.addEventListener('change', async e => {
+    if (e.target.id === 'rvIn') { const f = rvFormRead(); if (f.arrival && (!f.departure || f.departure <= f.arrival)) { f.departure = rvAddDays(f.arrival, 1); } rvFormPaint(); return; }
+    if (e.target.id !== 'rvFile') return;
+    const file = e.target.files && e.target.files[0]; e.target.value = ''; if (!file) return;
+    if (file.size > 15e6) return toast(esc(L2('That file is too big (15 MB max).', 'Ese archivo es muy grande (máximo 15 MB).')));
+    RV.busy = true; rvRender();
+    let res; try { res = await rvReadFile(file); } catch (err) { res = null; }
+    RV.busy = false; rvRender();
+    if (!res) return toast(esc(L2('I couldn’t read that file. Try a PDF, Excel or CSV, or add the reservations by hand.', 'No pude leer ese archivo. Prueba con un PDF, Excel o CSV, o agrega las reservaciones a mano.')));
+    rvImport(res, file.name || 'file');
+  });
+  v.addEventListener('click', async e => {
+    const s = e.target.closest('[data-rvsrc]'); if (s) { $('#rvSrc').value = s.dataset.rvsrc; rvCalcPaint(); return; }
+    if (e.target.id === 'rvSave') return rvSaveForm();
+    if (e.target.id === 'rvCancel') { RV.form = rvBlank(); rvFormPaint(); return; }
+    if (e.target.id === 'rvMore') { RV.days = RV.days < 180 ? 180 : 365; RV.list = null; rvListPaint(); rvFetch(); return; }
+    const b = e.target.closest('[data-rv]'); if (!b) return;
+    const r = (RV.list || []).find(x => x.id === b.closest('[data-rvid]').dataset.rvid); if (!r) return;
+    if (b.dataset.rv === 'edit') { RV.form = {id: r.id, confirmation: r.confirmation, guest: r.guest, arrival: r.arrival, departure: r.departure, rate: String(r.rate), source: r.source};
+      rvFormPaint(); const f = $('#rvForm'); if (f && f.scrollIntoView) f.scrollIntoView({block: 'start', behavior: 'smooth'}); $('#rvConf').focus(); return; }
+    if (b.dataset.rv === 'del') {
+      openModal(`<div data-noi18n><h2>${L2('Delete this reservation?', '¿Borrar esta reservación?')}</h2><p class="lead">${esc(r.confirmation)} · ${esc(r.guest)}</p>
+        <p class="hint">${L2('It leaves the list for everyone. This cannot be undone.', 'Sale de la lista para todos. No se puede deshacer.')}</p>
+        <div class="btnrow"><button type="button" class="btn danger" id="rvDelGo">${L2('Delete', 'Borrar')}</button><button type="button" class="btn" data-close>${L2('Cancel', 'Cancelar')}</button></div></div>`);
+      $('#rvDelGo').onclick = async () => { try { await call('sc_resv_delete', {p_id: r.id}); RV.list = RV.list.filter(x => x.id !== r.id); closeModal(); rvListPaint(); toast(esc(L2('Reservation deleted', 'Reservación borrada')), 'new'); }
+        catch (err) { toast(esc(rvErr(err))); } };
+    }
+  });
+}
+rvWire();
+// tests read the parsers here
+window.__fsResv = {rvDate, rvCsv, rvFromTable, rvFromPdfLines, rvFromLine, rvField, rvCheck};
+/* ---- the Menu's two categories: Operations (everything before) and Reservations ---- */
+const MCATS = [['ops', 'Operations', 'Operaciones'], ['res', 'Reservations', 'Reservaciones']];
+const catOf = t => t === 'resv' ? 'res' : 'ops';
+S.cat = ls.get('sc.cat', 'ops') === 'res' ? 'res' : 'ops';
+(function catBuild(){
+  const tabs = $('#tabs'), first = tabs && tabs.querySelector('button[data-tab]'); if (!first) return;
+  const g = document.createElement('div'); g.className = 'mcats'; g.id = 'mCats'; g.setAttribute('role', 'group'); g.setAttribute('data-noi18n', ''); g.setAttribute('aria-label', L2('Category', 'Categoría'));
+  const ico = {ops: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>',
+    res: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>'};
+  g.innerHTML = MCATS.map(([k, en, es]) => `<button type="button" class="mcat" data-cat="${k}" aria-pressed="${S.cat === k}"><span class="tic">${ico[k]}</span><span class="tl">${esc(L2(en, es))}</span></button>`).join('');
+  tabs.insertBefore(g, first);
+  g.addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; e.stopPropagation(); catSet(b.dataset.cat, true); });
+})();
+function catPaint(){
+  const hid = new Set(S.menuHid || []), resOk = !hid.has('resv');
+  if (!resOk && S.cat === 'res') S.cat = 'ops';
+  const g = $('#mCats'); if (g) { g.hidden = !resOk; g.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === S.cat)); }
+  document.querySelectorAll('#tabs button[data-tab]').forEach(b => b.classList.toggle('catoff', catOf(b.dataset.tab) !== S.cat));
+}
+function catSet(c, go){
+  S.cat = c === 'res' ? 'res' : 'ops'; ls.set('sc.cat', S.cat); catPaint();
+  if (go && catOf(S.tab || 'chat') !== S.cat) { setTab(S.cat === 'res' ? 'resv' : 'chat'); if (!DESK_MQ.matches) menuOpen(true); }
+}
+catPaint();
 
 if (S.token && S.me) enterApp(); else showLogin();
 })();
