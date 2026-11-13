@@ -1005,6 +1005,19 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .rvirmsg{flex-basis:100%;font-size:12px;color:var(--ink-3);padding-left:34px}
 .rvir.warn:not(.off) .rvirmsg{color:var(--urgent)}
 .rvisum{font-size:13px;font-weight:600;color:var(--ink-2);margin-top:8px}
+.rvblk{padding-bottom:10px}
+.rvbks{display:flex;flex-wrap:wrap;gap:6px}
+.rvbk{font-size:12.5px;color:var(--ink-2);background:color-mix(in srgb,var(--high) 12%,var(--surface));border:1px solid color-mix(in srgb,var(--high) 35%,transparent);border-radius:999px;padding:4px 10px;white-space:nowrap}
+.rvbk b{color:var(--ink);font-weight:700}
+.rvbk.past{opacity:.5}
+.rvbw{font-size:13px;font-weight:600;color:var(--high);margin:-4px 0 10px}
+.rvbw:empty{display:none}
+.rvbkt{display:inline-block;font-size:11.5px;font-weight:700;color:var(--high);background:color-mix(in srgb,var(--high) 12%,var(--surface));border-radius:999px;padding:1px 8px;margin-left:4px;max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;vertical-align:middle}
+.rvir.bk:not(.off){border-color:color-mix(in srgb,var(--high) 55%,var(--line))}
+.rvir.bk:not(.off) .rvirmsg{color:var(--high)}
+.rvibk{display:flex;align-items:flex-start;gap:8px;margin-top:8px;font-size:13.5px;font-weight:600;color:var(--high)}
+.rvibk[hidden]{display:none}
+.rvibk input{width:20px;height:20px;flex:none;margin-top:1px}
 .bddate{min-height:40px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:600 14px var(--f-body);padding:0 8px}
 .bdday{font-size:13px;color:var(--ink-2);margin:8px 0 0;display:flex;gap:8px;align-items:center;flex-wrap:wrap}
 .bdmine,.bdstrip,.bdmaster{margin-top:12px}
@@ -4659,8 +4672,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.16.0';
+const APP_VERSION = '1.16.1';
 const CHANGES = [
+  {v: '1.16.1', d: '2026-11-13', en: ['Reservations: the account number is the confirmation number, so reports that call it account number map to it when you import them', 'Reservations shows the 2027 blackout dates (MLK weekend, Presidents Day, Daytona 500, Spring Break, Easter, NPE Convention, MegaCon, Premiere Beauty, EDC, Warped Tour). A stay on those dates is marked Blackout and asks you to confirm the rate twice before saving'],
+    es: ['Reservaciones: el account number es el número de confirmación, así que los reportes que lo llaman account number se mapean a él al importarlos', 'Reservaciones muestra las fechas blackout de 2027 (MLK weekend, Presidents Day, Daytona 500, Spring Break, Easter, NPE Convention, MegaCon, Premiere Beauty, EDC, Warped Tour). Una estadía en esas fechas sale marcada Blackout y te pide confirmar la tarifa dos veces antes de guardar']},
   {v: '1.16.0', d: '2026-11-13', en: ['The Menu now has two categories: Operations, with everything you had, and Reservations', 'New Reservations: the front desk logs the reservations made by hand under rate code LP01, with confirmation number, guest name, check-in, check-out, rate per night and extranet source. Nights and total add up by themselves', 'Import a PDF, Excel or CSV and FrankShift reads the reservations in it. Check every line, fix or leave out any, and save them all at once. You can still add one by hand', 'Search by confirmation, name, source or date. Whoever entered a reservation, or a manager, can edit or delete it. Each hotel has its own list', 'For now only the owner sees Reservations'],
     es: ['El Menú ahora tiene dos categorías: Operaciones, con todo lo que ya tenías, y Reservaciones', 'Nuevo Reservaciones: el front desk anota las reservaciones hechas a mano bajo el rate code LP01, con número de confirmación, nombre del huésped, entrada, salida, tarifa por noche y fuente (extranet). Las noches y el total se calculan solos', 'Importa un PDF, Excel o CSV y FrankShift lee las reservaciones que trae. Revisa cada línea, corrige o deja fuera las que quieras y guárdalas todas de una vez. También puedes agregar una a mano', 'Busca por confirmación, nombre, fuente o fecha. Quien anotó la reservación, o un gerente, puede editarla o borrarla. Cada hotel tiene su propia lista', 'Por ahora solo el dueño ve Reservaciones']},
   {v: '1.15.0', d: '2026-11-12', en: ['Pass-on is now a list you can scan: each pass-on is one bar with who, when and a short preview of what was reported. Tap it to open the whole pass-on, tap again to close it', 'New search box in Pass-on: find a room, a guest, a word or who wrote it, in the pass-ons and their comments', 'Sub Managers can choose which hotels a person can use (only the hotels they can use themselves), besides the Menu each person sees'],
@@ -6211,6 +6226,30 @@ const rvNum = v => { if (v == null || v === '') return null; const s = String(v)
 const rvCan = r => !!(S.me && (r.staff_id === S.me.id || S.me.role === 'mgr' || S.me.role === 'sub' || S.owner));
 const rvNights2 = r => rvNights(r.arrival, r.departure);
 const rvNightsTxt = n => n === 1 ? L2('1 night', '1 noche') : L2(n + ' nights', n + ' noches');
+// 2027 main events: blackout dates where the rate must be confirmed twice. Warped Tour follows EDC, dates not set yet
+const RV_BLACKOUT = [['MLK weekend', 'MLK weekend', '2027-01-16', '2027-01-18'], ['Presidents Day', 'Presidents Day', '2027-02-13', '2027-02-15'],
+  ['Daytona 500', 'Daytona 500', '2027-02-20', '2027-02-21'], ['Spring Break', 'Spring Break', '2027-03-06', '2027-04-04'], ['Easter', 'Easter', '2027-03-28', '2027-03-28'],
+  ['NPE Convention', 'NPE Convention', '2027-05-03', '2027-05-07'], ['MegaCon', 'MegaCon', '2027-05-20', '2027-05-23'], ['Premiere Beauty', 'Premiere Beauty', '2027-06-05', '2027-06-07'],
+  ['EDC (projected)', 'EDC (proyectado)', '2027-11-12', '2027-11-14'], ['Warped Tour', 'Warped Tour', null, null]];
+const rvBkName = b => L2(b[0], b[1]);
+// events that touch a night of the stay (check-in night through the night before check-out)
+function rvBlack(a, d){
+  a = rvDate(a); d = rvDate(d); if (!a || !d || d <= a) return [];
+  const last = rvAddDays(d, -1);
+  return RV_BLACKOUT.filter(b => b[2] && b[2] <= last && b[3] >= a);
+}
+const rvBlackTxt = hits => hits.map(rvBkName).join(', ');
+function rvRange(a, b){
+  const f = (x, o) => new Date(x + 'T12:00:00').toLocaleDateString(LANG === 'es' ? 'es-US' : 'en-US', o);
+  if (a === b) return f(a, {month: 'short', day: 'numeric'});
+  if (a.slice(0, 7) === b.slice(0, 7)) return LANG === 'es' ? `${f(a, {day: 'numeric'})}–${f(b, {day: 'numeric'})} ${f(a, {month: 'short'})}` : `${f(a, {month: 'short'})} ${f(a, {day: 'numeric'})}–${f(b, {day: 'numeric'})}`;
+  return `${f(a, {month: 'short', day: 'numeric'})} – ${f(b, {month: 'short', day: 'numeric'})}`;
+}
+function rvLegendHtml(){
+  const today = mpToday();
+  return `<div class="card rvblk"><h3 class="srh">${L2('Blackout dates 2027 · confirm the rate twice', 'Fechas blackout 2027 · confirma la tarifa dos veces')}</h3>
+    <div class="rvbks">${RV_BLACKOUT.map(b => `<span class="rvbk${b[3] && b[3] < today ? ' past' : ''}"><b>${esc(rvBkName(b))}</b> ${esc(b[2] ? rvRange(b[2], b[3]) : L2('after EDC, dates to confirm', 'después de EDC, fechas por confirmar'))}</span>`).join('')}</div></div>`;
+}
 // a date written many ways: 2026-11-14, 11/14/2026, 11/14/26, 14-Nov-2026, Nov 14 2026, 14 Nov 2026, Thu, Nov 14, 2026
 const RV_MON = {jan: 1, ene: 1, feb: 2, mar: 3, apr: 4, abr: 4, may: 5, jun: 6, jul: 7, aug: 8, ago: 8, sep: 9, set: 9, oct: 10, nov: 11, dec: 12, dic: 12};
 function rvDate(v){
@@ -6256,6 +6295,7 @@ function rvField(h){
   if (!k) return null;
   if (/ratecode|rateplan|ratetype|roomtype|status|hotel|property|phone|email|adults?|child|guests?count|pax|room(no|number|#)?$/.test(k) && !/guestname/.test(k)) return null;
   if (/^(nights?|los|lengthofstay|noches)$/.test(k)) return 'nights';
+  if (/^(acct|account|cuenta)(no|num|number|numero|#|id)?$/.test(k)) return 'confirmation'; // the account number is the confirmation number
   if (/checkin|arriv|llegada|entrada|^in$|^from$|startdate|^desde$/.test(k)) return 'arrival';
   if (/checkout|depart|salida|^out$|^to$|enddate|^hasta$/.test(k)) return 'departure';
   if (/conf|reserv|booking(id|no|num|ref)|bookingnumber|itiner|referen|^ref|pnr|localizador|^id$|^res#?$|^resno$/.test(k)) return 'confirmation';
@@ -6368,11 +6408,12 @@ function rvCheck(r){
 }
 /* ---- screens ---- */
 const rvSrcOpts = (v, id) => `<input id="${id}" list="rvSrcList" maxlength="60" autocomplete="off" value="${esc(v || '')}" placeholder="${esc(L2('Expedia, Booking.com…', 'Expedia, Booking.com…'))}">`;
+const rvBwTxt = h => h.length ? L2('Blackout dates: ', 'Fechas blackout: ') + rvBlackTxt(h) + '. ' + L2('Confirm the rate twice.', 'Confirma la tarifa dos veces.') : '';
 function rvFormHtml(){
   const f = RV.form || (RV.form = rvBlank()), n = rvNights(f.arrival, f.departure), rate = rvNum(f.rate);
   return `<h3 class="srh">${f.id ? L2('Edit reservation', 'Editar reservación') : L2('Add a reservation by hand', 'Agregar una reservación a mano')}</h3>
     <div class="rvgrid">
-      <div class="field"><label for="rvConf">${L2('Confirmation #', 'Confirmación #')}</label><input id="rvConf" maxlength="40" autocomplete="off" autocapitalize="characters" value="${esc(f.confirmation)}"></div>
+      <div class="field"><label for="rvConf">${L2('Confirmation # (account #)', 'Confirmación # (account #)')}</label><input id="rvConf" maxlength="40" autocomplete="off" autocapitalize="characters" value="${esc(f.confirmation)}"></div>
       <div class="field"><label for="rvGuest">${L2('Guest name', 'Nombre del huésped')}</label><input id="rvGuest" maxlength="120" autocomplete="off" value="${esc(f.guest)}"></div>
       <div class="field"><label for="rvIn">${L2('Check-in', 'Entrada')}</label><input id="rvIn" type="date" value="${esc(f.arrival)}"></div>
       <div class="field"><label for="rvOut">${L2('Check-out', 'Salida')}</label><input id="rvOut" type="date" value="${esc(f.departure)}" ${f.arrival ? `min="${esc(rvAddDays(f.arrival, 1))}"` : ''}></div>
@@ -6381,13 +6422,14 @@ function rvFormHtml(){
     </div>
     <div class="rvchips" role="group" aria-label="${esc(L2('Extranet source', 'Fuente (extranet)'))}">${RV_SOURCES.slice(0, 6).map(s => `<button type="button" data-rvsrc="${esc(s)}" aria-pressed="${f.source === s}">${esc(s)}</button>`).join('')}</div>
     <div class="rvcalc" id="rvCalc">${n > 0 ? esc(rvNightsTxt(n)) + (rate != null ? ' · ' + esc(rvMoney(rate * n)) + ' ' + esc(L2('total', 'total')) : '') : ''}</div>
+    <div class="rvbw" id="rvBw" role="status">${esc(rvBwTxt(rvBlack(f.arrival, f.departure)))}</div>
     <div class="btnrow"><button type="button" class="btn pri" id="rvSave">${f.id ? L2('Save changes', 'Guardar cambios') : L2('Save reservation', 'Guardar reservación')}</button>${f.id ? `<button type="button" class="btn" id="rvCancel">${L2('Cancel', 'Cancelar')}</button>` : ''}</div>`;
 }
 function rvRow(r){
   const n = r.nights || rvNights2(r), mine = rvCan(r);
   return `<div class="rvrow" data-rvid="${esc(r.id)}"><div class="rvtop"><b class="rvconf">${poMark(r.confirmation)}</b><span class="rvsrc">${poMark(r.source)}</span><span class="grow"></span><span class="rvrate">${esc(rvMoney(r.rate))}<small>/${esc(L2('night', 'noche'))}</small></span></div>
     <div class="rvname">${poMark(r.guest)}</div>
-    <div class="rvdates">${esc(rvShort(r.arrival))} → ${esc(rvShort(r.departure))} · ${esc(rvNightsTxt(n))} · ${esc(rvMoney(r.rate * n))}</div>
+    <div class="rvdates">${esc(rvShort(r.arrival))} → ${esc(rvShort(r.departure))} · ${esc(rvNightsTxt(n))} · ${esc(rvMoney(r.rate * n))}${(h => h.length ? ` <span class="rvbkt" title="${esc(rvBlackTxt(h))}">Blackout · ${esc(rvBlackTxt(h))}</span>` : '')(rvBlack(r.arrival, r.departure))}</div>
     <div class="rvmeta">${poMark(r.author || '')} · ${esc(mpWhen(r.created_at))}${r.edited_at ? ' · ' + esc(L2('edited by ', 'editado por ') + (r.edited_by || '')) : ''}
       ${mine ? `<span class="grow"></span><button type="button" class="btn sm" data-rv="edit">${L2('Edit', 'Editar')}</button><button type="button" class="btn sm" data-rv="del">${L2('Delete', 'Borrar')}</button>` : ''}</div></div>`;
 }
@@ -6405,8 +6447,9 @@ function rvRender(){
   const box = $('#rvBody'); if (!box) return;
   box.innerHTML = `<div class="enghead"><div class="grow"><h2>${L2('Reservations', 'Reservaciones')} <span class="rvcode">${RV_CODE}</span></h2>
       <div class="sub">${L2('Reservations made by hand under rate code LP01. Add one, or import a PDF, Excel or CSV and check it before saving.', 'Reservaciones hechas a mano bajo el rate code LP01. Agrega una, o importa un PDF, Excel o CSV y revísalo antes de guardar.')}</div></div></div>
+    ${rvLegendHtml()}
     <datalist id="rvSrcList">${RV_SOURCES.map(s => `<option value="${esc(s)}">`).join('')}</datalist>
-    <div class="card rvimp"><div class="grow"><b>${L2('Import a file', 'Importar un archivo')}</b><div class="small">${L2('PDF, Excel or CSV with confirmation, name, check-in, check-out, rate and source.', 'PDF, Excel o CSV con confirmación, nombre, entrada, salida, tarifa y fuente.')}</div></div>
+    <div class="card rvimp"><div class="grow"><b>${L2('Import a file', 'Importar un archivo')}</b><div class="small">${L2('PDF, Excel or CSV with confirmation or account number, name, check-in, check-out, rate and source.', 'PDF, Excel o CSV con número de confirmación o account number, nombre, entrada, salida, tarifa y fuente.')}</div></div>
       <label class="btn pri rvfile">${RV.busy ? L2('Reading…', 'Leyendo…') : L2('Choose file', 'Elegir archivo')}<input type="file" id="rvFile" accept=".pdf,.csv,.xlsx,.xls,.xlsm,.ods,.txt,application/pdf,text/csv" hidden ${RV.busy ? 'disabled' : ''}></label></div>
     <div class="card rvform" id="rvForm">${rvFormHtml()}</div>
     <div class="card"><h3 class="srh">${L2('Reservations at this hotel', 'Reservaciones de este hotel')}</h3>
@@ -6424,12 +6467,23 @@ function rvShow(){ rvRender(); rvFetch(); }
 function rvFormRead(){ const f = RV.form; f.confirmation = $('#rvConf').value; f.guest = $('#rvGuest').value; f.arrival = $('#rvIn').value; f.departure = $('#rvOut').value; f.rate = $('#rvRate').value; f.source = $('#rvSrc').value; return f; }
 function rvCalcPaint(){ const f = rvFormRead(), n = rvNights(f.arrival, f.departure), rate = rvNum(f.rate);
   $('#rvCalc').textContent = n > 0 ? rvNightsTxt(n) + (rate != null ? ' · ' + rvMoney(rate * n) + ' ' + L2('total', 'total') : '') : '';
+  $('#rvBw').textContent = rvBwTxt(rvBlack(f.arrival, f.departure));
   document.querySelectorAll('[data-rvsrc]').forEach(b => b.setAttribute('aria-pressed', b.dataset.rvsrc === f.source)); }
 const rvArgs = r => ({p_confirmation: String(r.confirmation).trim(), p_guest: String(r.guest).trim(), p_arrival: rvDate(r.arrival), p_departure: rvDate(r.departure), p_rate: rvNum(r.rate), p_source: String(r.source).trim()});
-async function rvSaveForm(){
+async function rvSaveForm(sure){
   const f = rvFormRead(), bad = rvCheck(f);
   if (bad.length) { const k = {confirmation: 'BAD_CONFIRMATION', guest: 'BAD_NAME', arrival: 'BAD_DATES', departure: 'BAD_DATES', rate: 'BAD_RATE', source: 'BAD_SOURCE'}[bad[0]];
     toast(esc(rvErr({message: k}))); const el = $({confirmation: '#rvConf', guest: '#rvGuest', arrival: '#rvIn', departure: '#rvOut', rate: '#rvRate', source: '#rvSrc'}[bad[0]]); if (el) el.focus(); return; }
+  const hits = rvBlack(f.arrival, f.departure);
+  if (hits.length && !sure) {
+    openModal(`<div data-noi18n><h2>${L2('Confirm the rate twice', 'Confirma la tarifa dos veces')}</h2>
+      <p class="lead">${esc(rvMoney(rvNum(f.rate)))} ${esc(L2('per night', 'por noche'))} · ${esc(f.confirmation.trim())}</p>
+      <p class="hint">${esc(L2('This stay falls on blackout dates: ', 'Esta estadía cae en fechas blackout: ') + rvBlackTxt(hits) + '. ' + L2('Check the rate once more before saving.', 'Revisa la tarifa una vez más antes de guardar.'))}</p>
+      <div class="btnrow"><button type="button" class="btn pri" id="rvBkYes">${L2('Rate is right, save', 'La tarifa está bien, guardar')}</button><button type="button" class="btn" id="rvBkFix">${L2('Fix the rate', 'Corregir la tarifa')}</button></div></div>`);
+    $('#rvBkYes').onclick = () => { closeModal(); rvSaveForm(true); };
+    $('#rvBkFix').onclick = () => { closeModal(); const r = $('#rvRate'); if (r) { r.focus(); r.select && r.select(); } };
+    return;
+  }
   const b = $('#rvSave'); b.disabled = true;
   try { const r = await call('sc_resv_save', {p_id: f.id, ...rvArgs(f)});
     RV.list = [r].concat((RV.list || []).filter(x => x.id !== r.id)); if (f.id) RV.list.sort((a, c) => String(c.created_at).localeCompare(String(a.created_at)));
@@ -6438,9 +6492,14 @@ async function rvSaveForm(){
   catch (e) { b.disabled = false; toast(esc(rvErr(e))); }
 }
 /* review an import: every line can be fixed or left out before saving */
+function rvImpMsg(x){
+  const bad = rvCheck(x), n = rvNights(rvDate(x.arrival), rvDate(x.departure)), h = rvBlack(x.arrival, x.departure);
+  return x.err || (x.dup ? L2('Already in the list', 'Ya está en la lista') : bad.length ? L2('Fix the red boxes or leave it out', 'Corrige las casillas en rojo o déjala fuera')
+    : (n > 0 ? rvNightsTxt(n) : '') + (h.length ? ' · Blackout: ' + rvBlackTxt(h) + '. ' + L2('Confirm the rate twice.', 'Confirma la tarifa dos veces.') : ''));
+}
 function rvImpRow(r, i){
   const bad = rvCheck(r), dup = r.dup, n = rvNights(rvDate(r.arrival), rvDate(r.departure)), cls = k => bad.includes(k) ? ' bad' : '';
-  return `<div class="rvir${r.skip ? ' off' : ''}${bad.length || dup ? ' warn' : ''}" data-i="${i}">
+  return `<div class="rvir${r.skip ? ' off' : ''}${bad.length || dup ? ' warn' : ''}${!bad.length && !dup && rvBlack(r.arrival, r.departure).length ? ' bk' : ''}" data-i="${i}">
     <label class="rvirck"><input type="checkbox" data-ri="skip" ${r.skip ? '' : 'checked'}><b>${i + 1}</b></label>
     <div class="rvirg">
       <input class="c${cls('confirmation')}" data-ri="confirmation" value="${esc(r.confirmation)}" maxlength="40" aria-label="${esc(L2('Confirmation #', 'Confirmación #'))}" placeholder="${esc(L2('Confirmation #', 'Confirmación #'))}">
@@ -6450,15 +6509,20 @@ function rvImpRow(r, i){
       <input class="${cls('rate')}" data-ri="rate" value="${esc(r.rate)}" inputmode="decimal" aria-label="${esc(L2('Rate per night', 'Tarifa por noche'))}" placeholder="${esc(L2('Rate', 'Tarifa'))}">
       <input class="${cls('source')}" data-ri="source" value="${esc(r.source)}" list="rvSrcList" maxlength="60" aria-label="${esc(L2('Extranet source', 'Fuente (extranet)'))}" placeholder="${esc(L2('Source', 'Fuente'))}">
     </div>
-    <div class="rvirmsg">${r.err ? esc(r.err) : dup ? esc(L2('Already in the list', 'Ya está en la lista')) : bad.length ? esc(L2('Fix the red boxes or leave it out', 'Corrige las casillas en rojo o déjala fuera')) : n > 0 ? esc(rvNightsTxt(n)) : ''}</div></div>`;
+    <div class="rvirmsg">${esc(rvImpMsg(r))}</div></div>`;
 }
 function rvImpSummary(){ const I = RV.imp, on = I.rows.filter(r => !r.skip), ok = on.filter(r => !rvCheck(r).length && !r.dup);
-  return {on: on.length, ok: ok.length, bad: on.length - ok.length}; }
+  return {on: on.length, ok: ok.length, bad: on.length - ok.length, bk: ok.filter(r => rvBlack(r.arrival, r.departure).length).length}; }
+function rvImpState(){
+  const s = rvImpSummary(), b = $('#rviSave'), w = $('#rviBkW'), c = $('#rviBk');
+  $('#rviSum').textContent = L2(`${s.ok} ready to save`, `${s.ok} listas para guardar`) + (s.bad ? ' · ' + L2(`${s.bad} need a fix`, `${s.bad} por corregir`) : '');
+  if (w) { w.hidden = !s.bk; $('#rviBkT').textContent = s.bk === 1 ? L2('I checked the rate twice on the 1 line in blackout dates', 'Revisé dos veces la tarifa de la línea en fechas blackout')
+    : L2(`I checked the rate twice on the ${s.bk} lines in blackout dates`, `Revisé dos veces la tarifa de las ${s.bk} líneas en fechas blackout`); }
+  if (b) { b.disabled = !s.ok || s.bad > 0 || (s.bk > 0 && !(c && c.checked)); b.textContent = L2(`Save ${s.ok}`, `Guardar ${s.ok}`); }
+}
 function rvImpPaint(){
   const I = RV.imp, s = rvImpSummary(), b = $('#rviSave');
-  $('#rviRows').innerHTML = I.rows.map(rvImpRow).join('');
-  $('#rviSum').textContent = L2(`${s.ok} ready to save`, `${s.ok} listas para guardar`) + (s.bad ? ' · ' + L2(`${s.bad} need a fix`, `${s.bad} por corregir`) : '');
-  if (b) { b.disabled = !s.ok || s.bad > 0; b.textContent = L2(`Save ${s.ok}`, `Guardar ${s.ok}`); }
+  $('#rviRows').innerHTML = I.rows.map(rvImpRow).join(''); rvImpState();
 }
 function rvMarkDups(){
   const have = new Set((RV.list || []).map(r => norm(r.confirmation))), seen = new Set();
@@ -6473,21 +6537,21 @@ function rvImport(res, fname){
     <div class="rvall"><label for="rviAll">${L2('Same source for all', 'Misma fuente para todas')}</label><input id="rviAll" list="rvSrcList" maxlength="60" autocomplete="off" placeholder="Expedia"><button type="button" class="btn sm" id="rviAllGo">${L2('Apply', 'Aplicar')}</button></div>
     <div class="rvirs" id="rviRows"></div>
     <div class="rvisum" id="rviSum" role="status"></div>
+    <label class="rvibk" id="rviBkW" hidden><input type="checkbox" id="rviBk"><span id="rviBkT"></span></label>
     <div class="btnrow" style="margin-top:10px"><button type="button" class="btn pri" id="rviSave"></button><button type="button" class="btn" data-close>${L2('Cancel', 'Cancelar')}</button></div></div>`);
   rvImpPaint();
   const rows = $('#rviRows');
   rows.addEventListener('input', e => { const el = e.target.closest('[data-ri]'), w = el && el.closest('.rvir'); if (!w) return; const r = RV.imp.rows[+w.dataset.i];
     if (el.dataset.ri === 'skip') r.skip = !el.checked; else r[el.dataset.ri] = el.value; r.err = '';
-    rvMarkDups(); const s = rvImpSummary(), b = $('#rviSave');
+    rvMarkDups();
     // repaint the classes and messages without losing the cursor
     RV.imp.rows.forEach((x, i) => { const row = rows.querySelector(`.rvir[data-i="${i}"]`); if (!row) return; const bad = rvCheck(x);
-      row.classList.toggle('off', !!x.skip); row.classList.toggle('warn', !!(bad.length || x.dup));
+      row.classList.toggle('off', !!x.skip); row.classList.toggle('warn', !!(bad.length || x.dup)); row.classList.toggle('bk', !bad.length && !x.dup && rvBlack(x.arrival, x.departure).length > 0);
       row.querySelectorAll('[data-ri]').forEach(inp => { if (inp.dataset.ri !== 'skip') inp.classList.toggle('bad', bad.includes(inp.dataset.ri)); });
-      const n = rvNights(rvDate(x.arrival), rvDate(x.departure));
-      row.querySelector('.rvirmsg').textContent = x.err || (x.dup ? L2('Already in the list', 'Ya está en la lista') : bad.length ? L2('Fix the red boxes or leave it out', 'Corrige las casillas en rojo o déjala fuera') : n > 0 ? rvNightsTxt(n) : ''); });
-    $('#rviSum').textContent = L2(`${s.ok} ready to save`, `${s.ok} listas para guardar`) + (s.bad ? ' · ' + L2(`${s.bad} need a fix`, `${s.bad} por corregir`) : '');
-    b.disabled = !s.ok || s.bad > 0; b.textContent = L2(`Save ${s.ok}`, `Guardar ${s.ok}`); });
+      row.querySelector('.rvirmsg').textContent = rvImpMsg(x); });
+    rvImpState(); });
   rows.addEventListener('change', e => rows.dispatchEvent(new Event('input', {bubbles: true})) && 0);
+  $('#rviBk').onchange = rvImpState;
   $('#rviAllGo').onclick = () => { const v = $('#rviAll').value.trim(); if (!v) return; RV.imp.rows.forEach(r => { r.source = v; }); rvMarkDups(); rvImpPaint(); };
   $('#rviSave').onclick = async () => {
     const b = $('#rviSave'); b.disabled = true; let saved = 0, failed = 0;
@@ -6540,7 +6604,7 @@ function rvWire(){
 }
 rvWire();
 // tests read the parsers here
-window.__fsResv = {rvDate, rvCsv, rvFromTable, rvFromPdfLines, rvFromLine, rvField, rvCheck};
+window.__fsResv = {rvDate, rvCsv, rvFromTable, rvFromPdfLines, rvFromLine, rvField, rvCheck, rvBlack};
 /* ---- the Menu's two categories: Operations (everything before) and Reservations ---- */
 const MCATS = [['ops', 'Operations', 'Operaciones'], ['res', 'Reservations', 'Reservaciones']];
 const catOf = t => t === 'resv' ? 'res' : 'ops';
