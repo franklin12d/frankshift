@@ -1,0 +1,209 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<meta name="theme-color" content="#635BFF">
+<title>Guest check-in · Registro</title>
+<link rel="icon" href="icon-192.png">
+<style>
+:root{--bg:#F5F6FB;--surface:#FFFFFF;--surface-2:#F2F3F9;--line:#E3E6EF;--ink:#0F172A;--ink-2:#475569;--ink-3:#8A94A6;
+  --accent:#635BFF;--accent-ink:#FFFFFF;--accent-soft:#EEEDFF;--ok:#059669;--ok-soft:#E3F7EF;--bad:#E0383E;--bad-soft:#FDECEC;--high:#B45309;--high-soft:#FEF3E2;
+  --grad:linear-gradient(135deg,#635BFF 0%,#3B82F6 100%);color-scheme:light}
+@media (prefers-color-scheme:dark){:root{--bg:#0F172A;--surface:#141E33;--surface-2:#1B2640;--line:#26324D;--ink:#F1F5F9;--ink-2:#AEB8CB;--ink-3:#7D88A1;
+  --accent:#7D76FF;--accent-soft:#252457;--ok:#34D399;--ok-soft:#0F2F27;--bad:#FF6B6F;--bad-soft:#3A1719;--high:#F5A524;--high-soft:#35260C;color-scheme:dark}}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{background:var(--bg);color:var(--ink);font:17px/1.45 system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;-webkit-text-size-adjust:100%;
+  padding:env(safe-area-inset-top,0) max(16px,env(safe-area-inset-right,0)) env(safe-area-inset-bottom,0) max(16px,env(safe-area-inset-left,0))}
+button,input{font:inherit;color:inherit}
+main{max-width:480px;margin:0 auto;padding:14px 0 32px}
+.top{display:flex;align-items:center;gap:10px;margin-bottom:14px}
+.logo{width:36px;height:36px;border-radius:10px;background:var(--grad);display:grid;place-items:center;color:#fff;flex:none}
+.logo svg{width:20px;height:20px}
+.brand{font-weight:800;font-size:17px;letter-spacing:-.01em;flex:1;min-width:0}
+.brand small{display:block;font-weight:500;font-size:13px;color:var(--ink-3)}
+.lang{display:flex;border:1px solid var(--line);border-radius:999px;background:var(--surface);padding:3px;flex:none}
+.lang button{border:0;background:none;border-radius:999px;padding:7px 13px;font-weight:700;font-size:14px;color:var(--ink-2);min-height:36px}
+.lang button[aria-pressed="true"]{background:var(--accent);color:var(--accent-ink)}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:20px 18px}
+h1{font-size:24px;line-height:1.2;margin:0 0 4px;letter-spacing:-.01em}
+.lead{margin:0 0 18px;color:var(--ink-2)}
+.test{background:var(--high-soft);color:var(--high);border-radius:10px;padding:8px 12px;font-weight:700;font-size:14px;margin-bottom:12px}
+fieldset{border:0;margin:0 0 16px;padding:0}
+legend,label.l{display:block;font-weight:700;font-size:15px;margin-bottom:7px}
+.hotels{display:grid;gap:8px}
+.hotels button{display:flex;align-items:center;gap:12px;text-align:left;width:100%;min-height:56px;border:2px solid var(--line);background:var(--surface-2);border-radius:14px;padding:10px 14px;font-weight:700}
+.hotels button small{display:block;font-weight:500;font-size:14px;color:var(--ink-3)}
+.hotels button .dot{width:22px;height:22px;border-radius:50%;border:2px solid var(--ink-3);flex:none;display:grid;place-items:center}
+.hotels button:focus-visible{outline:3px solid var(--accent);outline-offset:2px}
+.hotels button[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.hotels button[aria-checked="true"] .dot{border-color:var(--accent);background:var(--accent)}
+.hotels button[aria-checked="true"] .dot::after{content:"";width:8px;height:8px;border-radius:50%;background:#fff}
+.f{margin-bottom:16px}
+.f input{width:100%;min-height:54px;border:2px solid var(--line);background:var(--surface-2);border-radius:14px;padding:12px 14px;font-size:18px}
+.f input:focus{outline:none;border-color:var(--accent);background:var(--surface)}
+.f input[aria-invalid="true"]{border-color:var(--bad)}
+.opt{font-weight:500;color:var(--ink-3)}
+.err{color:var(--bad);font-size:15px;margin-top:6px;font-weight:600}
+.when{display:flex;align-items:center;gap:8px;color:var(--ink-2);font-size:15px;margin:-4px 0 16px}
+.when svg{width:18px;height:18px;flex:none}
+.priv{background:var(--surface-2);border:1px solid var(--line);border-radius:14px;padding:12px 14px;font-size:15px;color:var(--ink-2);margin-bottom:12px}
+.chk{display:flex;gap:12px;align-items:flex-start;font-weight:600;font-size:16px;margin-bottom:18px;cursor:pointer}
+.chk input{width:26px;height:26px;margin:0;flex:none;accent-color:var(--accent)}
+.go{width:100%;min-height:58px;border:0;border-radius:14px;background:var(--accent);color:var(--accent-ink);font-weight:800;font-size:19px;cursor:pointer}
+.go[disabled]{opacity:.6;cursor:default}
+.formerr{background:var(--bad-soft);color:var(--bad);border-radius:12px;padding:10px 14px;font-weight:600;font-size:15px;margin-bottom:12px}
+.done{text-align:center;padding:34px 18px}
+.done .big{width:76px;height:76px;border-radius:50%;background:var(--ok-soft);color:var(--ok);display:grid;place-items:center;margin:0 auto 16px}
+.done .big svg{width:40px;height:40px}
+.done h1{font-size:26px}
+.done p{color:var(--ink-2);margin:6px 0 0}
+.again{margin-top:22px;border:1px solid var(--line);background:var(--surface);border-radius:12px;padding:12px 18px;font-weight:700;min-height:48px;cursor:pointer}
+.foot{text-align:center;color:var(--ink-3);font-size:13px;margin-top:16px}
+[hidden]{display:none!important}
+</style>
+</head>
+<body>
+<main>
+  <div class="top">
+    <span class="logo" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg></span>
+    <div class="brand" id="brand"></div>
+    <div class="lang" role="group" aria-label="Language / Idioma"><button type="button" data-lang="en" aria-pressed="false">EN</button><button type="button" data-lang="es" aria-pressed="false">ES</button></div>
+  </div>
+
+  <form class="card" id="form" novalidate>
+    <div class="test" id="testBar" hidden></div>
+    <h1 id="t-title"></h1>
+    <p class="lead" id="t-lead"></p>
+    <div class="formerr" id="formErr" role="alert" hidden></div>
+    <fieldset>
+      <legend id="t-hotel"></legend>
+      <div class="hotels" id="hotels" role="radiogroup"></div>
+      <div class="err" id="e-hotel" hidden></div>
+    </fieldset>
+    <div class="f"><label class="l" for="name" id="t-name"></label><input id="name" name="name" autocomplete="name" autocapitalize="words" maxlength="120" enterkeyhint="next"><div class="err" id="e-name" hidden></div></div>
+    <div class="f"><label class="l" for="phone" id="t-phone"></label><input id="phone" name="phone" type="tel" inputmode="tel" autocomplete="tel" maxlength="30" enterkeyhint="next"><div class="err" id="e-phone" hidden></div></div>
+    <div class="f"><label class="l" for="email"><span id="t-email"></span> <span class="opt" id="t-opt"></span></label><input id="email" name="email" type="email" inputmode="email" autocomplete="email" autocapitalize="off" spellcheck="false" maxlength="160" enterkeyhint="done"><div class="err" id="e-email" hidden></div></div>
+    <div class="when"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><span id="when"></span></div>
+    <div class="priv" id="t-priv"></div>
+    <label class="chk"><input type="checkbox" id="ok"><span id="t-ok"></span></label>
+    <div class="err" id="e-ok" hidden style="margin:-10px 0 14px"></div>
+    <button class="go" type="submit" id="go"></button>
+  </form>
+
+  <section class="card done" id="done" hidden aria-live="polite">
+    <div class="big"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12.5l4.5 4.5L19 7.5"/></svg></div>
+    <h1 id="t-thanks"></h1>
+    <p id="t-thanks2"></p>
+    <p id="doneAt"></p>
+    <button type="button" class="again" id="again"></button>
+  </section>
+  <p class="foot" id="t-foot"></p>
+</main>
+<script>
+(() => {
+'use strict';
+const API = 'https://ilqlluhsyxlwersrnmob.supabase.co';
+const KEY = 'sb_publishable_FGX3oLS67ifrHc1CUGkmPQ_s338NdmZ';
+const TZ = 'America/New_York';
+const HOTELS = [
+  {id: 'FDT', name: 'Travelodge Fundamental'},
+  {id: 'MGT', name: 'Baymont Maingate'},
+  {id: 'HWY', name: 'Howard Johnson Highway'},
+];
+const T = {
+  en: {title: 'Guest check-in', lead: 'Fill this in instead of the paper card at the front desk. It takes under a minute.',
+    hotel: 'Your hotel', name: 'Full name', phone: 'Phone', email: 'Email', opt: '(optional)',
+    priv: 'We use these details only to register your stay. Only our front desk staff can see them, we never use them for marketing, and they are deleted automatically after 30 days.',
+    ok: 'I agree that the hotel uses my details to register my stay.', go: 'Register', sending: 'Sending…',
+    thanks: 'Thank you! You’re registered', thanks2: 'The front desk already has your details. You can close this page.', again: 'Register another guest',
+    when: 'Date and time are added automatically', at: 'Registered ', foot: 'Your connection is secure (HTTPS).', test: 'TEST MODE: this sign-in is marked as test data.',
+    eHotel: 'Choose your hotel.', eName: 'Write your full name.', ePhone: 'Write a phone number with at least 7 digits.', eEmail: 'This email doesn’t look right.', eOk: 'Please check the box to continue.',
+    eNet: 'We couldn’t send it. Check your connection and try again.', eMany: 'Too many sign-ins right now. Please ask the front desk.', eGeneric: 'Something went wrong. Please try again or ask the front desk.'},
+  es: {title: 'Registro de huésped', lead: 'Llénalo en lugar del papelito de recepción. Toma menos de un minuto.',
+    hotel: 'Tu hotel', name: 'Nombre completo', phone: 'Teléfono', email: 'Correo', opt: '(opcional)',
+    priv: 'Usamos estos datos solo para registrar tu estadía. Solo el personal de recepción los ve, nunca los usamos para marketing y se borran solos a los 30 días.',
+    ok: 'Acepto que el hotel use mis datos para registrar mi estadía.', go: 'Registrarme', sending: 'Enviando…',
+    thanks: '¡Gracias! Ya estás registrado', thanks2: 'Recepción ya tiene tus datos. Puedes cerrar esta página.', again: 'Registrar a otro huésped',
+    when: 'La fecha y la hora se agregan solas', at: 'Registrado ', foot: 'Tu conexión es segura (HTTPS).', test: 'MODO PRUEBA: este registro queda marcado como dato de prueba.',
+    eHotel: 'Elige tu hotel.', eName: 'Escribe tu nombre completo.', ePhone: 'Escribe un teléfono de al menos 7 dígitos.', eEmail: 'Este correo no se ve bien.', eOk: 'Marca la casilla para continuar.',
+    eNet: 'No se pudo enviar. Revisa tu conexión e inténtalo otra vez.', eMany: 'Hay demasiados registros ahora. Pide ayuda en recepción.', eGeneric: 'Algo salió mal. Inténtalo otra vez o pide ayuda en recepción.'},
+};
+const $ = s => document.querySelector(s);
+const q = new URLSearchParams(location.search);
+const TEST = q.get('test') === '1';
+const store = {get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k, v){ try { localStorage.setItem(k, v); } catch {} }};
+let lang = q.get('lang') === 'en' || q.get('lang') === 'es' ? q.get('lang') : store.get('gq.lang') || (/^es\b/i.test(navigator.language || '') ? 'es' : 'en');
+let hotel = (HOTELS.find(h => h.id === String(q.get('h') || '').toUpperCase()) || {}).id || '';
+let busy = false;
+const t = k => T[lang][k];
+
+function hotelsPaint(){
+  $('#hotels').innerHTML = HOTELS.map(h => `<button type="button" role="radio" data-h="${h.id}" aria-checked="${h.id === hotel}"><span class="dot"></span><span>${h.name}</span></button>`).join('');
+  const h = HOTELS.find(x => x.id === hotel);
+  $('#brand').innerHTML = h ? h.name + '<small>' + t('title') + '</small>' : 'FrankShift<small>' + t('title') + '</small>';
+}
+function nowTxt(){ return new Date().toLocaleString(lang === 'es' ? 'es-US' : 'en-US', {weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: TZ}); }
+function paint(){
+  document.documentElement.lang = lang;
+  document.title = t('title');
+  document.querySelectorAll('[data-lang]').forEach(b => b.setAttribute('aria-pressed', b.dataset.lang === lang));
+  ['title', 'lead', 'hotel', 'name', 'phone', 'email', 'opt', 'priv', 'ok', 'thanks', 'thanks2', 'again', 'foot'].forEach(k => { const el = $('#t-' + k) || $('#' + k); if (el && el.id.startsWith('t-')) el.textContent = t(k); });
+  $('#again').textContent = t('again');
+  $('#go').textContent = busy ? t('sending') : t('go');
+  $('#when').textContent = t('when') + ' · ' + nowTxt();
+  $('#testBar').hidden = !TEST; $('#testBar').textContent = t('test');
+  hotelsPaint();
+  document.querySelectorAll('.err:not([hidden])').forEach(e => { if (e.dataset.k) e.textContent = t(e.dataset.k); });
+  const fe = $('#formErr'); if (!fe.hidden && fe.dataset.k) fe.textContent = t(fe.dataset.k);
+}
+function err(field, k){
+  const e = $('#e-' + field); e.hidden = !k; e.dataset.k = k || ''; e.textContent = k ? t(k) : '';
+  const inp = {name: '#name', phone: '#phone', email: '#email'}[field]; if (inp) $(inp).setAttribute('aria-invalid', k ? 'true' : 'false');
+}
+function formErr(k){ const fe = $('#formErr'); fe.hidden = !k; fe.dataset.k = k || ''; fe.textContent = k ? t(k) : ''; }
+function check(){
+  const name = $('#name').value.replace(/\s+/g, ' ').trim(), phone = $('#phone').value.trim(), email = $('#email').value.trim().toLowerCase();
+  const digits = phone.replace(/\D/g, '').length, bad = [];
+  err('hotel', hotel ? '' : 'eHotel'); if (!hotel) bad.push('#hotels button');
+  err('name', name.length >= 2 ? '' : 'eName'); if (name.length < 2) bad.push('#name');
+  const pOk = digits >= 7 && digits <= 15 && /^\+?[0-9 ().-]+$/.test(phone); err('phone', pOk ? '' : 'ePhone'); if (!pOk) bad.push('#phone');
+  const eOk = !email || /^[^@\s]+@[^@\s]+\.[^@\s]+$/.test(email); err('email', eOk ? '' : 'eEmail'); if (!eOk) bad.push('#email');
+  const ok = $('#ok').checked; err('ok', ok ? '' : 'eOk'); if (!ok) bad.push('#ok');
+  return {bad, name, phone, email};
+}
+async function send(v){
+  const ctl = 'AbortController' in window ? new AbortController() : null, tm = setTimeout(() => ctl && ctl.abort(), 20000);
+  try {
+    const r = await fetch(API + '/rest/v1/rpc/gq_register', {method: 'POST', signal: ctl ? ctl.signal : undefined,
+      headers: {'Content-Type': 'application/json', apikey: KEY},
+      body: JSON.stringify({p_hotel: hotel, p_name: v.name, p_phone: v.phone, p_email: v.email || null, p_lang: lang, p_consent: true, p_test: TEST})});
+    let j = null; try { j = await r.json(); } catch {}
+    if (!r.ok) { const m = (j && j.message) || ''; return {fail: m === 'TOO_MANY' ? 'eMany' : m === 'BAD_PHONE' ? 'ePhone' : m === 'BAD_EMAIL' ? 'eEmail' : m === 'BAD_NAME' ? 'eName' : 'eGeneric', field: {BAD_PHONE: 'phone', BAD_EMAIL: 'email', BAD_NAME: 'name'}[m]}; }
+    return {at: (j && j.at) || new Date().toISOString()};
+  } catch { return {fail: 'eNet'}; } finally { clearTimeout(tm); }
+}
+$('#form').addEventListener('submit', async e => {
+  e.preventDefault(); if (busy) return; formErr('');
+  const v = check();
+  if (v.bad.length) { const el = $(v.bad[0]); if (el) { if (!el.closest('#hotels')) el.focus(); if (el.scrollIntoView) el.scrollIntoView({block: 'center', behavior: 'smooth'}); } return; }
+  busy = true; $('#go').disabled = true; $('#go').textContent = t('sending');
+  const r = await send(v);
+  busy = false; $('#go').disabled = false; $('#go').textContent = t('go');
+  if (r.fail) { if (r.field) { err(r.field, r.fail); $('#' + r.field).focus(); } else formErr(r.fail); return; }
+  $('#doneAt').textContent = t('at') + new Date(r.at).toLocaleString(lang === 'es' ? 'es-US' : 'en-US', {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: TZ});
+  $('#form').hidden = true; $('#done').hidden = false; window.scrollTo(0, 0);
+});
+$('#again').onclick = () => { ['#name', '#phone', '#email'].forEach(s => $(s).value = ''); $('#ok').checked = false; $('#done').hidden = true; $('#form').hidden = false; paint(); $('#name').focus(); };
+$('#hotels').addEventListener('click', e => { const b = e.target.closest('[data-h]'); if (!b) return; hotel = b.dataset.h; err('hotel', ''); hotelsPaint(); });
+document.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => { lang = b.dataset.lang; store.set('gq.lang', lang); paint(); });
+['#name', '#phone', '#email'].forEach(s => $(s).addEventListener('input', () => err(s.slice(1), '')));
+$('#ok').addEventListener('change', () => { if ($('#ok').checked) err('ok', ''); });
+paint();
+setInterval(() => { if (!$('#form').hidden) $('#when').textContent = t('when') + ' · ' + nowTxt(); }, 30000);
+})();
+</script>
+</body>
+</html>

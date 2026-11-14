@@ -947,6 +947,8 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .menuoff{display:none!important}
 /* 1.16.0 Menu categories and Reservations */
 .catoff{display:none!important}
+/* the open phone Menu sets every button to flex, so these need the same weight to stay hidden */
+.app .tabs button.catoff,.app .tabs button.menuoff,.app.menu-open .tabs button.catoff,.app.menu-open .tabs button.menuoff{display:none!important}
 .tabs .mcats{display:flex;gap:4px;padding:4px;margin:0 4px 6px;border-radius:14px;background:var(--surface-2);flex:none}
 .tabs .mcats[hidden]{display:none!important}
 .app .tabs .mcats .mcat{flex:1 1 0!important;display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:center!important;gap:6px!important;width:auto!important;height:auto!important;min-height:42px!important;padding:6px 8px!important;margin:0!important;border:0!important;border-radius:10px!important;background:none!important;color:var(--ink-2)!important;box-shadow:none!important;cursor:pointer}
@@ -979,6 +981,26 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .rvcount{font-size:12.5px;color:var(--ink-3);margin:0 2px 8px}
 .rvrow{border-top:1px solid var(--line);padding:11px 2px;display:flex;flex-direction:column;gap:3px}
 .rvrow:first-of-type{border-top:0}
+/* 1.17.0 guest check-in by QR */
+.gqbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.gqbar .grow{flex:1}
+.gqchips{display:flex;flex-wrap:wrap;gap:6px}
+.gqchips button{border:1px solid var(--line);background:var(--surface-2);border-radius:999px;padding:7px 12px;font-size:13px;font-weight:600;color:var(--ink-2);min-height:36px}
+.gqchips button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:var(--accent-ink)}
+.gqbar input[type=date]{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:6px 10px;min-height:36px;font-size:14px}
+.gqrow{border-top:1px solid var(--line);padding:12px 2px;display:flex;flex-direction:column;gap:4px}
+.gqrow:first-of-type{border-top:0}
+.gqrow.done .gqname{color:var(--ink-2)}
+.gqtop{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.gqname{font-size:17px;font-weight:700;overflow-wrap:anywhere;flex:1;min-width:0}
+.gqtag{font-size:11px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;border-radius:6px;padding:3px 7px;white-space:nowrap}
+.gqtag.new{background:var(--accent-soft);color:var(--accent)}
+.gqtag.ok{background:var(--ok-soft);color:var(--ok)}
+.gqtag.test{background:var(--high-soft);color:var(--high)}
+.gqvals{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.gqval{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:5px 9px;font-size:14px;color:var(--ink);overflow-wrap:anywhere;text-align:left;min-height:34px}
+.gqmeta{font-size:12px;color:var(--ink-3)}
+.gqrow .btnrow{margin-top:4px}
 .rvtop{display:flex;align-items:baseline;gap:8px;min-width:0}
 .rvtop .grow{flex:1}
 .rvconf{font:700 15px var(--f-body);letter-spacing:.02em;overflow-wrap:anywhere}
@@ -1408,6 +1430,7 @@ body{background:var(--bg)}
     <button role="tab" data-tab="hkplan" aria-selected="false" id="hkTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg></span><span class="tl" data-noi18n>HK Game Plan</span></button>
     <button role="tab" data-tab="board" aria-selected="false" id="boardTab"><span class="tic"><span class="cnt" id="bdCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span><span class="tl" data-noi18n>Board</span></button>
     <button role="tab" data-tab="resv" aria-selected="false" id="resvTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg></span><span class="tl">Reservations</span></button>
+    <button role="tab" data-tab="guests" aria-selected="false" id="gqTab" class="menuoff"><span class="tic"><span class="cnt" id="gqCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v1M14 20h1M18 18h3v3"/></svg></span><span class="tl">Guest check-in</span></button>
     <button role="tab" data-tab="team" aria-selected="false" id="teamTab" hidden><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnt" id="teamCnt"></span></span><span class="tl">Manager</span></button>
   </nav>
   <div class="banner" id="pushBanner" hidden><span class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><span class="grow" id="pushText"></span><button class="btn sm pri" id="pushBtn">Turn on</button><button class="linkbtn" id="pushLater">Not now</button></div>
@@ -1475,6 +1498,7 @@ body{background:var(--bg)}
   <section class="view" id="view-hkplan" hidden data-noi18n aria-label="HK Game Plan"><div class="inner" id="hkBody"></div></section>
   <section class="view" id="view-board" hidden data-noi18n aria-label="Board"><div class="inner" id="bdBody"></div></section>
   <section class="view" id="view-resv" hidden data-noi18n aria-label="Reservations"><div class="inner" id="rvBody"></div></section>
+  <section class="view" id="view-guests" hidden data-noi18n aria-label="Guest check-in"><div class="inner" id="gqBody"></div></section>
 
   <section class="view" id="view-lost" hidden><div class="inner">
     <div><button type="button" class="btn sm" id="lfBack">‹ Pass-on</button></div>
@@ -2150,6 +2174,7 @@ const ES = {
 ,
 "Pass-on": "Entregas",
 "Reservations": "Reservaciones",
+"Guest check-in": "Registro de huéspedes",
 "New pass-on": "Nueva entrega de turno",
 "One point per line. Anyone can comment on a point or set an alarm on it.": "Un punto por línea. Cualquiera puede comentar un punto o ponerle una alarma.",
 "305 late checkout at 2 PM Guest in 210 waiting for a refund Call Spectrum about the Wi-Fi": "305 salida tarde a las 2 PM\nHuésped de la 210 espera un reembolso\nLlamar a Spectrum por el Wi-Fi",
@@ -3558,6 +3583,7 @@ function menuSet(d){
   if (!d) return; S.menuHid = d.hidden || []; S.owner = !!d.owner;
   const hid = new Set(S.menuHid);
   document.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('menuoff', hid.has(b.dataset.tab)));
+  { const gt = $('#gqTab'); if (gt && !(S.owner || (S.me && S.me.role === 'fd'))) gt.classList.add('menuoff'); } // guest check-in: Front desk and the superuser only
   if (S.tab && hid.has(S.tab === 'lost' ? 'passon' : S.tab)) setTab('chat');
   try { catPaint(); } catch {}
 }
@@ -4354,7 +4380,8 @@ function setTab(t){
   const inMain = t === 'chat' || t === 'orders', dash = desktop && t === 'orders';
   $('#main').hidden = !inMain || dash; $('#main').dataset.tab = t; $('#view-dash').hidden = !dash;
   if (dash) dashLoad();
-  ['passon','lost','rooms','team','map','laundry','eng','srep','punch','hkplan','board','resv'].forEach(v => $('#view-' + v).hidden = t !== v);
+  ['passon','lost','rooms','team','map','laundry','eng','srep','punch','hkplan','board','resv','guests'].forEach(v => $('#view-' + v).hidden = t !== v);
+  if (t === 'guests') setTimeout(gqShow); else gqLeave();
   if (t === 'board') setTimeout(bdShow);
   if (t === 'resv') setTimeout(rvShow);
   if (t === 'srep') setTimeout(srShow);
@@ -4713,8 +4740,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.16.5';
+const APP_VERSION = '1.17.0';
 const CHANGES = [
+  {v: '1.17.0', d: '2026-11-14', en: ['Guest check-in: guests scan the QR at the front desk and fill in their name, phone and email on their phone, in English or Spanish, instead of the paper card', 'The front desk of that hotel sees each check-in in the new Guest check-in section, newest first, and can copy the details for the guest profile, mark it processed, export a CSV or delete it', 'Print QR gives one sheet per hotel for the front desk. Check-ins are deleted on their own after 30 days and are never used for marketing', 'Guest check-in sits in the Reservations category of the Menu, next to Reservations', 'Phone Menu: each category now shows only its own sections'],
+    es: ['Registro de huéspedes: el huésped escanea el QR de recepción y llena su nombre, teléfono y correo en su teléfono, en inglés o español, en lugar del papelito', 'El front desk de ese hotel ve cada registro en la nueva sección Registro de huéspedes, los más nuevos primero, y puede copiar los datos para el perfil del huésped, marcarlo procesado, exportar un CSV o borrarlo', 'Imprimir QR da una hoja por hotel para recepción. Los registros se borran solos a los 30 días y nunca se usan para marketing', 'Registro de huéspedes está en la categoría Reservaciones del Menú, junto a Reservaciones', 'Menú en el teléfono: cada categoría muestra solo sus secciones']},
   {v: '1.16.5', d: '2026-11-14', en: ['Maingate and Highway maps: same look as Fundamental, with lawns, parking lines, trees along the edge, solid green rooms with shadows, orange stairs, white room numbers and a label for each wing. Search, floors, separate floors, top view, pins and orders work as before'],
     es: ['Mapas de Maingate y Highway: el mismo aspecto que Fundamental, con jardines, líneas de estacionamiento, árboles en el borde, habitaciones verdes sólidas con sombra, escaleras naranjas, números en blanco y el nombre de cada ala. La búsqueda, los pisos, separar pisos, la vista de planta, los pines y las órdenes funcionan igual']},
   {v: '1.16.4', d: '2026-11-14', en: ['Fundamental map: new look from the site map, with a cream ground, teal lawns, parking lines, trees, solid green rooms, orange stairs and white room numbers. Search, floors, separate floors, top view, pins and orders work as before'],
@@ -6652,11 +6681,122 @@ function rvWire(){
   });
 }
 rvWire();
+
+/* ===== 1.17.0 Guest check-in: guests sign in with the QR at the front desk (registro.html); the front desk of that hotel sees them here.
+   Only Front desk and the superuser get this section (the server hides it for everyone else). Records leave on their own after 30 days. ===== */
+const GQ = {list: null, day: 'today', date: '', hotel: '', seen: null, timer: 0, bg: 0};
+const GQ_ERR = {NOT_ALLOWED: ['Only the front desk can see guest check-ins.', 'Solo recepción puede ver los registros de huéspedes.'], NOT_FOUND: ['That check-in is no longer here.', 'Ese registro ya no está.']};
+const gqErr = e => { const m = (e && e.message) || ''; const x = GQ_ERR[m]; return x ? L2(x[0], x[1]) : m; };
+const gqToday = (off) => { const d = new Date(Date.now() - (off || 0) * 864e5); return d.toLocaleDateString('en-CA', {timeZone: TZ}); };
+const gqDayArg = () => GQ.day === 'today' ? gqToday(0) : GQ.day === 'yday' ? gqToday(1) : GQ.day === 'date' && GQ.date ? GQ.date : null;
+const gqAllowed = () => !!(S.me && !(S.menuHid || []).includes('guests') && (S.owner || S.me.role === 'fd'));
+const gqHotelName = id => ({FDT: 'Travelodge Fundamental', MGT: 'Baymont Maingate', HWY: 'Howard Johnson Highway'})[id] || hotelShort(id);
+const gqCopyTxt = g => [g.full_name, g.phone, g.email].filter(Boolean).join('\n');
+function gqRow(g){
+  const done = !!g.processed_at;
+  return `<div class="gqrow${done ? ' done' : ''}" data-gqid="${esc(g.id)}">
+    <div class="gqtop"><span class="gqname">${esc(g.full_name)}</span>${g.is_test ? `<span class="gqtag test">${L2('Test', 'Prueba')}</span>` : ''}<span class="gqtag ${done ? 'ok' : 'new'}">${done ? L2('Processed', 'Procesado') : L2('New', 'Nuevo')}</span></div>
+    <div class="gqvals"><button type="button" class="gqval" data-gqc="phone" title="${esc(L2('Copy phone', 'Copiar teléfono'))}">${esc(g.phone)}</button>${g.email ? `<button type="button" class="gqval" data-gqc="email" title="${esc(L2('Copy email', 'Copiar correo'))}">${esc(g.email)}</button>` : `<span class="gqmeta">${L2('No email', 'Sin correo')}</span>`}</div>
+    <div class="gqmeta">${S.owner && !GQ.hotel ? esc(hotelShort(g.hotel_id)) + ' · ' : ''}${esc(mpWhen(g.created_at))}${done ? ' · ' + esc(L2('processed by ', 'procesado por ') + (g.processed_by || '')) : ''}</div>
+    <div class="btnrow"><button type="button" class="btn sm pri" data-gq="copy">${L2('Copy details', 'Copiar datos')}</button><button type="button" class="btn sm" data-gq="done">${done ? L2('Mark as new', 'Marcar como nuevo') : L2('Mark processed', 'Marcar procesado')}</button><button type="button" class="btn sm" data-gq="del">${L2('Delete', 'Borrar')}</button></div></div>`;
+}
+function gqListHtml(){
+  if (!GQ.list) return `<p class="hint">${L2('Loading…', 'Cargando…')}</p>`;
+  const open = GQ.list.filter(g => !g.processed_at).length;
+  const head = `<div class="rvcount">${esc(GQ.list.length === 1 ? L2('1 check-in', '1 registro') : L2(GQ.list.length + ' check-ins', GQ.list.length + ' registros'))}${open ? ' · ' + esc(L2(open + ' to process', open + ' por procesar')) : ''}</div>`;
+  return head + (GQ.list.length ? GQ.list.map(gqRow).join('') : `<p class="hint">${L2('No check-ins for these dates yet. They show up here as soon as a guest sends the form.', 'Todavía no hay registros en estas fechas. Salen aquí en cuanto un huésped manda el formulario.')}</p>`);
+}
+function gqRender(){
+  const box = $('#gqBody'); if (!box) return;
+  const days = [['today', 'Today', 'Hoy'], ['yday', 'Yesterday', 'Ayer'], ['all', '30 days', '30 días']];
+  const hs = S.owner ? [['', L2('All hotels', 'Todos')]].concat(['FDT', 'MGT', 'HWY'].map(id => [id, hotelShort(id)])) : [];
+  const here = S.owner && GQ.hotel ? GQ.hotel : (S.hotel && S.hotel.id) || '';
+  box.innerHTML = `<div class="enghead"><div class="grow"><h2>${L2('Guest check-in', 'Registro de huéspedes')}</h2>
+      <div class="sub">${esc(S.owner && !GQ.hotel ? L2('What guests send with the front desk QR, at all three hotels.', 'Lo que los huéspedes mandan con el QR de recepción, en los tres hoteles.') : L2('What guests send with the QR at the front desk of ', 'Lo que los huéspedes mandan con el QR de recepción de ') + gqHotelName(here) + '.')} ${L2('Newest first. Deleted on their own after 30 days.', 'Los más nuevos primero. Se borran solos a los 30 días.')}</div></div></div>
+    <div class="card gqbar">
+      ${hs.length ? `<div class="gqchips" role="group" aria-label="${esc(L2('Hotel', 'Hotel'))}">${hs.map(([k, n]) => `<button type="button" data-gqh="${k}" aria-pressed="${GQ.hotel === k}">${esc(n)}</button>`).join('')}</div>` : ''}
+      <div class="gqchips" role="group" aria-label="${esc(L2('Date', 'Fecha'))}">${days.map(([k, en, es]) => `<button type="button" data-gqd="${k}" aria-pressed="${GQ.day === k}">${esc(L2(en, es))}</button>`).join('')}</div>
+      <input type="date" id="gqDate" value="${esc(GQ.day === 'date' ? GQ.date : '')}" max="${gqToday(0)}" min="${gqToday(30)}" aria-label="${esc(L2('Pick a day', 'Elige un día'))}">
+      <span class="grow"></span>
+      <button type="button" class="btn sm" id="gqCsv">${L2('Export CSV', 'Exportar CSV')}</button>
+      <button type="button" class="btn sm" id="gqQr">${L2('Print QR', 'Imprimir QR')}</button>
+    </div>
+    <div class="card"><div id="gqList">${gqListHtml()}</div></div>`;
+}
+const gqListPaint = () => { const l = $('#gqList'); if (l) l.innerHTML = gqListHtml(); };
+function gqBadge(list){
+  const b = $('#gqCnt'); if (!b) return;
+  const today = gqToday(0), n = (list || []).filter(g => !g.processed_at && new Date(g.created_at).toLocaleDateString('en-CA', {timeZone: TZ}) === today).length;
+  b.hidden = !n; b.textContent = n > 99 ? '99+' : String(n);
+}
+async function gqFetch(quiet){
+  if (!S.token || !S.me || !gqAllowed()) return;
+  try {
+    const list = (await call('sc_guests', {p_hotel: S.owner && GQ.hotel ? GQ.hotel : null, p_day: gqDayArg()})) || [];
+    if (GQ.seen && S.tab === 'guests') { const fresh = list.filter(g => !GQ.seen.has(g.id)); if (fresh.length) toast(esc(L2('New check-in: ', 'Nuevo registro: ') + fresh[0].full_name), 'new'); }
+    GQ.seen = new Set(list.map(g => g.id)); GQ.list = list; if (S.tab === 'guests') gqListPaint();
+    if (GQ.day === 'today' && !(S.owner && GQ.hotel)) gqBadge(list);
+  } catch (e) { if (!quiet) toast(esc(gqErr(e))); if (!GQ.list) { GQ.list = []; gqListPaint(); } }
+}
+// the badge on the Menu: today's check-ins still to process, checked every minute in the background
+async function gqBgTick(){
+  if (!gqAllowed() || document.hidden || S.tab === 'guests') return;
+  try { gqBadge((await call('sc_guests', {p_hotel: null, p_day: gqToday(0)})) || []); } catch {}
+}
+function gqShow(){
+  if (!gqAllowed()) { setTab('chat'); return; }
+  GQ.seen = null; gqRender(); gqFetch();
+  clearInterval(GQ.timer); GQ.timer = setInterval(() => { if (!document.hidden) gqFetch(true); }, 12000);
+}
+function gqLeave(){ clearInterval(GQ.timer); GQ.timer = 0; }
+function gqCsv(){
+  const rows = GQ.list || [];
+  if (!rows.length) { toast(esc(L2('Nothing to export for these dates.', 'No hay nada que exportar en estas fechas.'))); return; }
+  const q = v => { v = v == null ? '' : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
+  const when = x => x ? new Date(x).toLocaleString('en-US', {timeZone: TZ}) : '';
+  const csv = ['Hotel,Name,Phone,Email,Registered,Language,Processed,Processed by,Test'].concat(rows.map(g =>
+    [gqHotelName(g.hotel_id), g.full_name, g.phone, g.email || '', when(g.created_at), g.lang, when(g.processed_at), g.processed_by || '', g.is_test ? 'yes' : ''].map(q).join(','))).join('\n');
+  const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['﻿' + csv], {type: 'text/csv'}));
+  a.download = 'guest-checkins-' + (S.owner && !GQ.hotel ? 'all' : (GQ.hotel || (S.hotel && S.hotel.id) || '')) + '-' + (gqDayArg() || 'last-30-days') + '.csv';
+  document.body.appendChild(a); a.click(); a.remove();
+}
+function gqWire(){
+  const v = $('#view-guests'); if (!v || v.dataset.w) return; v.dataset.w = '1';
+  v.addEventListener('click', async e => {
+    const hb = e.target.closest('[data-gqh]'); if (hb) { GQ.hotel = hb.dataset.gqh; GQ.list = null; GQ.seen = null; gqRender(); gqFetch(); return; }
+    const db = e.target.closest('[data-gqd]'); if (db) { GQ.day = db.dataset.gqd; GQ.date = ''; GQ.list = null; GQ.seen = null; gqRender(); gqFetch(); return; }
+    if (e.target.id === 'gqCsv') { gqCsv(); return; }
+    if (e.target.id === 'gqQr') { const h = S.owner && !GQ.hotel ? '' : (GQ.hotel || (S.hotel && S.hotel.id) || ''); window.open('qr.html' + (h ? '?h=' + encodeURIComponent(h) : ''), '_blank', 'noopener'); return; }
+    const row = e.target.closest('[data-gqid]'); if (!row) return;
+    const g = (GQ.list || []).find(x => x.id === row.dataset.gqid); if (!g) return;
+    const cv = e.target.closest('[data-gqc]'); if (cv) { copyText(g[cv.dataset.gqc] || ''); return; }
+    const b = e.target.closest('[data-gq]'); if (!b) return;
+    if (b.dataset.gq === 'copy') { copyText(gqCopyTxt(g)); return; }
+    if (b.dataset.gq === 'done') {
+      b.disabled = true;
+      try { const u = await call('sc_guest_done', {p_id: g.id, p_done: !g.processed_at}); Object.assign(g, u); gqListPaint(); gqBadge(GQ.day === 'today' ? GQ.list : null); }
+      catch (err) { b.disabled = false; toast(esc(gqErr(err))); }
+      return;
+    }
+    if (b.dataset.gq === 'del') {
+      openModal(`<div data-noi18n><h2>${L2('Delete this check-in?', '¿Borrar este registro?')}</h2><p class="lead">${esc(g.full_name)} · ${esc(g.phone)}</p>
+        <p class="hint">${L2('It leaves the list for everyone. This cannot be undone.', 'Sale de la lista para todos. No se puede deshacer.')}</p>
+        <div class="btnrow"><button type="button" class="btn danger" id="gqDelGo">${L2('Delete', 'Borrar')}</button><button type="button" class="btn" data-close>${L2('Cancel', 'Cancelar')}</button></div></div>`);
+      $('#gqDelGo').onclick = async () => { try { await call('sc_guest_delete', {p_id: g.id}); GQ.list = GQ.list.filter(x => x.id !== g.id); closeModal(); gqListPaint(); toast(esc(L2('Check-in deleted', 'Registro borrado')), 'new'); }
+        catch (err) { toast(esc(gqErr(err))); } };
+    }
+  });
+  v.addEventListener('change', e => { if (e.target.id === 'gqDate') { GQ.date = e.target.value; GQ.day = GQ.date ? 'date' : 'today'; GQ.list = null; GQ.seen = null; gqRender(); gqFetch(); } });
+  GQ.bg = setInterval(gqBgTick, 60000); setTimeout(gqBgTick, 4000);
+}
+gqWire();
+window.__fsGuests = {GQ, gqRow, gqCopyTxt, gqDayArg, gqToday};
 // tests read the parsers here
 window.__fsResv = {rvDate, rvCsv, rvFromTable, rvFromPdfLines, rvFromLine, rvField, rvCheck, rvBlack};
 /* ---- the Menu's two categories: Operations (everything before) and Reservations ---- */
 const MCATS = [['ops', 'Operations', 'Operaciones'], ['res', 'Reservations', 'Reservaciones']];
-const catOf = t => t === 'resv' ? 'res' : 'ops';
+const RES_TABS = ['resv', 'guests'];
+const catOf = t => RES_TABS.includes(t) ? 'res' : 'ops';
 S.cat = ls.get('sc.cat', 'ops') === 'res' ? 'res' : 'ops';
 (function catBuild(){
   const tabs = $('#tabs'), first = tabs && tabs.querySelector('button[data-tab]'); if (!first) return;
@@ -6668,14 +6808,15 @@ S.cat = ls.get('sc.cat', 'ops') === 'res' ? 'res' : 'ops';
   g.addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; e.stopPropagation(); catSet(b.dataset.cat, true); });
 })();
 function catPaint(){
-  const hid = new Set(S.menuHid || []), resOk = !hid.has('resv');
+  const hid = new Set(S.menuHid || []), resOk = RES_TABS.some(t => { const b = document.querySelector(`#tabs button[data-tab="${t}"]`); return b && !hid.has(t) && !b.classList.contains('menuoff'); });
   if (!resOk && S.cat === 'res') S.cat = 'ops';
   const g = $('#mCats'); if (g) { g.hidden = !resOk; g.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === S.cat)); }
   document.querySelectorAll('#tabs button[data-tab]').forEach(b => b.classList.toggle('catoff', catOf(b.dataset.tab) !== S.cat));
 }
 function catSet(c, go){
   S.cat = c === 'res' ? 'res' : 'ops'; ls.set('sc.cat', S.cat); catPaint();
-  if (go && catOf(S.tab || 'chat') !== S.cat) { setTab(S.cat === 'res' ? 'resv' : 'chat'); if (!DESK_MQ.matches) menuOpen(true); }
+  const firstRes = () => (RES_TABS.find(t => { const b = document.querySelector(`#tabs button[data-tab="${t}"]`); return b && !b.classList.contains('menuoff'); }) || 'chat');
+  if (go && catOf(S.tab || 'chat') !== S.cat) { setTab(S.cat === 'res' ? firstRes() : 'chat'); if (!DESK_MQ.matches) menuOpen(true); }
 }
 catPaint();
 
