@@ -4672,8 +4672,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.16.1';
+const APP_VERSION = '1.16.2';
 const CHANGES = [
+  {v: '1.16.2', d: '2026-11-14', en: ['Alerts now show a hotel bell: in colour inside the alert, and as a bell in the Android status bar instead of a white square'],
+    es: ['Las alertas ahora muestran una campanita de hotel: a color dentro de la alerta, y como campanita en la barra de Android en lugar de un cuadro blanco']},
   {v: '1.16.1', d: '2026-11-13', en: ['Reservations: the account number is the confirmation number, so reports that call it account number map to it when you import them', 'Reservations shows the 2027 blackout dates (MLK weekend, Presidents Day, Daytona 500, Spring Break, Easter, NPE Convention, MegaCon, Premiere Beauty, EDC, Warped Tour). A stay on those dates is marked Blackout and asks you to confirm the rate twice before saving'],
     es: ['Reservaciones: el account number es el número de confirmación, así que los reportes que lo llaman account number se mapean a él al importarlos', 'Reservaciones muestra las fechas blackout de 2027 (MLK weekend, Presidents Day, Daytona 500, Spring Break, Easter, NPE Convention, MegaCon, Premiere Beauty, EDC, Warped Tour). Una estadía en esas fechas sale marcada Blackout y te pide confirmar la tarifa dos veces antes de guardar']},
   {v: '1.16.0', d: '2026-11-13', en: ['The Menu now has two categories: Operations, with everything you had, and Reservations', 'New Reservations: the front desk logs the reservations made by hand under rate code LP01, with confirmation number, guest name, check-in, check-out, rate per night and extranet source. Nights and total add up by themselves', 'Import a PDF, Excel or CSV and FrankShift reads the reservations in it. Check every line, fix or leave out any, and save them all at once. You can still add one by hand', 'Search by confirmation, name, source or date. Whoever entered a reservation, or a manager, can edit or delete it. Each hotel has its own list', 'For now only the owner sees Reservations'],

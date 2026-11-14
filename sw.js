@@ -34,8 +34,10 @@ self.addEventListener('push', e => {
       silent: false,
       requireInteraction: urgent,
       vibrate: VIBE[d.kind === 'eng' ? (urgent ? 'engUrgent' : 'eng') : d.kind === 'alarm' ? 'alarm' : urgent ? 'urgent' : d.kind] || [200, 100, 200],
-      icon: 'icon-192.png',
-      badge: 'icon-192.png',
+      // the hotel bell: in colour inside the alert, and as a white silhouette in the Android status bar
+      // (Android draws only the shape of a badge, so a full-colour square shows up as a white box)
+      icon: 'notify-bell.png',
+      badge: 'badge-bell.png',
       timestamp: Date.now(),
       // maintenance alerts open Engineer
       data: { url: self.registration.scope + (d.kind === 'eng' ? '#eng' : d.hash === '#team' || d.hash === '#passon' || d.hash === '#laundry' ? d.hash : '#orders') },
