@@ -78,7 +78,7 @@ legend,label.l{display:block;font-weight:700;font-size:15px;margin-bottom:7px}
     <h1 id="t-title"></h1>
     <p class="lead" id="t-lead"></p>
     <div class="formerr" id="formErr" role="alert" hidden></div>
-    <fieldset>
+    <fieldset id="hotelSet">
       <legend id="t-hotel"></legend>
       <div class="hotels" id="hotels" role="radiogroup"></div>
       <div class="err" id="e-hotel" hidden></div>
@@ -137,11 +137,13 @@ const TEST = q.get('test') === '1';
 const store = {get(k){ try { return localStorage.getItem(k); } catch { return null; } }, set(k, v){ try { localStorage.setItem(k, v); } catch {} }};
 let lang = q.get('lang') === 'en' || q.get('lang') === 'es' ? q.get('lang') : store.get('gq.lang') || (/^es\b/i.test(navigator.language || '') ? 'es' : 'en');
 let hotel = (HOTELS.find(h => h.id === String(q.get('h') || '').toUpperCase()) || {}).id || '';
+const LOCK = !!hotel; // each hotel's QR opens its own form: no hotel choice
 let busy = false;
 const t = k => T[lang][k];
 
 function hotelsPaint(){
-  $('#hotels').innerHTML = HOTELS.map(h => `<button type="button" role="radio" data-h="${h.id}" aria-checked="${h.id === hotel}"><span class="dot"></span><span>${h.name}</span></button>`).join('');
+  $('#hotelSet').hidden = LOCK;
+  if (!LOCK) $('#hotels').innerHTML = HOTELS.map(h => `<button type="button" role="radio" data-h="${h.id}" aria-checked="${h.id === hotel}"><span class="dot"></span><span>${h.name}</span></button>`).join('');
   const h = HOTELS.find(x => x.id === hotel);
   $('#brand').innerHTML = h ? h.name + '<small>' + t('title') + '</small>' : 'FrankShift<small>' + t('title') + '</small>';
 }
@@ -197,7 +199,7 @@ $('#form').addEventListener('submit', async e => {
   $('#form').hidden = true; $('#done').hidden = false; window.scrollTo(0, 0);
 });
 $('#again').onclick = () => { ['#name', '#phone', '#email'].forEach(s => $(s).value = ''); $('#ok').checked = false; $('#done').hidden = true; $('#form').hidden = false; paint(); $('#name').focus(); };
-$('#hotels').addEventListener('click', e => { const b = e.target.closest('[data-h]'); if (!b) return; hotel = b.dataset.h; err('hotel', ''); hotelsPaint(); });
+$('#hotels').addEventListener('click', e => { if (LOCK) return; const b = e.target.closest('[data-h]'); if (!b) return; hotel = b.dataset.h; err('hotel', ''); hotelsPaint(); });
 document.querySelectorAll('[data-lang]').forEach(b => b.onclick = () => { lang = b.dataset.lang; store.set('gq.lang', lang); paint(); });
 ['#name', '#phone', '#email'].forEach(s => $(s).addEventListener('input', () => err(s.slice(1), '')));
 $('#ok').addEventListener('change', () => { if ($('#ok').checked) err('ok', ''); });
