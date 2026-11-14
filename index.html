@@ -1025,6 +1025,15 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .pkadd .pkbig{flex:1 1 220px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;font-size:16px;cursor:pointer}
 .pkadd .pkbig svg{width:22px;height:22px}
 .pkadd .btn{min-height:48px}
+.pkadd .pkphoto{display:inline-flex;align-items:center;justify-content:center;gap:7px;cursor:pointer}
+.pkadd .pkphoto svg{width:19px;height:19px}
+.pkcam{position:relative;border-radius:14px;overflow:hidden;background:#000;aspect-ratio:3/4;max-height:58vh;margin:0 auto 10px;width:100%}
+.pkcam video{width:100%;height:100%;object-fit:cover;display:block}
+.pkaim{position:absolute;left:9%;right:9%;top:30%;bottom:30%;border:3px solid rgba(255,255,255,.92);border-radius:14px;box-shadow:0 0 0 999px rgba(0,0,0,.28);pointer-events:none}
+.pktorch{position:absolute;right:10px;top:10px;border:0;border-radius:999px;padding:7px 13px;font:600 13.5px var(--f-body);background:rgba(15,23,42,.72);color:#fff;cursor:pointer}
+.pktorch[aria-pressed="true"]{background:#FACC15;color:#0F172A}
+.pkstate{font-weight:600;font-size:14.5px;margin:0 0 6px;text-align:center}
+@media (min-width:900px){.pkcam{aspect-ratio:4/3;max-height:48vh}}
 .gqbar select,.gqbar input[type=search]{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:6px 10px;min-height:38px;font-size:15px;color:var(--ink)}
 .gqbar input[type=search]{flex:1 1 200px;min-width:0}
 .pkform .f{margin-bottom:10px}
@@ -4795,8 +4804,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.19.0';
+const APP_VERSION = '1.20.0';
 const CHANGES = [
+  {v: '1.20.0', d: '2026-11-14', en: ['New Quick scan in Package log: point the camera at the label and the app reads the barcode or QR on its own, with a beep. It takes the tracking and carrier from the code and reads the name and room from the same picture', 'Save and scan next keeps the camera open, so you can log a pile of packages one after another', 'Works with a USB or Bluetooth barcode scanner too: scan on the Package log page and the new package opens with the tracking filled in', 'The app warns you when a tracking number was already logged, and when the label says perishable or urgent', 'A Light button turns on the phone’s flashlight in dark rooms, on phones that allow it'],
+    es: ['Nuevo Escaneo rápido en Package log: apunta la cámara a la etiqueta y la app lee sola el código de barras o el QR, con un pitido. Toma el tracking y la mensajería del código y lee el nombre y la habitación de la misma imagen', 'Guardar y escanear otro deja la cámara abierta, para registrar una pila de paquetes uno tras otro', 'También funciona con un lector de códigos USB o Bluetooth: escanea en la página de Package log y se abre el paquete nuevo con el tracking puesto', 'La app te avisa cuando un tracking ya se registró, y cuando la etiqueta dice perecedero o urgente', 'El botón Luz prende la linterna del teléfono en cuartos oscuros, en los teléfonos que lo permiten']},
   {v: '1.19.0', d: '2026-11-14', en: ['The Menu now has three categories: Operations, Front Office and Housekeeping', 'Front Office now holds Pass-on, Shift Report and Orders, next to Reservations, Guest check-in and Package log', 'New Housekeeping category with Laundry, HK Game Plan and Board', 'A red number on a category tells you something is waiting inside it. Who sees each item is the same as before'],
     es: ['El Menú ahora tiene tres categorías: Operations, Front Office y Housekeeping', 'Front Office ahora tiene Pass-on, Shift Report y Orders, junto a Reservaciones, Registro de huéspedes y Package log', 'Nueva categoría Housekeeping con Laundry, HK Game Plan y Board', 'Un número rojo en una categoría te avisa que algo espera adentro. Quién ve cada opción sigue igual que antes']},
   {v: '1.18.0', d: '2026-11-14', en: ['The Reservations category in the Menu is now called Front Office', 'New Package log in Front Office, for the front desk and managers of each hotel: take a photo of the label and the app reads the tracking, carrier and name on the phone, so you only check them and save. The photo stays as proof, and the app warns you when the label was hard to read', 'Each package goes Received, Notified, Delivered. Filter by status, date, carrier and hotel, sort by date, name, room, carrier or status, or search by name, tracking or room', 'To deliver, the guest signs with a finger on your phone, or scans a QR and signs on their own phone. The signature stays with the package, and packages are kept with their photo and signature'],
@@ -6931,7 +6942,8 @@ function pkFromText(txt, cleanTxt){
   }
   recipient = recipient.toLowerCase().replace(/(^|[\s'-])([a-zà-ÿ])/g, (x, a, b) => a + b.toUpperCase());
   const rm = raw.match(/\b(?:RM|ROOM|HAB(?:ITACI[OÓ]N)?)\s*#?\s*:?\s*(\d{2,4})\b/i);
-  return {carrier, tracking, recipient, room: rm ? rm[1] : ''};
+  const urgent = /PERISHABLE|REFRIGERAT|KEEP (?:FROZEN|COLD|REFRIGERATED)|MEDICAL|URGENT|TIME[- ]SENSITIVE/.test(U);
+  return {carrier, tracking, recipient, room: rm ? rm[1] : '', urgent};
 }
 // put both together; check = the staff should look again before saving
 function pkMerge(code, text, conf){
@@ -6996,7 +7008,199 @@ async function pkRead(file, onPct){
   const code = await pkBarcodes(cv).catch(() => null);
   let text = null, conf = 0, failed = false;
   try { const o = await pkOcr(cv, onPct); text = pkFromText(o.text, o.clean); conf = o.conf; } catch { failed = !code; }
-  return Object.assign(pkMerge(code, text, conf), {failed});
+  return Object.assign(pkMerge(code, text, conf), {failed, urgent: !!(text && text.urgent)});
+}
+
+/* ---- 1.20.0 quick scan: live camera reads barcodes and QR codes, package after package; a USB or Bluetooth scanner works too ---- */
+// formats a shipping label uses; product codes (EAN, UPC) on the box are left out so they are never taken for a tracking number
+const PK_FMTS = ['code_128', 'qr_code', 'pdf417', 'data_matrix', 'code_39', 'code_93', 'codabar', 'aztec', 'itf'];
+const PK_ZFMTS = ['CODE_128', 'QR_CODE', 'PDF_417', 'DATA_MATRIX', 'CODE_39', 'CODE_93', 'CODABAR', 'AZTEC', 'ITF'];
+const PK_PRODUCT = /^(ean|upc)/i;
+// what any scanned code says -> {carrier, tracking, guess?, unknown?} or null.
+// Big 2D codes (FedEx PDF417, UPS, Amazon QR) hold many fields: the tracking number is one of them
+function pkFromScan(raw, format){
+  if (format && PK_PRODUCT.test(String(format))) return null;
+  const s = String(raw || ''); if (!s.trim()) return null;
+  // a structured 2D code: read field by field, so letters that run across fields (a name, a phone) never pass for a tracking number
+  if (/[\x1d\x1e\x04]/.test(s)) {
+    const fields = s.split(/[\x1d\x1e\x04]/).map(x => x.replace(/\s/g, '').toUpperCase());
+    const fi = fields.findIndex(x => /^FDE/.test(x));
+    if (fi > 0 && /^(\d{12}|\d{15})$/.test(fields[fi - 1])) return {carrier: 'FedEx', tracking: fields[fi - 1]};
+    let guess = null;
+    for (const f of fields) { const p = pkFromCode(f); if (p && p.tracking === f && !p.guess && p.carrier !== 'FedEx' && p.carrier !== 'DHL') return p; if (p && p.tracking === f && !guess && p.carrier !== 'FedEx' && p.carrier !== 'DHL') guess = p; }
+    const one = pkFromCode(s.replace(/^[\x1d\x1e\x04]+|[\x1d\x1e\x04]+$/g, ''));
+    if (one && !/[\x1d\x1e\x04]/.test(s.replace(/^[\x1d\x1e\x04]+|[\x1d\x1e\x04]+$/g, ''))) return one;
+    return guess;
+  }
+  const direct = pkFromCode(s); if (direct && !direct.guess) return direct;
+  const U = s.toUpperCase(); let m;
+  if ((m = U.replace(/[^0-9A-Z]/g, ' ').match(/(?:^|\s)(9[1-5]\d{18,20})(?:\s|$)/))) return {carrier: 'USPS', tracking: m[1]};
+  let best = direct || null;
+  for (const t of s.split(/[^0-9A-Za-z]+/).filter(x => x.length >= 10)) {
+    const p = pkFromCode(t); if (p && !p.guess && p.carrier !== 'DHL' && p.tracking === t.toUpperCase()) return p; if (p && !best) best = p;
+  }
+  if (best) return best;
+  const flat = s.replace(/\s/g, '');
+  if (/^[0-9A-Za-z-]{8,40}$/.test(flat)) return {carrier: 'Other', tracking: flat.toUpperCase(), unknown: true};
+  return null;
+}
+// the best of what one frame showed
+function pkPick(hits){
+  const parsed = (hits || []).map(h => pkFromScan(h.raw, h.format)).filter(Boolean);
+  return parsed.find(p => !p.guess && !p.unknown) || parsed.find(p => !p.unknown) || parsed[0] || null;
+}
+// a USB or Bluetooth scanner types fast and ends with Enter; a person types slowly
+function pkWedge(){
+  let buf = '', last = 0, gaps = [];
+  return (key, t) => {
+    if (key === 'Enter') { const out = buf, slow = gaps.length && gaps.reduce((a, b) => a + b, 0) / gaps.length > 50; buf = ''; gaps = []; last = 0;
+      return out.length >= 8 && !slow ? out : null; }
+    if (key.length !== 1) return null;
+    if (last && t - last > 120) { buf = ''; gaps = []; }
+    else if (last) gaps.push(t - last);
+    buf += key; last = t; return null;
+  };
+}
+async function pkDetect(cv){
+  if (PK.bd === undefined) {
+    PK.bd = null;
+    if ('BarcodeDetector' in window) try {
+      const sup = window.BarcodeDetector.getSupportedFormats ? await window.BarcodeDetector.getSupportedFormats() : PK_FMTS;
+      const f = PK_FMTS.filter(x => sup.includes(x)); if (f.length) PK.bd = new window.BarcodeDetector({formats: f});
+    } catch { PK.bd = null; }
+  }
+  if (PK.bd) { try { return (await PK.bd.detect(cv)).map(b => ({raw: b.rawValue, format: b.format})); } catch { return []; } }
+  await pkLoad('zx'); const Z = window.ZXing; if (!Z) return [];
+  if (!PK.zr) { const h = new Map(); h.set(Z.DecodeHintType.POSSIBLE_FORMATS, PK_ZFMTS.map(k => Z.BarcodeFormat[k]).filter(x => x !== undefined)); h.set(Z.DecodeHintType.TRY_HARDER, true);
+    PK.zr = new Z.MultiFormatReader(); PK.zr.setHints(h); }
+  try { const r = PK.zr.decode(new Z.BinaryBitmap(new Z.HybridBinarizer(new Z.HTMLCanvasElementLuminanceSource(cv))));
+    const f = r.getBarcodeFormat(); return [{raw: r.getText(), format: typeof f === 'number' ? Z.BarcodeFormat[f] : String(f)}]; } catch { return []; }
+}
+function pkFrame(video, max){
+  const vw = video.videoWidth || 0, vh = video.videoHeight || 0; if (!vw || !vh) return null;
+  const k = Math.min(1, max / Math.max(vw, vh)), c = document.createElement('canvas');
+  c.width = Math.round(vw * k); c.height = Math.round(vh * k); c.getContext('2d').drawImage(video, 0, 0, c.width, c.height); return c;
+}
+function pkBeep(){
+  try { if (navigator.vibrate) navigator.vibrate(70); } catch {}
+  try { const a = PK.audio; if (!a) return; const o = a.createOscillator(), g = a.createGain(); o.frequency.value = 1320; g.gain.value = .08;
+    o.connect(g); g.connect(a.destination); o.start(); o.stop(a.currentTime + .09); } catch {}
+}
+function pkStopCam(){
+  const s = PK.cam; PK.cam = null; PK.scanOn = false; clearTimeout(PK.scanT);
+  if (s) try { s.getTracks().forEach(t => t.stop()); } catch {}
+}
+const pkSeenBefore = tk => tk ? (PK.list || []).find(p => (p.tracking || '').toUpperCase() === tk.toUpperCase()) : null;
+const pkWhen = iso => new Date(iso).toLocaleString(LANG === 'es' ? 'es-US' : 'en-US', {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: TZ});
+const PK_URGENT = () => L2('Perishable or urgent (label)', 'Perecedero o urgente (etiqueta)');
+
+async function pkScan(){
+  try { if (!PK.audio && (window.AudioContext || window.webkitAudioContext)) PK.audio = new (window.AudioContext || window.webkitAudioContext)(); } catch {}
+  const round = []; // logged in this round
+  openModal(`<div data-noi18n class="pkform pkscan"><h2>${L2('Quick scan', 'Escaneo rápido')}</h2>
+    <div id="pkLive"><div class="pkcam"><video id="pkVid" playsinline muted autoplay></video><div class="pkaim" aria-hidden="true"></div>
+      <button type="button" class="pktorch" id="pkTorch" hidden aria-pressed="false">${L2('Light', 'Luz')}</button></div>
+      <p class="pkstate" id="pkState" aria-live="polite">${L2('Opening the camera…', 'Abriendo la cámara…')}</p>
+      <p class="hint" id="pkRound" hidden></p>
+      <div class="btnrow"><button type="button" class="btn" id="pkHand">${L2('Type it in', 'Escribirlo a mano')}</button><button type="button" class="btn" data-close>${L2('Done', 'Listo')}</button></div></div>
+    <div id="pkOk" hidden></div></div>`);
+  const vid = $('#pkVid'), state = t => { const e = $('#pkState'); if (e) e.textContent = t; };
+  const paintRound = () => { const e = $('#pkRound'); if (!e) return; e.hidden = !round.length;
+    e.textContent = (round.length === 1 ? L2('1 logged: ', '1 registrado: ') : L2(round.length + ' logged: ', round.length + ' registrados: ')) + round.map(r => r.recipient).join(', '); };
+  try {
+    if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) throw new Error('NOCAM');
+    PK.cam = await navigator.mediaDevices.getUserMedia({audio: false, video: {facingMode: {ideal: 'environment'}, width: {ideal: 1920}, height: {ideal: 1080}}});
+  } catch (e) {
+    if (!$('#pkVid')) return;
+    state(e && e.name === 'NotAllowedError' ? L2('The camera is blocked. Allow it for frankshift.app in your phone’s settings, or use Log a package to take a photo.', 'La cámara está bloqueada. Permítela para frankshift.app en los ajustes del teléfono, o usa Registrar paquete para tomar una foto.')
+      : L2('This device has no camera the app can use. Use Type it in, or a USB scanner.', 'Este equipo no tiene una cámara que la app pueda usar. Usa Escribirlo a mano, o un lector USB.'));
+    $('#pkVid').closest('.pkcam').hidden = true; return;
+  }
+  if (!$('#pkVid')) { pkStopCam(); return; }
+  vid.srcObject = PK.cam; try { await vid.play(); } catch {}
+  clearInterval(PK.camWatch); PK.camWatch = setInterval(() => { if (!document.body.contains(vid)) { clearInterval(PK.camWatch); pkStopCam(); } }, 1000);
+  try { const tr = PK.cam.getVideoTracks()[0], cap = tr.getCapabilities ? tr.getCapabilities() : {};
+    if (cap && cap.torch) { const tb = $('#pkTorch'); tb.hidden = false;
+      tb.onclick = async () => { const on = tb.getAttribute('aria-pressed') !== 'true'; try { await tr.applyConstraints({advanced: [{torch: on}]}); tb.setAttribute('aria-pressed', on); } catch {} }; } } catch {}
+  const ready = L2('Point the camera at the barcode or QR on the label.', 'Apunta la cámara al código de barras o QR de la etiqueta.');
+  state(ready);
+  let wait = null; // a code that is not a known tracking number waits a moment for a better one
+  const tick = async () => {
+    if (!PK.scanOn) return;
+    if (!document.body.contains(vid)) { pkStopCam(); return; }
+    let hit = null;
+    if (!document.hidden) {
+      const cv = pkFrame(vid, 1280);
+      if (cv) { const p = pkPick(await pkDetect(cv).catch(() => [])); if (!PK.scanOn) return;
+        if (p && round.some(r => r.tracking === p.tracking)) state(L2('Already logged in this round: ', 'Ya registrado en esta ronda: ') + p.tracking);
+        else if (p && p.unknown) { if (!wait || wait.p.tracking !== p.tracking) wait = {p, t: Date.now()}; else if (Date.now() - wait.t > 900) hit = p; }
+        else if (p) hit = p; }
+    }
+    if (hit) { wait = null; PK.scanOn = false; pkBeep(); confirm(hit); return; }
+    PK.scanT = setTimeout(tick, PK.bd ? 120 : 250);
+  };
+  const live = () => { $('#pkLive').hidden = false; $('#pkOk').hidden = true; $('#pkOk').innerHTML = ''; state(ready); paintRound(); PK.scanOn = true; clearTimeout(PK.scanT); PK.scanT = setTimeout(tick, 400); };
+  const confirm = (code, hand) => {
+    const still = hand ? null : pkFrame(vid, 1800), small = hand ? null : pkFrame(vid, 1280), dup = pkSeenBefore(code.tracking);
+    let shot = small ? small.toDataURL('image/jpeg', .7) : null; if (shot && shot.length > 590000) shot = small.toDataURL('image/jpeg', .5);
+    $('#pkLive').hidden = true; const box = $('#pkOk'); box.hidden = false;
+    box.innerHTML = `${shot ? `<div class="pkshot"><img id="pkShot" src="${shot}" alt="${esc(L2('Label photo', 'Foto de la etiqueta'))}"><div class="pkread" id="pkRead" aria-live="polite">${L2('Reading the name…', 'Leyendo el nombre…')}</div></div>` : ''}
+      <div class="pkwarn" id="pkWarn"${dup || code.unknown || code.guess ? '' : ' hidden'}>${dup ? esc(L2('Already logged ' + pkWhen(dup.received_at) + ' for ' + dup.recipient + '. Save it again only if it is another box.', 'Ya se registró el ' + pkWhen(dup.received_at) + ' para ' + dup.recipient + '. Guárdalo otra vez solo si es otra caja.'))
+        : code.unknown ? esc(L2('This code is not a tracking number the app knows. Check it before saving.', 'Este código no es un tracking que la app conozca. Revísalo antes de guardar.'))
+        : code.guess ? esc(L2('Check the tracking number before saving.', 'Revisa el número de tracking antes de guardar.')) : ''}</div>
+      <div class="f"><span class="l">${L2('Carrier', 'Mensajería')}</span><div class="gqchips pkcars" id="pkCars" role="radiogroup">${PK_CARRIERS.map(c => `<button type="button" role="radio" data-car="${c}" aria-pressed="${code.carrier === c}">${esc(c === 'Other' ? L2('Other', 'Otra') : c)}</button>`).join('')}</div></div>
+      <div class="f"><label class="l" for="pkTk">${L2('Tracking number', 'Número de tracking')}</label><input id="pkTk" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="60" value="${esc(code.tracking || '')}"></div>
+      <div class="f"><label class="l" for="pkTo">${L2('Recipient', 'Destinatario')}</label><input id="pkTo" autocomplete="off" autocapitalize="words" maxlength="120"></div>
+      <div class="pkpair"><div class="f"><label class="l" for="pkRm">${L2('Room (optional)', 'Habitación (opcional)')}</label><input id="pkRm" inputmode="numeric" maxlength="12"></div>
+      <div class="f"><label class="l" for="pkNote">${L2('Note (optional)', 'Nota (opcional)')}</label><input id="pkNote" maxlength="300" placeholder="${esc(L2('Where it is, how many boxes…', 'Dónde está, cuántas cajas…'))}"></div></div>
+      <div class="btnrow"><button type="button" class="btn pri" id="pkNext">${L2('Save and scan next', 'Guardar y escanear otro')}</button><button type="button" class="btn" id="pkSave">${L2('Save and close', 'Guardar y cerrar')}</button><button type="button" class="btn" id="pkAgain">${L2('Scan again', 'Escanear de nuevo')}</button></div>`;
+    let carrier = code.carrier || 'Other', check = !!(code.unknown || code.guess); const touched = new Set();
+    ['#pkTk', '#pkTo', '#pkRm', '#pkNote'].forEach(s => $(s).addEventListener('input', () => touched.add(s)));
+    $('#pkCars').addEventListener('click', e => { const b = e.target.closest('[data-car]'); if (!b) return; carrier = b.dataset.car; touched.add('car');
+      $('#pkCars').querySelectorAll('[data-car]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+    const warn = t => { const w = $('#pkWarn'); if (w && t && w.hidden) { w.hidden = false; w.textContent = t; } };
+    const focusName = () => { const t = $('#pkTo'); if (t && !t.value) try { t.focus(); } catch {} };
+    if (still) {
+      pkOcr(still).then(o => {
+        if (!$('#pkNext')) return; const rd = $('#pkRead'); if (rd) rd.hidden = true;
+        const t = pkFromText(o.text, o.clean), m = pkMerge(code, t, o.conf);
+        if (!touched.has('#pkTo') && m.recipient) $('#pkTo').value = m.recipient;
+        if (!touched.has('#pkRm') && m.room) $('#pkRm').value = m.room;
+        if (!touched.has('car') && carrier === 'Other' && t.carrier) { carrier = t.carrier; $('#pkCars').querySelectorAll('[data-car]').forEach(x => x.setAttribute('aria-pressed', x.dataset.car === carrier)); }
+        if (t.urgent && !touched.has('#pkNote') && !$('#pkNote').value) { $('#pkNote').value = PK_URGENT(); warn(L2('The label says perishable or urgent.', 'La etiqueta dice perecedero o urgente.')); }
+        check = check || m.check;
+        if (!m.recipient) { warn(L2('Couldn’t find the name on the label. Type it.', 'No encontré el nombre en la etiqueta. Escríbelo.')); focusName(); }
+      }).catch(() => { const rd = $('#pkRead'); if (rd) rd.hidden = true; check = true; focusName(); });
+    } else focusName();
+    const save = async next => {
+      const to = $('#pkTo').value.replace(/\s+/g, ' ').trim(), tk = $('#pkTk').value.replace(/\s+/g, '').toUpperCase();
+      if (to.length < 2) { $('#pkTo').focus(); toast(esc(L2('Write the recipient’s name.', 'Escribe el nombre del destinatario.'))); return; }
+      if (tk && tk.length < 4) { $('#pkTk').focus(); toast(esc(pkErr({message: 'BAD_TRACKING'}))); return; }
+      const bs = [$('#pkNext'), $('#pkSave'), $('#pkAgain')]; bs.forEach(b => { b.disabled = true; }); (next ? bs[0] : bs[1]).textContent = L2('Saving…', 'Guardando…');
+      try {
+        const row = await call('sc_pkg_add', {p_carrier: carrier, p_tracking: tk || null, p_recipient: to, p_room: $('#pkRm').value.trim() || null, p_note: $('#pkNote').value.trim() || null, p_photo: shot, p_check: !!check});
+        if (PK.list) { PK.list.unshift(row); if (PK.seen) PK.seen.set(row.id, row.status); }
+        pkListPaint(); pkBadge(PK.list); round.push({tracking: tk, recipient: row.recipient});
+        toast(esc(L2('Package logged for ', 'Paquete registrado para ') + row.recipient), 'new');
+        if (next && PK.cam) live(); else { pkStopCam(); closeModal(); }
+      } catch (e) { bs.forEach(b => { b.disabled = false; }); bs[0].textContent = L2('Save and scan next', 'Guardar y escanear otro'); bs[1].textContent = L2('Save and close', 'Guardar y cerrar'); toast(esc(pkErr(e))); }
+    };
+    $('#pkNext').onclick = () => save(true); $('#pkSave').onclick = () => save(false); $('#pkAgain').onclick = live;
+  };
+  $('#pkHand').onclick = () => { PK.scanOn = false; clearTimeout(PK.scanT); confirm({carrier: 'Other', tracking: ''}, true); };
+  live();
+}
+// a USB or Bluetooth scanner on the Package log page opens a new package with the tracking filled in
+function pkWedgeWire(){
+  if (PK.wedgeOn) return; PK.wedgeOn = true; const feed = pkWedge();
+  document.addEventListener('keydown', e => {
+    if (S.tab !== 'pkgs' || !pkAllowed() || !$('#modal').hidden || e.ctrlKey || e.metaKey || e.altKey) return;
+    const a = document.activeElement; if (a && /^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)) return;
+    const out = feed(e.key, e.timeStamp || Date.now()); if (!out) return;
+    e.preventDefault(); const c = pkFromScan(out, null) || {carrier: 'Other', tracking: out.replace(/\s/g, '').toUpperCase(), unknown: true};
+    pkBeep(); pkForm({carrier: c.carrier, tracking: c.tracking, recipient: '', room: '', note: ''}, null);
+    setTimeout(() => { const t = $('#pkTo'); if (t) t.focus(); }, 30);
+  });
 }
 
 /* ---- the list ---- */
@@ -7038,7 +7242,7 @@ function pkListHtml(){
   if (!PK.list) return `<p class="hint">${L2('Loading…', 'Cargando…')}</p>`;
   const rows = pkSorted(PK.list.filter(pkMatch), PK.sort), wait = PK.list.filter(p => p.status !== 'delivered').length;
   const head = `<div class="rvcount">${esc(rows.length === 1 ? L2('1 package', '1 paquete') : L2(rows.length + ' packages', rows.length + ' paquetes'))}${wait ? ' · ' + esc(L2(wait + ' waiting for pickup', wait + ' esperando que los recojan')) : ''}</div>`;
-  return head + (rows.length ? rows.map(pkRow).join('') : `<p class="hint">${PK.q ? L2('Nothing matches that search.', 'Nada coincide con esa búsqueda.') : L2('No packages here. Tap Log a package when one arrives.', 'No hay paquetes aquí. Toca Registrar paquete cuando llegue uno.')}</p>`);
+  return head + (rows.length ? rows.map(pkRow).join('') : `<p class="hint">${PK.q ? L2('Nothing matches that search.', 'Nada coincide con esa búsqueda.') : L2('No packages here. Tap Quick scan when one arrives.', 'No hay paquetes aquí. Toca Escaneo rápido cuando llegue uno.')}</p>`);
 }
 function pkRender(){
   const box = $('#pkBody'); if (!box) return;
@@ -7049,7 +7253,8 @@ function pkRender(){
   box.innerHTML = `<div class="enghead"><div class="grow"><h2>Package log</h2>
       <div class="sub">${esc(S.owner && !PK.hotel ? L2('Packages that arrived at the three hotels, from arrival to pickup.', 'Los paquetes que llegaron a los tres hoteles, de la llegada a la entrega.') : L2('Packages that arrived at ' + gqHotelName(here) + ', from arrival to pickup.', 'Los paquetes que llegaron a ' + gqHotelName(here) + ', de la llegada a la entrega.'))}</div></div></div>
     <div class="pkadd">
-      <label class="btn pri pkbig"><input type="file" accept="image/*" capture="environment" id="pkFile" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${L2('Log a package', 'Registrar paquete')}</label>
+      <button type="button" class="btn pri pkbig" id="pkScanBtn"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 7V5a2 2 0 0 1 2-2h2M17 3h2a2 2 0 0 1 2 2v2M21 17v2a2 2 0 0 1-2 2h-2M7 21H5a2 2 0 0 1-2-2v-2M7 8v8M10 8v8M13 8v8M17 8v8"/></svg>${L2('Quick scan', 'Escaneo rápido')}</button>
+      <label class="btn pkphoto"><input type="file" accept="image/*" capture="environment" id="pkFile" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${L2('Log with a photo', 'Registrar con foto')}</label>
       <button type="button" class="btn" id="pkType">${L2('Type it in', 'Escribirlo a mano')}</button>
     </div>
     <div class="card gqbar">
@@ -7086,7 +7291,7 @@ function pkShow(){
   PK.seen = null; pkRender(); pkFetch();
   clearInterval(PK.timer); PK.timer = setInterval(() => { if (!document.hidden) pkFetch(true); }, 15000);
 }
-function pkLeave(){ clearInterval(PK.timer); PK.timer = 0; }
+function pkLeave(){ clearInterval(PK.timer); PK.timer = 0; pkStopCam(); }
 
 /* ---- log or edit a package ---- */
 function pkForm(p, photo){
@@ -7108,6 +7313,9 @@ function pkForm(p, photo){
   $('#pkCars').addEventListener('click', e => { const b = e.target.closest('[data-car]'); if (!b) return; carrier = b.dataset.car; touched.add('car');
     $('#pkCars').querySelectorAll('[data-car]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
   const warn = (on, txt) => { const w = $('#pkWarn'); if (!w) return; w.hidden = !on; w.textContent = txt || ''; };
+  const dupWarn = () => { if (p && p.id) return false; const d = pkSeenBefore($('#pkTk').value.replace(/\s+/g, '')); if (!d) return false;
+    warn(true, L2('Already logged ' + pkWhen(d.received_at) + ' for ' + d.recipient + '. Save it again only if it is another box.', 'Ya se registró el ' + pkWhen(d.received_at) + ' para ' + d.recipient + '. Guárdalo otra vez solo si es otra caja.')); return true; };
+  dupWarn();
   if (photo) {
     const url = URL.createObjectURL(photo); $('#pkShot').src = url;
     const pct = x => { const r = $('#pkRead'); if (r) r.textContent = L2('Reading the label… ', 'Leyendo la etiqueta… ') + Math.round((x || 0) * 100) + '%'; };
@@ -7119,6 +7327,8 @@ function pkForm(p, photo){
       if (!touched.has('#pkRm') && r.room) $('#pkRm').value = r.room;
       if (!touched.has('car') && r.carrier) { carrier = r.carrier; $('#pkCars').querySelectorAll('[data-car]').forEach(x => x.setAttribute('aria-pressed', x.dataset.car === carrier)); }
       check = r.check;
+      if (r.urgent && !$('#pkNote').value) $('#pkNote').value = PK_URGENT();
+      if (dupWarn()) return;
       if (r.check) warn(true, !r.recipient ? L2('Couldn’t find the name on the label. Type it and check the tracking.', 'No encontré el nombre en la etiqueta. Escríbelo y revisa el tracking.')
         : L2('The label was hard to read. Check the details before saving.', 'La etiqueta se leyó con dudas. Revisa los datos antes de guardar.'));
     }).catch(() => { const rd = $('#pkRead'); if (rd) rd.hidden = true; check = true; warn(true, L2('Couldn’t read this label. Type the details, the photo is still saved as proof.', 'No se pudo leer esta etiqueta. Escribe los datos; la foto se guarda igual como evidencia.')); })
@@ -7239,6 +7449,7 @@ function pkWire(){
     const sb = e.target.closest('[data-pks]'); if (sb) { PK.st = sb.dataset.pks; v.querySelectorAll('[data-pks]').forEach(x => x.setAttribute('aria-pressed', x === sb)); pkListPaint(); return; }
     const db = e.target.closest('[data-pkd]'); if (db) { PK.day = db.dataset.pkd; v.querySelectorAll('[data-pkd]').forEach(x => x.setAttribute('aria-pressed', x === db)); pkListPaint(); return; }
     if (e.target.closest('#pkType')) { pkForm(null, null); return; }
+    if (e.target.closest('#pkScanBtn')) { pkScan(); return; }
     const row = e.target.closest('[data-pkid]'); if (!row) return;
     const p = (PK.list || []).find(x => x.id === row.dataset.pkid); if (!p) return;
     if (e.target.closest('[data-pkc]')) { copyText(p.tracking || ''); return; }
@@ -7258,9 +7469,10 @@ function pkWire(){
   });
   v.addEventListener('input', e => { if (e.target.id === 'pkQ') { PK.q = e.target.value; pkListPaint(); } });
   PK.bg = setInterval(pkBgTick, 60000); setTimeout(pkBgTick, 5000);
+  pkWedgeWire();
 }
 pkWire();
-window.__fsPkgs = {PK, pkFromCode, pkFromText, pkName, pkMerge, pkMatch, pkRow, pkSorted};
+window.__fsPkgs = {PK, pkFromCode, pkFromScan, pkPick, pkWedge, pkFromText, pkName, pkMerge, pkMatch, pkRow, pkSorted};
 // tests read the parsers here
 window.__fsResv = {rvDate, rvCsv, rvFromTable, rvFromPdfLines, rvFromLine, rvField, rvCheck, rvBlack};
 /* ---- the Menu's categories: Operations, Front Office and Housekeeping (1.19.0). 'res' stays the Front Office key so saved choices keep working ---- */
