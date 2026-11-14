@@ -1001,6 +1001,45 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .gqval{border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:5px 9px;font-size:14px;color:var(--ink);overflow-wrap:anywhere;text-align:left;min-height:34px}
 .gqmeta{font-size:12px;color:var(--ink-3)}
 .gqrow .btnrow{margin-top:4px}
+.pkrow{border-top:1px solid var(--line);padding:12px 2px;display:flex;flex-direction:column;gap:4px}
+.pkrow:first-of-type{border-top:0}
+.pkrow.done .gqname{color:var(--ink-2)}
+.pkrow .btnrow{margin-top:4px}
+.pkroom{font-size:13px;font-weight:600;color:var(--ink-3)}
+.pkcar{font-size:13px;font-weight:700;color:var(--ink-2)}
+.pktk{font-family:ui-monospace,SFMono-Regular,Menlo,monospace;font-size:13px}
+.gqtag.pk-received{background:var(--accent-soft);color:var(--accent)}
+.gqtag.pk-notified{background:var(--high-soft);color:var(--high)}
+.gqtag.pk-delivered{background:var(--ok-soft);color:var(--ok)}
+.pkadd{display:flex;gap:8px;flex-wrap:wrap;margin:0 0 12px}
+.pkadd .pkbig{flex:1 1 220px;display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;font-size:16px;cursor:pointer}
+.pkadd .pkbig svg{width:22px;height:22px}
+.pkadd .btn{min-height:48px}
+.gqbar select,.gqbar input[type=search]{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:6px 10px;min-height:38px;font-size:15px;color:var(--ink)}
+.gqbar input[type=search]{flex:1 1 200px;min-width:0}
+.pkform .f{margin-bottom:10px}
+.pkform input{width:100%}
+.pkpair{display:grid;grid-template-columns:1fr 2fr;gap:8px}
+.pkshot{position:relative;margin:0 0 10px;border-radius:12px;overflow:hidden;background:var(--surface-2);max-height:220px;display:flex;align-items:center;justify-content:center}
+.pkshot img{max-width:100%;max-height:220px;display:block}
+.pkread{position:absolute;left:8px;bottom:8px;background:rgba(15,23,42,.78);color:#fff;font-size:12.5px;font-weight:600;border-radius:8px;padding:5px 9px}
+.pkwarn{background:var(--high-soft);color:var(--high);border-radius:10px;padding:8px 10px;font-size:13.5px;font-weight:600;margin:0 0 10px}
+.pkcars button{min-height:40px}
+.pkpadw{position:relative;border:1.5px dashed var(--line);border-radius:12px;background:#fff;height:180px;margin-top:4px;touch-action:none}
+.pkpadw canvas{width:100%;height:100%;display:block;touch-action:none;border-radius:12px}
+.pkpadhint{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;text-align:center;padding:0 16px;color:#94A3B8;font-size:14px;pointer-events:none}
+.pkpadrow{display:flex;justify-content:flex-end}
+.pkqrbox{display:flex;justify-content:center;margin:6px 0 10px}
+.pkqrbox svg{width:min(260px,70vw);height:auto;background:#fff;border-radius:12px;padding:6px}
+.pkdls{display:flex;flex-direction:column;gap:6px;margin:0 0 12px}
+.pkdl{display:flex;gap:10px;font-size:14px}
+.pkdl span{color:var(--ink-3);min-width:96px}
+.pkdl b{font-weight:600;overflow-wrap:anywhere}
+.pkimgs{margin:0 0 12px}
+.pkimgs img{display:block;max-width:100%;border-radius:10px;border:1px solid var(--line);margin-top:4px;background:#fff}
+.pksig{max-height:140px}
+.pkphoto{max-height:360px}
+@media (max-width:480px){.pkpair{grid-template-columns:1fr}}
 .rvtop{display:flex;align-items:baseline;gap:8px;min-width:0}
 .rvtop .grow{flex:1}
 .rvconf{font:700 15px var(--f-body);letter-spacing:.02em;overflow-wrap:anywhere}
@@ -1431,6 +1470,7 @@ body{background:var(--bg)}
     <button role="tab" data-tab="board" aria-selected="false" id="boardTab"><span class="tic"><span class="cnt" id="bdCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span><span class="tl" data-noi18n>Board</span></button>
     <button role="tab" data-tab="resv" aria-selected="false" id="resvTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg></span><span class="tl">Reservations</span></button>
     <button role="tab" data-tab="guests" aria-selected="false" id="gqTab" class="menuoff"><span class="tic"><span class="cnt" id="gqCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><path d="M14 14h3v3h-3zM20 14v1M14 20h1M18 18h3v3"/></svg></span><span class="tl">Guest check-in</span></button>
+    <button role="tab" data-tab="pkgs" aria-selected="false" id="pkTab" class="menuoff"><span class="tic"><span class="cnt" id="pkCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M21 8l-9-5-9 5v8l9 5 9-5z"/><path d="M3 8l9 5 9-5M12 13v8M7.5 5.5l9 5"/></svg></span><span class="tl">Package log</span></button>
     <button role="tab" data-tab="team" aria-selected="false" id="teamTab" hidden><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"/><circle cx="9" cy="7" r="4"/><path d="M22 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/></svg><span class="cnt" id="teamCnt"></span></span><span class="tl">Manager</span></button>
   </nav>
   <div class="banner" id="pushBanner" hidden><span class="bell"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M6 8a6 6 0 0 1 12 0c0 7 3 9 3 9H3s3-2 3-9"/><path d="M10.3 21a1.94 1.94 0 0 0 3.4 0"/></svg></span><span class="grow" id="pushText"></span><button class="btn sm pri" id="pushBtn">Turn on</button><button class="linkbtn" id="pushLater">Not now</button></div>
@@ -1499,6 +1539,7 @@ body{background:var(--bg)}
   <section class="view" id="view-board" hidden data-noi18n aria-label="Board"><div class="inner" id="bdBody"></div></section>
   <section class="view" id="view-resv" hidden data-noi18n aria-label="Reservations"><div class="inner" id="rvBody"></div></section>
   <section class="view" id="view-guests" hidden data-noi18n aria-label="Guest check-in"><div class="inner" id="gqBody"></div></section>
+  <section class="view" id="view-pkgs" hidden data-noi18n aria-label="Package log"><div class="inner" id="pkBody"></div></section>
 
   <section class="view" id="view-lost" hidden><div class="inner">
     <div><button type="button" class="btn sm" id="lfBack">‹ Pass-on</button></div>
@@ -3584,6 +3625,7 @@ function menuSet(d){
   const hid = new Set(S.menuHid);
   document.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('menuoff', hid.has(b.dataset.tab)));
   { const gt = $('#gqTab'); if (gt && !(S.owner || (S.me && S.me.role === 'fd'))) gt.classList.add('menuoff'); } // guest check-in: Front desk and the superuser only
+  { const pt = $('#pkTab'); if (pt && !(S.owner || (S.me && (S.me.role === 'fd' || S.me.role === 'mgr')))) pt.classList.add('menuoff'); } // package log: Front desk, Managers and the superuser
   if (S.tab && hid.has(S.tab === 'lost' ? 'passon' : S.tab)) setTab('chat');
   try { catPaint(); } catch {}
 }
@@ -4380,8 +4422,9 @@ function setTab(t){
   const inMain = t === 'chat' || t === 'orders', dash = desktop && t === 'orders';
   $('#main').hidden = !inMain || dash; $('#main').dataset.tab = t; $('#view-dash').hidden = !dash;
   if (dash) dashLoad();
-  ['passon','lost','rooms','team','map','laundry','eng','srep','punch','hkplan','board','resv','guests'].forEach(v => $('#view-' + v).hidden = t !== v);
+  ['passon','lost','rooms','team','map','laundry','eng','srep','punch','hkplan','board','resv','guests','pkgs'].forEach(v => $('#view-' + v).hidden = t !== v);
   if (t === 'guests') setTimeout(gqShow); else gqLeave();
+  if (t === 'pkgs') setTimeout(pkShow); else pkLeave();
   if (t === 'board') setTimeout(bdShow);
   if (t === 'resv') setTimeout(rvShow);
   if (t === 'srep') setTimeout(srShow);
@@ -4740,8 +4783,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.17.1';
+const APP_VERSION = '1.18.0';
 const CHANGES = [
+  {v: '1.18.0', d: '2026-11-14', en: ['The Reservations category in the Menu is now called Front Office', 'New Package log in Front Office, for the front desk and managers of each hotel: take a photo of the label and the app reads the tracking, carrier and name on the phone, so you only check them and save. The photo stays as proof, and the app warns you when the label was hard to read', 'Each package goes Received, Notified, Delivered. Filter by status, date, carrier and hotel, sort by date, name, room, carrier or status, or search by name, tracking or room', 'To deliver, the guest signs with a finger on your phone, or scans a QR and signs on their own phone. The signature stays with the package, and packages are kept with their photo and signature'],
+    es: ['La categoría Reservaciones del Menú ahora se llama Front Office', 'Nuevo Package log en Front Office, para el front desk y los gerentes de cada hotel: toma una foto de la etiqueta y la app lee el tracking, la mensajería y el nombre en el teléfono, así solo los revisas y guardas. La foto queda como evidencia, y la app avisa cuando la etiqueta se leyó con dudas', 'Cada paquete pasa por Recibido, Notificado y Entregado. Filtra por estado, fecha, mensajería y hotel, ordena por fecha, nombre, habitación, mensajería o estado, o busca por nombre, tracking o habitación', 'Para entregar, el huésped firma con el dedo en tu teléfono, o escanea un QR y firma en su propio teléfono. La firma queda con el paquete, y los paquetes se guardan con su foto y su firma']},
   {v: '1.17.1', d: '2026-11-14', en: ['Guest check-in: each hotel\'s QR opens a form already set to that hotel, so guests no longer pick one'], es: ['Registro de huéspedes: el QR de cada hotel abre un formulario ya fijo en ese hotel, así el huésped no tiene que elegirlo']},
   {v: '1.17.0', d: '2026-11-14', en: ['Guest check-in: guests scan the QR at the front desk and fill in their name, phone and email on their phone, in English or Spanish, instead of the paper card', 'The front desk of that hotel sees each check-in in the new Guest check-in section, newest first, and can copy the details for the guest profile, mark it processed, export a CSV or delete it', 'Print QR gives one sheet per hotel for the front desk. Check-ins are deleted on their own after 30 days and are never used for marketing', 'Guest check-in sits in the Reservations category of the Menu, next to Reservations', 'Phone Menu: each category now shows only its own sections'],
     es: ['Registro de huéspedes: el huésped escanea el QR de recepción y llena su nombre, teléfono y correo en su teléfono, en inglés o español, en lugar del papelito', 'El front desk de ese hotel ve cada registro en la nueva sección Registro de huéspedes, los más nuevos primero, y puede copiar los datos para el perfil del huésped, marcarlo procesado, exportar un CSV o borrarlo', 'Imprimir QR da una hoja por hotel para recepción. Los registros se borran solos a los 30 días y nunca se usan para marketing', 'Registro de huéspedes está en la categoría Reservaciones del Menú, junto a Reservaciones', 'Menú en el teléfono: cada categoría muestra solo sus secciones']},
@@ -6792,11 +6837,421 @@ function gqWire(){
 }
 gqWire();
 window.__fsGuests = {GQ, gqRow, gqCopyTxt, gqDayArg, gqToday};
+/* ===== 1.18.0 Package log: the front desk logs each package with a photo of its label (read on the phone, for free:
+   Tesseract for the text and ZXing or the phone's own barcode reader for the tracking), follows it Received -> Notified -> Delivered,
+   and the guest signs for it with a finger on the staff phone or on their own phone with a QR (firma.html).
+   Front desk and Managers only (the server hides it for everyone else). Packages are kept: nothing deletes them on its own. ===== */
+const PK_SORTS = [['new', 'Newest first', 'Más nuevos primero'], ['old', 'Oldest first', 'Más viejos primero'], ['name', 'Name A to Z', 'Nombre de la A a la Z'],
+  ['room', 'Room number', 'Número de habitación'], ['carrier', 'Carrier', 'Mensajería'], ['status', 'Status', 'Estado']];
+const PK = {list: null, st: 'wait', day: 'all', sort: (() => { try { const v = JSON.parse(localStorage.getItem('sc.pksort') || '"new"'); return PK_SORTS.some(x => x[0] === v) ? v : 'new'; } catch { return 'new'; } })(), carrier: '', q: '', hotel: '', seen: null, timer: 0, bg: 0, worker: null, poll: 0};
+const PK_CARRIERS = ['UPS', 'FedEx', 'USPS', 'Amazon', 'DHL', 'Other'];
+const PK_LIB = {tess: 'https://cdn.jsdelivr.net/npm/tesseract.js@5.1.1/dist/tesseract.min.js',
+  zx: 'https://cdn.jsdelivr.net/npm/@zxing/library@0.21.3/umd/index.min.js',
+  qr: 'https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.js'};
+const PK_ERR = {NOT_ALLOWED: ['Only the front desk and managers can see the package log.', 'Solo recepción y gerentes pueden ver el registro de paquetes.'],
+  NOT_FOUND: ['That package is no longer here.', 'Ese paquete ya no está.'], ALREADY_DELIVERED: ['That package was already delivered.', 'Ese paquete ya se entregó.'],
+  BAD_NAME: ['Write the full name.', 'Escribe el nombre completo.'], BAD_TRACKING: ['That tracking number looks too short.', 'Ese número de tracking se ve muy corto.'],
+  NO_SIGNATURE: ['A signature is needed.', 'Hace falta la firma.'], BAD_PHOTO: ['That photo could not be saved.', 'Esa foto no se pudo guardar.']};
+const pkErr = e => { const m = (e && e.message) || ''; const x = PK_ERR[m]; return x ? L2(x[0], x[1]) : m; };
+const pkAllowed = () => !!(S.me && !(S.menuHid || []).includes('pkgs') && (S.owner || S.me.role === 'fd' || S.me.role === 'mgr'));
+const pkCanUndo = () => !!(S.me && (S.owner || S.me.role === 'mgr'));
+const pkDay = iso => new Date(iso).toLocaleDateString('en-CA', {timeZone: TZ});
+const pkStLabel = s => s === 'delivered' ? L2('Delivered', 'Entregado') : s === 'notified' ? L2('Notified', 'Notificado') : L2('Received', 'Recibido');
+const pkLoad = (() => { const p = {}; return k => p[k] || (p[k] = new Promise((res, rej) => {
+  const s = document.createElement('script'); s.src = PK_LIB[k]; s.async = true; s.crossOrigin = 'anonymous';
+  s.onload = () => res(); s.onerror = () => { delete p[k]; s.remove(); rej(new Error('LIB')); }; document.head.appendChild(s); })); })();
+
+/* ---- reading a label: pure functions, so the tests can check them ---- */
+// what a barcode says -> carrier and tracking
+function pkFromCode(raw){
+  const s = String(raw || '').replace(/[\x1d\s]/g, '').toUpperCase(); let m;
+  if ((m = s.match(/1Z[0-9A-Z]{16}/))) return {carrier: 'UPS', tracking: m[0]};
+  if ((m = s.match(/TBA\d{12}/))) return {carrier: 'Amazon', tracking: m[0]};
+  if ((m = s.match(/^420\d{5}(?:\d{4})?(9[1-5]\d{18,20})$/))) return {carrier: 'USPS', tracking: m[1]};
+  if (/^9[1-5]\d{18,20}$/.test(s)) return {carrier: 'USPS', tracking: s};
+  if (/^96\d{20}$/.test(s)) return {carrier: 'FedEx', tracking: s.slice(-15), guess: true};
+  if (/^\d{34}$/.test(s)) return {carrier: 'FedEx', tracking: s.slice(-12), guess: true};
+  if (/^(\d{12}|\d{15})$/.test(s)) return {carrier: 'FedEx', tracking: s};
+  if (/^JD\d{16,18}$/.test(s) || /^\d{10}$/.test(s)) return {carrier: 'DHL', tracking: s};
+  return null;
+}
+// what the photo's text says -> carrier, tracking, recipient, room.
+// clean = the same lines with only the words Tesseract was sure of: logos and barcodes next to the name read as junk words
+function pkName(s){
+  const toks = String(s || '').replace(/[^A-Za-zÀ-ÿ.' -]/g, ' ').split(/\s+/).filter(Boolean);
+  const up = t => /^[A-ZÀ-Þ][A-ZÀ-Þ.'-]*$/.test(t), title = t => /^[A-ZÀ-Þ][a-zß-ÿ.'-]+$/.test(t);
+  let run = []; for (const t of toks) { if (up(t)) run.push(t); else break; }
+  if (run.length < 2) { run = []; for (const t of toks) { if (title(t) || (run.length && up(t) && t.replace(/\./g, '').length === 1)) run.push(t); else break; } }
+  while (run.length > 2 && run[run.length - 1].replace(/[.'-]/g, '').length <= 2 && !/\.$/.test(run[run.length - 1])) run.pop();
+  return run.slice(0, 5).join(' ');
+}
+function pkFromText(txt, cleanTxt){
+  const raw = String(txt || ''), U = raw.toUpperCase(), lines = raw.split(/\r?\n/).map(l => l.trim()).filter(Boolean);
+  const carrier = /\bUPS\b|UNITED PARCEL/.test(U) ? 'UPS' : /FEDEX|FED EX/.test(U) ? 'FedEx'
+    : /USPS|POSTAL SERVICE|PRIORITY MAIL|GROUND ADVANTAGE|FIRST[- ]CLASS/.test(U) ? 'USPS' : /AMAZON|\bTBA ?\d/.test(U) ? 'Amazon' : /\bDHL\b/.test(U) ? 'DHL' : '';
+  const flat = U.replace(/[ \t]/g, '');
+  let tracking = '', m;
+  if ((m = flat.match(/1Z[0-9A-Z]{16}/))) tracking = m[0];
+  else if ((m = flat.match(/TBA\d{12}/))) tracking = m[0];
+  else if ((m = U.match(/TRK#?\s*:?\s*((?:\d[ \t]*){12,15})/))) tracking = m[1].replace(/\D/g, '');
+  else {
+    for (const l of lines) {
+      if (!/TRACK|TRK|TRACKING|NUMBER|#/i.test(l)) continue;
+      const d = l.replace(/\D/g, '');
+      if ((m = d.match(/9[1-5]\d{18,20}/))) { tracking = m[0]; break; }
+      if (d.length >= 10 && d.length <= 22) { tracking = d; break; }
+    }
+    if (!tracking && (m = flat.replace(/[^0-9\n]/g, '').match(/9[1-5]\d{20}/))) tracking = m[0];
+  }
+  let recipient = '';
+  const rl = raw.split(/\r?\n/).map(l => l.trim()), cl0 = cleanTxt ? String(cleanTxt).split(/\r?\n/).map(l => l.trim()) : null;
+  const cl = cl0 && cl0.length === rl.length ? cl0 : rl, idx = rl.map((l, i) => i).filter(i => rl[i]);
+  const TO = /\b(?:SHIP\s*TO|DELIVER(?:\s*TO)?|TO)\b\s*:?/i;
+  const looksName = s => s.length >= 4 && s.split(' ').filter(w => w.replace(/\./g, '').length > 1).length >= 2
+    && !/\b(STREET|ST|AVE|ROAD|RD|BLVD|HWY|DR|SUITE|STE|ORLANDO|KISSIMMEE|FL|USA|HOTEL|INN|TRACKING|PRIORITY|GROUND|EXPRESS|MAIL|BAYMONT|MAINGATE|TRAVELODGE|FUNDAMENTAL|HOWARD|HIGHWAY|WYNDHAM|FROM|SHIP|DATE|ORIGIN)\b/i.test(s);
+  const k = idx.findIndex(i => TO.test(rl[i]) && !/\bFROM\b|RETURN/i.test(rl[i]));
+  if (k >= 0) {
+    const at = idx[k], after = l => { const m = l.match(TO); return m ? l.slice(m.index + m[0].length) : l; };
+    const cands = [pkName(after(cl[at])), pkName(after(rl[at]))].concat(idx.slice(k + 1, k + 4).flatMap(i => [pkName(cl[i]), pkName(rl[i])]));
+    recipient = cands.find(looksName) || '';
+  }
+  recipient = recipient.toLowerCase().replace(/(^|[\s'-])([a-zà-ÿ])/g, (x, a, b) => a + b.toUpperCase());
+  const rm = raw.match(/\b(?:RM|ROOM|HAB(?:ITACI[OÓ]N)?)\s*#?\s*:?\s*(\d{2,4})\b/i);
+  return {carrier, tracking, recipient, room: rm ? rm[1] : ''};
+}
+// put both together; check = the staff should look again before saving
+function pkMerge(code, text, conf){
+  const t = text || {}, c = code || null;
+  const carrier = (c && c.carrier) || t.carrier || '';
+  let tracking = (c && !(c.guess && t.tracking)) ? c.tracking : (t.tracking || (c && c.tracking) || '');
+  const check = !tracking || !t.recipient || (!c && (conf || 0) < 75) || !!(c && c.guess && !t.tracking);
+  return {carrier: carrier || 'Other', tracking, recipient: t.recipient || '', room: t.room || '', check};
+}
+
+/* ---- reading a label: the phone side ---- */
+function pkCanvas(file, max){
+  return new Promise((res, rej) => {
+    const img = new Image(), url = URL.createObjectURL(file);
+    img.onload = () => { const k = Math.min(1, max / Math.max(img.width, img.height)), c = document.createElement('canvas');
+      c.width = Math.round(img.width * k); c.height = Math.round(img.height * k); c.getContext('2d').drawImage(img, 0, 0, c.width, c.height); URL.revokeObjectURL(url); res(c); };
+    img.onerror = () => { URL.revokeObjectURL(url); rej(new Error('IMG')); };
+    img.src = url;
+  });
+}
+function pkCrop(src, x, y, w, h, rot){
+  const c = document.createElement('canvas'), sw = Math.round(src.width * w), sh = Math.round(src.height * h);
+  c.width = rot ? sh : sw; c.height = rot ? sw : sh; const g = c.getContext('2d');
+  if (rot) { g.translate(c.width, 0); g.rotate(Math.PI / 2); }
+  g.drawImage(src, Math.round(src.width * x), Math.round(src.height * y), sw, sh, 0, 0, sw, sh); return c;
+}
+async function pkBarcodes(cv){
+  const found = [];
+  if ('BarcodeDetector' in window) {
+    try { const d = new window.BarcodeDetector(); (await d.detect(cv)).forEach(b => found.push(b.rawValue)); } catch {}
+  }
+  let best = found.map(pkFromCode).find(x => x && !x.guess) || found.map(pkFromCode).find(Boolean);
+  if (best && !best.guess) return best;
+  try {
+    await pkLoad('zx'); const Z = window.ZXing; if (!Z) return best || null;
+    const hints = new Map(); hints.set(Z.DecodeHintType.TRY_HARDER, true);
+    const r = new Z.MultiFormatReader(); r.setHints(hints);
+    const parts = [[0, 0, 1, 1], [0, 0, 1, .5], [0, .5, 1, .5], [0, .25, 1, .5], [0, .5, 1, .25], [0, .75, 1, .25], [0, 0, 1, .25]];
+    for (const rot of [false, true]) for (const [x, y, w, h] of parts) {
+      try {
+        const res = r.decode(new Z.BinaryBitmap(new Z.HybridBinarizer(new Z.HTMLCanvasElementLuminanceSource(pkCrop(cv, x, y, w, h, rot)))));
+        const p = pkFromCode(res.getText()); if (p && !p.guess) return p; if (p && !best) best = p;
+      } catch {}
+    }
+  } catch {}
+  return best || null;
+}
+async function pkOcr(cv, onPct){
+  await pkLoad('tess'); if (!window.Tesseract) throw new Error('LIB');
+  if (!PK.worker) PK.worker = window.Tesseract.createWorker('eng', 1, {logger: m => { if (m && m.status === 'recognizing text' && PK.onPct) PK.onPct(m.progress); }})
+    .catch(e => { PK.worker = null; throw e; });
+  const w = await PK.worker; PK.onPct = onPct;
+  const r = await w.recognize(cv, {rotateAuto: true}, {text: true, blocks: true});
+  const lines = (r.data.blocks || []).flatMap(b => (b.paragraphs || []).flatMap(p => p.lines || []));
+  if (!lines.length) return {text: r.data.text || '', clean: '', conf: r.data.confidence || 0};
+  const sure = []; // how sure it was of the words it kept
+  const clean = lines.map(l => (l.words || []).filter(x => x.confidence >= 45).map(x => { sure.push(x.confidence); return x.text; }).join(' '));
+  return {text: lines.map(l => (l.words || []).map(x => x.text).join(' ')).join('\n'), clean: clean.join('\n'), conf: sure.length ? sure.reduce((a, b) => a + b, 0) / sure.length : 0};
+}
+async function pkRead(file, onPct){
+  const cv = await pkCanvas(file, 1800);
+  const code = await pkBarcodes(cv).catch(() => null);
+  let text = null, conf = 0, failed = false;
+  try { const o = await pkOcr(cv, onPct); text = pkFromText(o.text, o.clean); conf = o.conf; } catch { failed = !code; }
+  return Object.assign(pkMerge(code, text, conf), {failed});
+}
+
+/* ---- the list ---- */
+function pkMatch(p){
+  if (PK.st === 'wait' && p.status === 'delivered') return false;
+  if (PK.st !== 'wait' && PK.st !== 'all' && p.status !== PK.st) return false;
+  if (PK.carrier && p.carrier !== PK.carrier) return false;
+  if (PK.day === 'today' && pkDay(p.received_at) !== gqToday(0)) return false;
+  if (PK.day === '7' && Date.now() - new Date(p.received_at).getTime() > 7 * 864e5) return false;
+  if (PK.day === '30' && Date.now() - new Date(p.received_at).getTime() > 30 * 864e5) return false;
+  const q = PK.q.trim().toLowerCase().replace(/\s+/g, '');
+  if (q && !((p.recipient || '').toLowerCase().replace(/\s+/g, '').includes(q) || (p.tracking || '').toLowerCase().includes(q) || (p.room || '').toLowerCase() === q)) return false;
+  return true;
+}
+function pkRow(p){
+  const d = p.status === 'delivered';
+  const meta = [S.owner && !PK.hotel ? hotelShort(p.hotel_id) : '', L2('In ', 'Llegó ') + mpWhen(p.received_at) + (p.received_by ? ' · ' + p.received_by : ''),
+    p.status === 'notified' && p.notified_at ? L2('notified ', 'notificado ') + mpWhen(p.notified_at) : '',
+    d ? L2('picked up by ', 'lo recogió ') + (p.delivered_to || '') + ' · ' + mpWhen(p.delivered_at) + (p.sign_method === 'qr' ? L2(' (signed on their phone)', ' (firmó en su teléfono)') : '') : ''].filter(Boolean).join(' · ');
+  return `<div class="pkrow${d ? ' done' : ''}" data-pkid="${esc(p.id)}">
+    <div class="gqtop"><span class="gqname">${esc(p.recipient)}${p.room ? ` <span class="pkroom">${esc(L2('Rm ', 'Hab ') + p.room)}</span>` : ''}</span>${p.is_test ? `<span class="gqtag test">${L2('Test', 'Prueba')}</span>` : ''}${p.ocr_check ? `<span class="gqtag test">${L2('Check', 'Revisar')}</span>` : ''}<span class="gqtag pk-${esc(p.status)}">${esc(pkStLabel(p.status))}</span></div>
+    <div class="gqvals"><span class="pkcar">${esc(p.carrier === 'Other' ? L2('Other', 'Otra') : p.carrier)}</span>${p.tracking ? `<button type="button" class="gqval pktk" data-pkc="1" title="${esc(L2('Copy tracking', 'Copiar tracking'))}">${esc(p.tracking)}</button>` : ''}</div>
+    ${p.note ? `<div class="gqmeta">${esc(p.note)}</div>` : ''}
+    <div class="gqmeta">${esc(meta)}</div>
+    <div class="btnrow">${d ? '' : `<button type="button" class="btn sm pri" data-pk="deliver">${L2('Deliver', 'Entregar')}</button>`}${p.status === 'received' ? `<button type="button" class="btn sm" data-pk="notify">${L2('Mark notified', 'Marcar notificado')}</button>` : ''}<button type="button" class="btn sm" data-pk="open">${d ? L2('Signature and photo', 'Firma y foto') : L2('Details', 'Detalles')}</button></div></div>`;
+}
+// the order the list shows; ties fall back to newest first
+function pkSorted(rows, how){
+  const t = p => new Date(p.received_at).getTime(), newest = (a, b) => t(b) - t(a), ST = {received: 0, notified: 1, delivered: 2};
+  const room = p => { const n = parseInt(String(p.room || '').replace(/\D/g, ''), 10); return isNaN(n) ? Infinity : n; };
+  const by = {new: newest, old: (a, b) => t(a) - t(b),
+    name: (a, b) => (a.recipient || '').localeCompare(b.recipient || '', undefined, {sensitivity: 'base'}) || newest(a, b),
+    room: (a, b) => (room(a) - room(b)) || newest(a, b),
+    carrier: (a, b) => (a.carrier === 'Other') - (b.carrier === 'Other') || (a.carrier || '').localeCompare(b.carrier || '') || newest(a, b),
+    status: (a, b) => (ST[a.status] - ST[b.status]) || newest(a, b)}[how] || newest;
+  return rows.slice().sort(by);
+}
+function pkListHtml(){
+  if (!PK.list) return `<p class="hint">${L2('Loading…', 'Cargando…')}</p>`;
+  const rows = pkSorted(PK.list.filter(pkMatch), PK.sort), wait = PK.list.filter(p => p.status !== 'delivered').length;
+  const head = `<div class="rvcount">${esc(rows.length === 1 ? L2('1 package', '1 paquete') : L2(rows.length + ' packages', rows.length + ' paquetes'))}${wait ? ' · ' + esc(L2(wait + ' waiting for pickup', wait + ' esperando que los recojan')) : ''}</div>`;
+  return head + (rows.length ? rows.map(pkRow).join('') : `<p class="hint">${PK.q ? L2('Nothing matches that search.', 'Nada coincide con esa búsqueda.') : L2('No packages here. Tap Log a package when one arrives.', 'No hay paquetes aquí. Toca Registrar paquete cuando llegue uno.')}</p>`);
+}
+function pkRender(){
+  const box = $('#pkBody'); if (!box) return;
+  const sts = [['wait', 'Waiting', 'Por entregar'], ['received', 'Received', 'Recibido'], ['notified', 'Notified', 'Notificado'], ['delivered', 'Delivered', 'Entregado'], ['all', 'All', 'Todos']];
+  const days = [['today', 'Today', 'Hoy'], ['7', '7 days', '7 días'], ['30', '30 days', '30 días'], ['all', 'All dates', 'Todas las fechas']];
+  const hs = S.owner ? [['', L2('All hotels', 'Todos')]].concat(['FDT', 'MGT', 'HWY'].map(id => [id, hotelShort(id)])) : [];
+  const here = S.owner && PK.hotel ? PK.hotel : (S.hotel && S.hotel.id) || '';
+  box.innerHTML = `<div class="enghead"><div class="grow"><h2>Package log</h2>
+      <div class="sub">${esc(S.owner && !PK.hotel ? L2('Packages that arrived at the three hotels, from arrival to pickup.', 'Los paquetes que llegaron a los tres hoteles, de la llegada a la entrega.') : L2('Packages that arrived at ' + gqHotelName(here) + ', from arrival to pickup.', 'Los paquetes que llegaron a ' + gqHotelName(here) + ', de la llegada a la entrega.'))}</div></div></div>
+    <div class="pkadd">
+      <label class="btn pri pkbig"><input type="file" accept="image/*" capture="environment" id="pkFile" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>${L2('Log a package', 'Registrar paquete')}</label>
+      <button type="button" class="btn" id="pkType">${L2('Type it in', 'Escribirlo a mano')}</button>
+    </div>
+    <div class="card gqbar">
+      ${hs.length ? `<div class="gqchips" role="group" aria-label="${esc(L2('Hotel', 'Hotel'))}">${hs.map(([k, n]) => `<button type="button" data-pkh="${k}" aria-pressed="${PK.hotel === k}">${esc(n)}</button>`).join('')}</div>` : ''}
+      <div class="gqchips" role="group" aria-label="${esc(L2('Status', 'Estado'))}">${sts.map(([k, en, es]) => `<button type="button" data-pks="${k}" aria-pressed="${PK.st === k}">${esc(L2(en, es))}</button>`).join('')}</div>
+      <div class="gqchips" role="group" aria-label="${esc(L2('Date', 'Fecha'))}">${days.map(([k, en, es]) => `<button type="button" data-pkd="${k}" aria-pressed="${PK.day === k}">${esc(L2(en, es))}</button>`).join('')}</div>
+      <select id="pkSort" aria-label="${esc(L2('Sort', 'Ordenar'))}">${PK_SORTS.map(([k, en, es]) => `<option value="${k}"${PK.sort === k ? ' selected' : ''}>${esc(L2('Sort: ', 'Orden: ') + L2(en, es))}</option>`).join('')}</select>
+      <select id="pkCar" aria-label="${esc(L2('Carrier', 'Mensajería'))}"><option value="">${esc(L2('All carriers', 'Todas las mensajerías'))}</option>${PK_CARRIERS.map(c => `<option value="${c}"${PK.carrier === c ? ' selected' : ''}>${esc(c === 'Other' ? L2('Other', 'Otra') : c)}</option>`).join('')}</select>
+      <input type="search" id="pkQ" value="${esc(PK.q)}" placeholder="${esc(L2('Search name, tracking or room', 'Busca nombre, tracking o habitación'))}" aria-label="${esc(L2('Search', 'Buscar'))}" enterkeyhint="search">
+    </div>
+    <div class="card"><div id="pkList">${pkListHtml()}</div></div>`;
+}
+const pkListPaint = () => { const l = $('#pkList'); if (l) l.innerHTML = pkListHtml(); };
+function pkBadge(list){
+  const b = $('#pkCnt'); if (!b) return;
+  const n = (list || []).filter(p => p.status !== 'delivered').length;
+  b.hidden = !n; b.textContent = n > 99 ? '99+' : String(n);
+}
+async function pkFetch(quiet){
+  if (!S.token || !S.me || !pkAllowed()) return;
+  try {
+    const list = (await call('sc_pkgs', {p_hotel: S.owner && PK.hotel ? PK.hotel : null})) || [];
+    if (PK.seen && S.tab === 'pkgs') { const fresh = list.find(p => p.status === 'delivered' && PK.seen.get(p.id) && PK.seen.get(p.id) !== 'delivered'); if (fresh) toast(esc(L2('Delivered: ', 'Entregado: ') + fresh.recipient), 'new'); }
+    PK.seen = new Map(list.map(p => [p.id, p.status])); PK.list = list; if (S.tab === 'pkgs') pkListPaint();
+    if (!(S.owner && PK.hotel)) pkBadge(list);
+  } catch (e) { if (!quiet) toast(esc(pkErr(e))); if (!PK.list) { PK.list = []; pkListPaint(); } }
+}
+async function pkBgTick(){
+  if (!pkAllowed() || document.hidden || S.tab === 'pkgs') return;
+  try { pkBadge((await call('sc_pkgs', {p_hotel: null})) || []); } catch {}
+}
+function pkShow(){
+  if (!pkAllowed()) { setTab('chat'); return; }
+  PK.seen = null; pkRender(); pkFetch();
+  clearInterval(PK.timer); PK.timer = setInterval(() => { if (!document.hidden) pkFetch(true); }, 15000);
+}
+function pkLeave(){ clearInterval(PK.timer); PK.timer = 0; }
+
+/* ---- log or edit a package ---- */
+function pkForm(p, photo){
+  const v = p || {carrier: 'Other', tracking: '', recipient: '', room: '', note: ''};
+  const now = new Date().toLocaleString(LANG === 'es' ? 'es-US' : 'en-US', {weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', timeZone: TZ});
+  openModal(`<div data-noi18n class="pkform"><h2>${p && p.id ? L2('Edit package', 'Editar paquete') : L2('New package', 'Paquete nuevo')}</h2>
+    ${photo ? `<div class="pkshot"><img id="pkShot" alt="${esc(L2('Label photo', 'Foto de la etiqueta'))}"><div class="pkread" id="pkRead" aria-live="polite">${L2('Reading the label…', 'Leyendo la etiqueta…')}</div></div>` : ''}
+    <div class="pkwarn" id="pkWarn" hidden></div>
+    <div class="f"><span class="l">${L2('Carrier', 'Mensajería')}</span><div class="gqchips pkcars" id="pkCars" role="radiogroup">${PK_CARRIERS.map(c => `<button type="button" role="radio" data-car="${c}" aria-pressed="${v.carrier === c}">${esc(c === 'Other' ? L2('Other', 'Otra') : c)}</button>`).join('')}</div></div>
+    <div class="f"><label class="l" for="pkTk">${L2('Tracking number', 'Número de tracking')}</label><input id="pkTk" autocomplete="off" autocapitalize="characters" spellcheck="false" maxlength="60" value="${esc(v.tracking || '')}"></div>
+    <div class="f"><label class="l" for="pkTo">${L2('Recipient', 'Destinatario')}</label><input id="pkTo" autocomplete="off" autocapitalize="words" maxlength="120" value="${esc(v.recipient || '')}"></div>
+    <div class="pkpair"><div class="f"><label class="l" for="pkRm">${L2('Room (optional)', 'Habitación (opcional)')}</label><input id="pkRm" inputmode="numeric" maxlength="12" value="${esc(v.room || '')}"></div>
+    <div class="f"><label class="l" for="pkNote">${L2('Note (optional)', 'Nota (opcional)')}</label><input id="pkNote" maxlength="300" placeholder="${esc(L2('Where it is, how many boxes…', 'Dónde está, cuántas cajas…'))}" value="${esc(v.note || '')}"></div></div>
+    ${p && p.id ? '' : `<p class="hint">${esc(L2('Received now · ', 'Recibido ahora · ') + now)}${S.hotel ? ' · ' + esc(gqHotelName(S.hotel.id)) : ''}</p>`}
+    <div class="btnrow"><button type="button" class="btn pri" id="pkSave">${L2('Save', 'Guardar')}</button><button type="button" class="btn" data-close>${L2('Cancel', 'Cancelar')}</button></div></div>`);
+  const touched = new Set();
+  ['#pkTk', '#pkTo', '#pkRm'].forEach(s => $(s).addEventListener('input', () => touched.add(s)));
+  let carrier = v.carrier, check = false;
+  $('#pkCars').addEventListener('click', e => { const b = e.target.closest('[data-car]'); if (!b) return; carrier = b.dataset.car; touched.add('car');
+    $('#pkCars').querySelectorAll('[data-car]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  const warn = (on, txt) => { const w = $('#pkWarn'); if (!w) return; w.hidden = !on; w.textContent = txt || ''; };
+  if (photo) {
+    const url = URL.createObjectURL(photo); $('#pkShot').src = url;
+    const pct = x => { const r = $('#pkRead'); if (r) r.textContent = L2('Reading the label… ', 'Leyendo la etiqueta… ') + Math.round((x || 0) * 100) + '%'; };
+    pkRead(photo, pct).then(r => {
+      if (!$('#pkSave')) return; const rd = $('#pkRead'); if (rd) rd.hidden = true;
+      if (r.failed) { check = true; warn(true, L2('Couldn’t read this label. Type the details, the photo is still saved as proof.', 'No se pudo leer esta etiqueta. Escribe los datos; la foto se guarda igual como evidencia.')); return; }
+      if (!touched.has('#pkTk') && r.tracking) $('#pkTk').value = r.tracking;
+      if (!touched.has('#pkTo') && r.recipient) $('#pkTo').value = r.recipient;
+      if (!touched.has('#pkRm') && r.room) $('#pkRm').value = r.room;
+      if (!touched.has('car') && r.carrier) { carrier = r.carrier; $('#pkCars').querySelectorAll('[data-car]').forEach(x => x.setAttribute('aria-pressed', x.dataset.car === carrier)); }
+      check = r.check;
+      if (r.check) warn(true, !r.recipient ? L2('Couldn’t find the name on the label. Type it and check the tracking.', 'No encontré el nombre en la etiqueta. Escríbelo y revisa el tracking.')
+        : L2('The label was hard to read. Check the details before saving.', 'La etiqueta se leyó con dudas. Revisa los datos antes de guardar.'));
+    }).catch(() => { const rd = $('#pkRead'); if (rd) rd.hidden = true; check = true; warn(true, L2('Couldn’t read this label. Type the details, the photo is still saved as proof.', 'No se pudo leer esta etiqueta. Escribe los datos; la foto se guarda igual como evidencia.')); })
+      .finally(() => setTimeout(() => URL.revokeObjectURL(url), 60000));
+  }
+  $('#pkSave').onclick = async () => {
+    const b = $('#pkSave'), to = $('#pkTo').value.replace(/\s+/g, ' ').trim(), tk = $('#pkTk').value.replace(/\s+/g, '').toUpperCase();
+    if (to.length < 2) { $('#pkTo').focus(); toast(esc(L2('Write the recipient’s name.', 'Escribe el nombre del destinatario.'))); return; }
+    if (tk && tk.length < 4) { $('#pkTk').focus(); toast(esc(pkErr({message: 'BAD_TRACKING'}))); return; }
+    b.disabled = true; b.textContent = L2('Saving…', 'Guardando…');
+    try {
+      let row;
+      if (p && p.id) row = await call('sc_pkg_edit', {p_id: p.id, p_carrier: carrier, p_tracking: tk || null, p_recipient: to, p_room: $('#pkRm').value.trim() || null, p_note: $('#pkNote').value.trim() || null});
+      else row = await call('sc_pkg_add', {p_carrier: carrier, p_tracking: tk || null, p_recipient: to, p_room: $('#pkRm').value.trim() || null, p_note: $('#pkNote').value.trim() || null,
+        p_photo: photo ? await shrink(photo, 1280, .7) : null, p_check: !!(photo && check)});
+      if (PK.list) { const i = PK.list.findIndex(x => x.id === row.id); if (i >= 0) PK.list[i] = row; else PK.list.unshift(row); if (PK.seen) PK.seen.set(row.id, row.status); }
+      closeModal(); pkListPaint(); pkBadge(PK.list); toast(esc(p && p.id ? L2('Package updated', 'Paquete actualizado') : L2('Package logged for ', 'Paquete registrado para ') + row.recipient), 'new');
+    } catch (e) { b.disabled = false; b.textContent = L2('Save', 'Guardar'); toast(esc(pkErr(e))); }
+  };
+}
+
+/* ---- deliver: signature with a finger here, or on the guest's phone with a QR ---- */
+function pkPad(cv){
+  const g = cv.getContext('2d'); let last = null, inked = false;
+  const size = () => { const r = cv.getBoundingClientRect(), d = Math.max(1, Math.min(3, window.devicePixelRatio || 1));
+    cv.width = Math.max(1, Math.round(r.width * d)); cv.height = Math.max(1, Math.round(r.height * d)); g.setTransform(d, 0, 0, d, 0, 0);
+    g.lineWidth = 2.6; g.lineCap = 'round'; g.lineJoin = 'round'; g.strokeStyle = '#0F172A'; g.fillStyle = '#0F172A'; inked = false; };
+  const pt = e => { const r = cv.getBoundingClientRect(); return {x: e.clientX - r.left, y: e.clientY - r.top}; };
+  cv.addEventListener('pointerdown', e => { e.preventDefault(); try { cv.setPointerCapture(e.pointerId); } catch {} last = pt(e); g.beginPath(); g.arc(last.x, last.y, 1.2, 0, Math.PI * 2); g.fill(); });
+  cv.addEventListener('pointermove', e => { if (!last) return; e.preventDefault(); const p = pt(e); g.beginPath(); g.moveTo(last.x, last.y); g.lineTo(p.x, p.y); g.stroke(); last = p; if (!inked) { inked = true; cv.dispatchEvent(new Event('inked')); } });
+  ['pointerup', 'pointercancel', 'pointerleave'].forEach(k => cv.addEventListener(k, () => { last = null; }));
+  size();
+  return {size, clear: size, inked: () => inked,
+    data(){ const w = Math.min(600, cv.width), h = Math.round(cv.height * w / cv.width), c = document.createElement('canvas'); c.width = w; c.height = h;
+      const x = c.getContext('2d'); x.fillStyle = '#fff'; x.fillRect(0, 0, w, h); x.drawImage(cv, 0, 0, w, h); return c.toDataURL('image/png'); }};
+}
+function pkStopPoll(){ clearInterval(PK.poll); PK.poll = 0; }
+function pkDeliver(p){
+  pkStopPoll();
+  openModal(`<div data-noi18n class="pkform"><h2>${L2('Deliver to ', 'Entregar a ') + esc(p.recipient)}</h2>
+    <p class="lead">${esc((p.carrier === 'Other' ? '' : p.carrier + ' · ') + (p.tracking || L2('no tracking', 'sin tracking')))}</p>
+    <div class="f"><label class="l" for="pkWho">${L2('Who picks it up', 'Quién lo recoge')}</label><input id="pkWho" autocomplete="off" autocapitalize="words" maxlength="120" value="${esc(p.recipient)}"></div>
+    <span class="l">${L2('Signature', 'Firma')}</span>
+    <div class="pkpadw"><canvas id="pkPad" aria-label="${esc(L2('Signature pad', 'Recuadro de firma'))}"></canvas><div class="pkpadhint" id="pkPadHint">${L2('Hand the phone to the guest to sign here', 'Pásale el teléfono al huésped para que firme aquí')}</div></div>
+    <div class="pkpadrow"><button type="button" class="linkbtn" id="pkClear">${L2('Clear', 'Borrar')}</button></div>
+    <div class="btnrow"><button type="button" class="btn pri" id="pkDone" disabled>${L2('Confirm delivery', 'Confirmar entrega')}</button><button type="button" class="btn" id="pkQrBtn">${L2('Sign on their phone (QR)', 'Firmar en su teléfono (QR)')}</button><button type="button" class="btn" data-close>${L2('Cancel', 'Cancelar')}</button></div></div>`);
+  const pad = pkPad($('#pkPad')), ok = () => { $('#pkDone').disabled = !(pad.inked() && $('#pkWho').value.trim().length >= 2); };
+  $('#pkPad').addEventListener('inked', () => { $('#pkPadHint').hidden = true; ok(); });
+  $('#pkWho').addEventListener('input', ok);
+  $('#pkClear').onclick = () => { pad.clear(); $('#pkPadHint').hidden = false; ok(); };
+  $('#pkDone').onclick = async () => {
+    const b = $('#pkDone'); b.disabled = true; b.textContent = L2('Saving…', 'Guardando…');
+    try { const row = await call('sc_pkg_deliver', {p_id: p.id, p_to: $('#pkWho').value.replace(/\s+/g, ' ').trim(), p_signature: pad.data()});
+      Object.assign(p, row); if (PK.seen) PK.seen.set(p.id, 'delivered'); closeModal(); pkListPaint(); pkBadge(PK.list); toast(esc(L2('Delivered to ', 'Entregado a ') + p.delivered_to), 'new'); }
+    catch (e) { b.textContent = L2('Confirm delivery', 'Confirmar entrega'); ok(); toast(esc(pkErr(e))); }
+  };
+  $('#pkQrBtn').onclick = () => pkQr(p);
+}
+async function pkQr(p){
+  let link;
+  try { const r = await call('sc_pkg_sign_link', {p_id: p.id}); link = location.origin + location.pathname.replace(/[^/]*$/, '') + 'firma.html?t=' + r.token + '&lang=' + (LANG === 'es' ? 'es' : 'en'); }
+  catch (e) { toast(esc(pkErr(e))); return; }
+  let svg = '';
+  try { await pkLoad('qr'); const q = window.qrcode(0, 'M'); q.addData(link); q.make(); svg = q.createSvgTag({cellSize: 6, margin: 2, scalable: true}); }
+  catch { svg = ''; }
+  openModal(`<div data-noi18n class="pkform pkqr"><h2>${L2('Scan to sign', 'Escanea para firmar')}</h2>
+    <p class="lead">${esc(L2('Ask ' + p.recipient + ' to scan this with the phone camera and sign there. It works once, for 30 minutes.', 'Pídele a ' + p.recipient + ' que lo escanee con la cámara del teléfono y firme ahí. Sirve una vez, por 30 minutos.'))}</p>
+    <div class="pkqrbox">${svg || `<p class="hint">${L2('The QR couldn’t load. Use the signature here instead.', 'No se pudo cargar el QR. Usa la firma aquí.')}</p>`}</div>
+    <p class="hint" id="pkQrWait" aria-live="polite">${L2('Waiting for the signature…', 'Esperando la firma…')}</p>
+    <div class="btnrow"><button type="button" class="btn" id="pkBack">${L2('Sign here instead', 'Firmar aquí')}</button><button type="button" class="btn" data-close>${L2('Close', 'Cerrar')}</button></div></div>`);
+  $('#pkBack').onclick = () => pkDeliver(p);
+  pkStopPoll();
+  const t0 = Date.now();
+  PK.poll = setInterval(async () => {
+    if ($('#modal').hidden || !$('#pkQrWait') || Date.now() - t0 > 30 * 60000) { pkStopPoll(); return; }
+    try { const list = (await call('sc_pkgs', {p_hotel: S.owner && PK.hotel ? PK.hotel : null})) || []; const x = list.find(r => r.id === p.id);
+      if (x && x.status === 'delivered') { pkStopPoll(); PK.list = list; PK.seen = new Map(list.map(r => [r.id, r.status])); closeModal(); pkListPaint(); pkBadge(list); toast(esc(L2('Signed by ', 'Firmó ') + (x.delivered_to || '')), 'new'); } } catch {}
+  }, 4000);
+}
+
+/* ---- details: photo, signature, edit, delete, take back a delivery ---- */
+async function pkOpen(p){
+  openModal(`<div data-noi18n class="pkform"><h2>${esc(p.recipient)}</h2><p class="hint">${L2('Loading…', 'Cargando…')}</p></div>`);
+  let f;
+  try { f = await call('sc_pkg_get', {p_id: p.id}); } catch (e) { closeModal(); toast(esc(pkErr(e))); return; }
+  if ($('#modal').hidden) return;
+  const d = f.status === 'delivered', line = (k, v) => v ? `<div class="pkdl"><span>${esc(k)}</span><b>${esc(v)}</b></div>` : '';
+  openModal(`<div data-noi18n class="pkform"><h2>${esc(f.recipient)}${f.room ? ' · ' + esc(L2('Rm ', 'Hab ') + f.room) : ''}</h2>
+    <div class="pkdls">${line(L2('Status', 'Estado'), pkStLabel(f.status))}${line(L2('Carrier', 'Mensajería'), f.carrier === 'Other' ? L2('Other', 'Otra') : f.carrier)}${line('Tracking', f.tracking)}
+      ${line(L2('Received', 'Recibido'), mpWhen(f.received_at) + (f.received_by ? ' · ' + f.received_by : ''))}${line(L2('Notified', 'Notificado'), f.notified_at ? mpWhen(f.notified_at) + (f.notified_by ? ' · ' + f.notified_by : '') : '')}
+      ${line(L2('Picked up by', 'Lo recogió'), d ? f.delivered_to : '')}${line(L2('Delivered', 'Entregado'), d ? mpWhen(f.delivered_at) + ' · ' + (f.sign_method === 'qr' ? L2('signed on their phone', 'firmó en su teléfono') : f.delivered_by || '') : '')}${line(L2('Note', 'Nota'), f.note)}</div>
+    ${f.signature ? `<div class="pkimgs"><span class="l">${L2('Signature', 'Firma')}</span><img class="pksig" src="${esc(f.signature)}" alt="${esc(L2('Signature', 'Firma'))}"></div>` : ''}
+    ${f.label_photo ? `<div class="pkimgs"><span class="l">${L2('Label photo', 'Foto de la etiqueta')}</span><img class="pkphoto" src="${esc(f.label_photo)}" alt="${esc(L2('Label photo', 'Foto de la etiqueta'))}"></div>` : `<p class="hint">${L2('No label photo.', 'Sin foto de la etiqueta.')}</p>`}
+    <div class="btnrow">${d ? (pkCanUndo() ? `<button type="button" class="btn" id="pkUndo">${L2('Undo delivery', 'Deshacer entrega')}</button>` : '') : `<button type="button" class="btn" id="pkEdit">${L2('Edit', 'Editar')}</button>${f.status === 'notified' ? `<button type="button" class="btn" id="pkUnNotify">${L2('Not notified yet', 'Aún no notificado')}</button>` : ''}`}
+      <button type="button" class="btn danger" id="pkDel">${L2('Delete', 'Borrar')}</button><button type="button" class="btn" data-close>${L2('Close', 'Cerrar')}</button></div></div>`);
+  const put = row => { const i = (PK.list || []).findIndex(x => x.id === row.id); if (i >= 0) PK.list[i] = row; if (PK.seen) PK.seen.set(row.id, row.status); pkListPaint(); pkBadge(PK.list); };
+  const ed = $('#pkEdit'); if (ed) ed.onclick = () => pkForm(f, null);
+  const un = $('#pkUnNotify'); if (un) un.onclick = async () => { try { put(await call('sc_pkg_status', {p_id: f.id, p_status: 'received'})); closeModal(); } catch (e) { toast(esc(pkErr(e))); } };
+  const ud = $('#pkUndo'); if (ud) ud.onclick = () => {
+    openModal(`<div data-noi18n><h2>${L2('Undo this delivery?', '¿Deshacer esta entrega?')}</h2><p class="lead">${esc(f.recipient)}</p>
+      <p class="hint">${L2('The package goes back to Received and its signature is removed.', 'El paquete vuelve a Recibido y se borra su firma.')}</p>
+      <div class="btnrow"><button type="button" class="btn danger" id="pkUndoGo">${L2('Undo delivery', 'Deshacer entrega')}</button><button type="button" class="btn" data-close>${L2('Cancel', 'Cancelar')}</button></div></div>`);
+    $('#pkUndoGo').onclick = async () => { try { put(await call('sc_pkg_status', {p_id: f.id, p_status: 'received'})); closeModal(); toast(esc(L2('Delivery undone', 'Entrega deshecha')), 'new'); } catch (e) { toast(esc(pkErr(e))); } };
+  };
+  $('#pkDel').onclick = () => {
+    openModal(`<div data-noi18n><h2>${L2('Delete this package?', '¿Borrar este paquete?')}</h2><p class="lead">${esc(f.recipient)}${f.tracking ? ' · ' + esc(f.tracking) : ''}</p>
+      <p class="hint">${L2('It leaves the log for everyone, with its photo and signature. This cannot be undone.', 'Sale del registro para todos, con su foto y su firma. No se puede deshacer.')}</p>
+      <div class="btnrow"><button type="button" class="btn danger" id="pkDelGo">${L2('Delete', 'Borrar')}</button><button type="button" class="btn" data-close>${L2('Cancel', 'Cancelar')}</button></div></div>`);
+    $('#pkDelGo').onclick = async () => { try { await call('sc_pkg_delete', {p_id: f.id}); PK.list = (PK.list || []).filter(x => x.id !== f.id); closeModal(); pkListPaint(); pkBadge(PK.list); toast(esc(L2('Package deleted', 'Paquete borrado')), 'new'); }
+      catch (e) { toast(esc(pkErr(e))); } };
+  };
+}
+
+function pkWire(){
+  const v = $('#view-pkgs'); if (!v || v.dataset.w) return; v.dataset.w = '1';
+  v.addEventListener('click', async e => {
+    const hb = e.target.closest('[data-pkh]'); if (hb) { PK.hotel = hb.dataset.pkh; PK.list = null; PK.seen = null; pkRender(); pkFetch(); return; }
+    const sb = e.target.closest('[data-pks]'); if (sb) { PK.st = sb.dataset.pks; v.querySelectorAll('[data-pks]').forEach(x => x.setAttribute('aria-pressed', x === sb)); pkListPaint(); return; }
+    const db = e.target.closest('[data-pkd]'); if (db) { PK.day = db.dataset.pkd; v.querySelectorAll('[data-pkd]').forEach(x => x.setAttribute('aria-pressed', x === db)); pkListPaint(); return; }
+    if (e.target.closest('#pkType')) { pkForm(null, null); return; }
+    const row = e.target.closest('[data-pkid]'); if (!row) return;
+    const p = (PK.list || []).find(x => x.id === row.dataset.pkid); if (!p) return;
+    if (e.target.closest('[data-pkc]')) { copyText(p.tracking || ''); return; }
+    const b = e.target.closest('[data-pk]'); if (!b) return;
+    if (b.dataset.pk === 'deliver') { pkDeliver(p); return; }
+    if (b.dataset.pk === 'open') { pkOpen(p); return; }
+    if (b.dataset.pk === 'notify') {
+      b.disabled = true;
+      try { const u = await call('sc_pkg_status', {p_id: p.id, p_status: 'notified'}); Object.assign(p, u); if (PK.seen) PK.seen.set(p.id, p.status); pkListPaint(); }
+      catch (err) { b.disabled = false; toast(esc(pkErr(err))); }
+    }
+  });
+  v.addEventListener('change', e => {
+    if (e.target.id === 'pkFile') { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (f) pkForm(null, f); return; }
+    if (e.target.id === 'pkCar') { PK.carrier = e.target.value; pkListPaint(); }
+    if (e.target.id === 'pkSort') { PK.sort = e.target.value; try { localStorage.setItem('sc.pksort', JSON.stringify(PK.sort)); } catch {} pkListPaint(); }
+  });
+  v.addEventListener('input', e => { if (e.target.id === 'pkQ') { PK.q = e.target.value; pkListPaint(); } });
+  PK.bg = setInterval(pkBgTick, 60000); setTimeout(pkBgTick, 5000);
+}
+pkWire();
+window.__fsPkgs = {PK, pkFromCode, pkFromText, pkName, pkMerge, pkMatch, pkRow, pkSorted};
 // tests read the parsers here
 window.__fsResv = {rvDate, rvCsv, rvFromTable, rvFromPdfLines, rvFromLine, rvField, rvCheck, rvBlack};
-/* ---- the Menu's two categories: Operations (everything before) and Reservations ---- */
-const MCATS = [['ops', 'Operations', 'Operaciones'], ['res', 'Reservations', 'Reservaciones']];
-const RES_TABS = ['resv', 'guests'];
+/* ---- the Menu's two categories: Operations (everything before) and Front Office ---- */
+const MCATS = [['ops', 'Operations', 'Operaciones'], ['res', 'Front Office', 'Front Office']];
+const RES_TABS = ['resv', 'guests', 'pkgs'];
 const catOf = t => RES_TABS.includes(t) ? 'res' : 'ops';
 S.cat = ls.get('sc.cat', 'ops') === 'res' ? 'res' : 'ops';
 (function catBuild(){
