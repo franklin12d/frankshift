@@ -957,6 +957,16 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .app .tabs .mcats .mcat .tic{position:static!important;width:auto!important;height:auto!important;background:none!important;color:inherit!important;border-radius:0!important}
 .app .tabs .mcats .mcat .tic svg{width:18px!important;height:18px!important}
 .app .tabs .mcats .mcat .tl{font:600 14px var(--f-body)!important;flex:none!important;max-width:none!important;white-space:nowrap!important;display:inline!important}
+.app .tabs .mcats .mcat[hidden]{display:none!important}
+.app .tabs .mcats .mcat .tic{position:relative!important}
+.tabs .mcats .ccnt{position:absolute;top:-7px;right:-10px;min-width:17px;height:17px;padding:0 4px;border-radius:9px;background:var(--danger,#dc2626);color:#fff;font:700 10.5px/17px var(--f-body);text-align:center;box-sizing:border-box}
+.tabs .mcats .ccnt[hidden]{display:none}
+/* three categories on a phone: icon over a smaller label so all three fit */
+@media (max-width:899px){
+  .tabs .mcats[data-n="3"]{gap:2px;padding:3px}
+  .app .tabs .mcats[data-n="3"] .mcat{flex-direction:column!important;gap:3px!important;padding:6px 1px!important;min-height:52px!important;min-width:0!important}
+  .app .tabs .mcats[data-n="3"] .mcat .tl{font-size:12px!important;letter-spacing:-.15px!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
+}
 @media (min-width:900px){
   .tabs .mcats{flex-direction:column;align-items:center;gap:3px;padding:3px;margin:0 0 8px;border-radius:16px;width:60px}
   .app .tabs .mcats .mcat{flex:none!important;width:54px!important;height:40px!important;min-height:0!important;padding:0!important;border-radius:12px!important}
@@ -4186,6 +4196,8 @@ function enterApp(){
   if (location.hash === '#resv') setTab('resv');
   menuFetch(); if (bdWatch()) bdFetch(true);
   setTimeout(() => { if (location.hash === '#eng' || ((!location.hash || location.hash === '#orders') && engIsMe())) setTab('eng'); });
+  // on a computer the rail shows the category of the page that is open; the phone Menu keeps the saved one
+  setTimeout(() => { try { if (DESK_MQ.matches && catOf(S.tab || 'chat') !== S.cat) { S.cat = catOf(S.tab || 'chat'); catPaint(); } } catch {} });
 }
 
 /* ===== pass-on log: comments and alarms on a pass-on or one of its points ===== */
@@ -4783,8 +4795,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.18.0';
+const APP_VERSION = '1.19.0';
 const CHANGES = [
+  {v: '1.19.0', d: '2026-11-14', en: ['The Menu now has three categories: Operations, Front Office and Housekeeping', 'Front Office now holds Pass-on, Shift Report and Orders, next to Reservations, Guest check-in and Package log', 'New Housekeeping category with Laundry, HK Game Plan and Board', 'A red number on a category tells you something is waiting inside it. Who sees each item is the same as before'],
+    es: ['El Menú ahora tiene tres categorías: Operations, Front Office y Housekeeping', 'Front Office ahora tiene Pass-on, Shift Report y Orders, junto a Reservaciones, Registro de huéspedes y Package log', 'Nueva categoría Housekeeping con Laundry, HK Game Plan y Board', 'Un número rojo en una categoría te avisa que algo espera adentro. Quién ve cada opción sigue igual que antes']},
   {v: '1.18.0', d: '2026-11-14', en: ['The Reservations category in the Menu is now called Front Office', 'New Package log in Front Office, for the front desk and managers of each hotel: take a photo of the label and the app reads the tracking, carrier and name on the phone, so you only check them and save. The photo stays as proof, and the app warns you when the label was hard to read', 'Each package goes Received, Notified, Delivered. Filter by status, date, carrier and hotel, sort by date, name, room, carrier or status, or search by name, tracking or room', 'To deliver, the guest signs with a finger on your phone, or scans a QR and signs on their own phone. The signature stays with the package, and packages are kept with their photo and signature'],
     es: ['La categoría Reservaciones del Menú ahora se llama Front Office', 'Nuevo Package log en Front Office, para el front desk y los gerentes de cada hotel: toma una foto de la etiqueta y la app lee el tracking, la mensajería y el nombre en el teléfono, así solo los revisas y guardas. La foto queda como evidencia, y la app avisa cuando la etiqueta se leyó con dudas', 'Cada paquete pasa por Recibido, Notificado y Entregado. Filtra por estado, fecha, mensajería y hotel, ordena por fecha, nombre, habitación, mensajería o estado, o busca por nombre, tracking o habitación', 'Para entregar, el huésped firma con el dedo en tu teléfono, o escanea un QR y firma en su propio teléfono. La firma queda con el paquete, y los paquetes se guardan con su foto y su firma']},
   {v: '1.17.1', d: '2026-11-14', en: ['Guest check-in: each hotel\'s QR opens a form already set to that hotel, so guests no longer pick one'], es: ['Registro de huéspedes: el QR de cada hotel abre un formulario ya fijo en ese hotel, así el huésped no tiene que elegirlo']},
@@ -7249,30 +7263,49 @@ pkWire();
 window.__fsPkgs = {PK, pkFromCode, pkFromText, pkName, pkMerge, pkMatch, pkRow, pkSorted};
 // tests read the parsers here
 window.__fsResv = {rvDate, rvCsv, rvFromTable, rvFromPdfLines, rvFromLine, rvField, rvCheck, rvBlack};
-/* ---- the Menu's two categories: Operations (everything before) and Front Office ---- */
-const MCATS = [['ops', 'Operations', 'Operaciones'], ['res', 'Front Office', 'Front Office']];
-const RES_TABS = ['resv', 'guests', 'pkgs'];
-const catOf = t => RES_TABS.includes(t) ? 'res' : 'ops';
-S.cat = ls.get('sc.cat', 'ops') === 'res' ? 'res' : 'ops';
+/* ---- the Menu's categories: Operations, Front Office and Housekeeping (1.19.0). 'res' stays the Front Office key so saved choices keep working ---- */
+const MCATS = [['ops', 'Operations', 'Operations'], ['res', 'Front Office', 'Front Office'], ['hk', 'Housekeeping', 'Housekeeping']];
+const CAT_TABS = {res: ['passon', 'srep', 'orders', 'resv', 'guests', 'pkgs'], hk: ['laundry', 'hkplan', 'board']};
+const RES_TABS = CAT_TABS.res;
+const catOf = t => CAT_TABS.res.includes(t) ? 'res' : CAT_TABS.hk.includes(t) ? 'hk' : 'ops';
+const catOk = c => MCATS.some(m => m[0] === c) ? c : 'ops';
+S.cat = catOk(ls.get('sc.cat', 'ops'));
 (function catBuild(){
   const tabs = $('#tabs'), first = tabs && tabs.querySelector('button[data-tab]'); if (!first) return;
   const g = document.createElement('div'); g.className = 'mcats'; g.id = 'mCats'; g.setAttribute('role', 'group'); g.setAttribute('data-noi18n', ''); g.setAttribute('aria-label', L2('Category', 'Categoría'));
   const ico = {ops: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>',
-    res: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>'};
-  g.innerHTML = MCATS.map(([k, en, es]) => `<button type="button" class="mcat" data-cat="${k}" aria-pressed="${S.cat === k}"><span class="tic">${ico[k]}</span><span class="tl">${esc(L2(en, es))}</span></button>`).join('');
+    res: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>',
+    hk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 19v-7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v7M2 15h20M2 19v2M22 19v2M6 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>'};
+  g.innerHTML = MCATS.map(([k, en, es]) => `<button type="button" class="mcat" data-cat="${k}" aria-pressed="${S.cat === k}" title="${esc(L2(en, es))}"><span class="tic">${ico[k]}<span class="ccnt" hidden></span></span><span class="tl">${esc(L2(en, es))}</span></button>`).join('');
   tabs.insertBefore(g, first);
   g.addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; e.stopPropagation(); catSet(b.dataset.cat, true); });
+  // a category shows the sum of the red numbers waiting inside it
+  try { new MutationObserver(ms => { if (ms.some(m => !(m.target.closest && m.target.closest('#mCats')) && !(m.target.parentNode && m.target.parentNode.closest && m.target.parentNode.closest('#mCats')))) catCounts(); })
+    .observe(tabs, {subtree: true, childList: true, characterData: true, attributes: true, attributeFilter: ['hidden', 'class']}); } catch {}
 })();
+const catTabOk = (t, hid) => { const b = document.querySelector(`#tabs button[data-tab="${t}"]`); return !!b && !(hid || new Set(S.menuHid || [])).has(t) && !b.classList.contains('menuoff') && !b.hidden; };
+const catTabsOf = c => [...document.querySelectorAll('#tabs button[data-tab]')].map(b => b.dataset.tab).filter(t => catOf(t) === c);
+function catCounts(){
+  const g = $('#mCats'); if (!g) return;
+  g.querySelectorAll('[data-cat]').forEach(b => {
+    const c = b.dataset.cat; let n = 0;
+    if (c !== S.cat) catTabsOf(c).forEach(t => { if (!catTabOk(t)) return; const e = document.querySelector(`#tabs button[data-tab="${t}"] .cnt`); if (e && !e.hidden) n += parseInt(e.textContent, 10) || 0; });
+    const el = b.querySelector('.ccnt'), txt = n > 99 ? '99+' : String(n);
+    if (el && (el.hidden !== !n || el.textContent !== (n ? txt : ''))) { el.hidden = !n; el.textContent = n ? txt : ''; }
+  });
+}
 function catPaint(){
-  const hid = new Set(S.menuHid || []), resOk = RES_TABS.some(t => { const b = document.querySelector(`#tabs button[data-tab="${t}"]`); return b && !hid.has(t) && !b.classList.contains('menuoff'); });
-  if (!resOk && S.cat === 'res') S.cat = 'ops';
-  const g = $('#mCats'); if (g) { g.hidden = !resOk; g.querySelectorAll('[data-cat]').forEach(b => b.setAttribute('aria-pressed', b.dataset.cat === S.cat)); }
+  const hid = new Set(S.menuHid || []), has = c => catTabsOf(c).some(t => catTabOk(t, hid)), shown = MCATS.map(m => m[0]).filter(c => c === 'ops' || has(c));
+  if (!shown.includes(S.cat)) S.cat = 'ops';
+  const g = $('#mCats');
+  if (g) { g.hidden = shown.length < 2; g.querySelectorAll('[data-cat]').forEach(b => { b.hidden = !shown.includes(b.dataset.cat); b.setAttribute('aria-pressed', b.dataset.cat === S.cat); }); g.dataset.n = shown.length; }
   document.querySelectorAll('#tabs button[data-tab]').forEach(b => b.classList.toggle('catoff', catOf(b.dataset.tab) !== S.cat));
+  catCounts();
 }
 function catSet(c, go){
-  S.cat = c === 'res' ? 'res' : 'ops'; ls.set('sc.cat', S.cat); catPaint();
-  const firstRes = () => (RES_TABS.find(t => { const b = document.querySelector(`#tabs button[data-tab="${t}"]`); return b && !b.classList.contains('menuoff'); }) || 'chat');
-  if (go && catOf(S.tab || 'chat') !== S.cat) { setTab(S.cat === 'res' ? firstRes() : 'chat'); if (!DESK_MQ.matches) menuOpen(true); }
+  S.cat = catOk(c); ls.set('sc.cat', S.cat); catPaint();
+  const firstIn = k => catTabsOf(k).find(t => catTabOk(t)) || 'chat';
+  if (go && catOf(S.tab || 'chat') !== S.cat) { setTab(S.cat === 'ops' ? 'chat' : firstIn(S.cat)); if (!DESK_MQ.matches) menuOpen(true); }
 }
 catPaint();
 
