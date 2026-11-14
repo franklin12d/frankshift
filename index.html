@@ -1270,6 +1270,31 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .mpst{flex:none;font:600 12px var(--f-body);border-radius:999px;padding:4px 10px;border:0}
 .mpst.ok{background:var(--ok-soft);color:var(--ok)}
 .mpst.wait{background:var(--high-soft);color:var(--high)}
+.mpst.no{background:var(--urgent-soft);color:var(--urgent)}
+.mpst.off{background:var(--surface-2);color:var(--ink-3)}
+.dycard.dy-ok{border-left-color:var(--ok)}
+.dycard.dy-no{border-left-color:var(--urgent)}
+.dycard.dy-off{border-left-color:var(--line);opacity:.8}
+.dycard .mptop b{white-space:normal;overflow:visible}
+@media (max-width:560px){.dycard .mptop{flex-wrap:wrap;row-gap:6px}.dycard .mptop b{flex:1 1 100%}}
+.dypto{flex:none;font:700 11.5px var(--f-body);letter-spacing:.04em;border-radius:6px;padding:3px 7px;background:var(--accent-soft);color:var(--accent)}
+.dycard .btnrow{margin-top:6px;gap:8px}
+.dycard .btnrow .btn{margin-top:0}
+.dyans span{color:var(--ink-3)}
+.dydates{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.dydates .field{min-width:0}
+.dydates input{width:100%;min-width:0}
+.dycount{font:600 14.5px var(--f-body);color:var(--accent);min-height:20px;margin:-2px 0 10px}
+.dyswitch{display:flex;align-items:center;gap:12px;width:100%;text-align:left;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);padding:12px;margin:0 0 12px;cursor:pointer;color:var(--ink);font:inherit}
+.dyswitch[aria-checked="true"]{border-color:var(--accent);background:var(--accent-soft)}
+.dytrack{flex:none;width:46px;height:28px;border-radius:999px;background:var(--line);position:relative;transition:background .15s}
+.dyknob{position:absolute;top:3px;left:3px;width:22px;height:22px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:left .15s}
+.dyswitch[aria-checked="true"] .dytrack{background:var(--accent)}
+.dyswitch[aria-checked="true"] .dyknob{left:21px}
+.dysw{display:flex;flex-direction:column;gap:2px;min-width:0}
+.dysw b{font-size:15px}
+.dysw span{font-size:12.5px;color:var(--ink-3)}
+@media (max-width:380px){.dydates{grid-template-columns:1fr}}
 .mpsums{display:flex;flex-direction:column;border:1px solid var(--line);border-radius:12px;overflow:hidden}
 .mpsum{display:flex;gap:12px;padding:10px 12px;border-top:1px solid var(--line)}
 .mpsum:first-child{border-top:0}
@@ -1485,6 +1510,7 @@ body{background:var(--bg)}
     <button role="tab" data-tab="map" aria-selected="false"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.1 6.1 9.9 3.9a2 2 0 0 0-1.8 0L3.6 6.2A1 1 0 0 0 3 7.1v12.3a1 1 0 0 0 1.4.9l3.7-1.9a2 2 0 0 1 1.8 0l4.2 2.2a2 2 0 0 0 1.8 0l4.5-2.3a1 1 0 0 0 .6-.9V5.1a1 1 0 0 0-1.4-.9l-3.7 1.9a2 2 0 0 1-1.8 0Z"/><path d="M9 3.6v15M15 5.6v15"/></svg><span class="cnt" id="mapCnt"></span></span><span class="tl">Map</span></button>
     <button role="tab" data-tab="laundry" aria-selected="false" id="lnTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h.01M11 6h.01"/><circle cx="12" cy="13.5" r="5"/><path class="drum" d="M9.3 14c.9-.8 1.8-.8 2.7 0s1.8.8 2.7 0"/></svg></span><span class="tl">Laundry</span><span class="lnst" id="lnSt" data-noi18n></span></button>
     <button role="tab" data-tab="punch" aria-selected="false" id="mpTab"><span class="tic"><span class="cnt" id="mpCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="13" r="8"/><path d="M12 9v4"/><path d="M12 16.5h.01"/><path d="M9 2h6"/></svg></span><span class="tl" data-noi18n>Missing Punch</span></button>
+    <button role="tab" data-tab="dayoff" aria-selected="false" id="dyTab"><span class="tic"><span class="cnt" id="dyCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M16 3v4M8 3v4M3 10h18"/><path d="M9 15.5l2 2 4-4"/></svg></span><span class="tl" data-noi18n>Day off request</span></button>
     <button role="tab" data-tab="hkplan" aria-selected="false" id="hkTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="3" width="16" height="18" rx="2"/><path d="M8 8h8"/><path d="M8 12h8"/><path d="M8 16h5"/></svg></span><span class="tl" data-noi18n>HK Game Plan</span></button>
     <button role="tab" data-tab="board" aria-selected="false" id="boardTab"><span class="tic"><span class="cnt" id="bdCnt" hidden></span><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/></svg></span><span class="tl" data-noi18n>Board</span></button>
     <button role="tab" data-tab="resv" aria-selected="false" id="resvTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg></span><span class="tl">Reservations</span></button>
@@ -1554,6 +1580,7 @@ body{background:var(--bg)}
 
   <section class="view" id="view-srep" hidden data-noi18n aria-label="Shift Report"><div class="inner" id="srBody"></div></section>
   <section class="view" id="view-punch" hidden data-noi18n aria-label="Missing Punch"><div class="inner" id="mpBody"></div></section>
+  <section class="view" id="view-dayoff" hidden data-noi18n aria-label="Day off request"><div class="inner" id="dyBody"></div></section>
   <section class="view" id="view-hkplan" hidden data-noi18n aria-label="HK Game Plan"><div class="inner" id="hkBody"></div></section>
   <section class="view" id="view-board" hidden data-noi18n aria-label="Board"><div class="inner" id="bdBody"></div></section>
   <section class="view" id="view-resv" hidden data-noi18n aria-label="Reservations"><div class="inner" id="rvBody"></div></section>
@@ -3637,7 +3664,7 @@ function staffCtl(s){
 }
 /* Menu permissions: managers choose which sections each role, or each person, sees. Chat and Manager always show; the superuser always sees everything */
 const MENU_SECS = [['passon', 'Pass-on', 'Entregas'], ['srep', 'Shift Report', 'Shift Report'], ['orders', 'Orders', 'Órdenes'], ['eng', 'Engineer', 'Engineer'], ['map', 'Map', 'Mapa'],
-  ['laundry', 'Laundry', 'Laundry'], ['punch', 'Missing Punch', 'Missing Punch'], ['hkplan', 'HK Game Plan', 'HK Game Plan'], ['board', 'Board', 'Board']];
+  ['laundry', 'Laundry', 'Laundry'], ['punch', 'Missing Punch', 'Missing Punch'], ['dayoff', 'Day off request', 'Day off request'], ['hkplan', 'HK Game Plan', 'HK Game Plan'], ['board', 'Board', 'Board']];
 const MR = {role: 'hk', rules: null};
 function menuSet(d){
   if (!d) return; S.menuHid = d.hidden || []; S.owner = !!d.owner;
@@ -4203,6 +4230,7 @@ function enterApp(){
   if (location.hash === '#team' && isAdmin()) setTab('team');
   if (location.hash === '#board') setTab('board');
   if (location.hash === '#resv') setTab('resv');
+  if (location.hash === '#dayoff') setTab('dayoff');
   menuFetch(); if (bdWatch()) bdFetch(true);
   setTimeout(() => { if (location.hash === '#eng' || ((!location.hash || location.hash === '#orders') && engIsMe())) setTab('eng'); });
   // on a computer the rail shows the category of the page that is open; the phone Menu keeps the saved one
@@ -4443,13 +4471,14 @@ function setTab(t){
   const inMain = t === 'chat' || t === 'orders', dash = desktop && t === 'orders';
   $('#main').hidden = !inMain || dash; $('#main').dataset.tab = t; $('#view-dash').hidden = !dash;
   if (dash) dashLoad();
-  ['passon','lost','rooms','team','map','laundry','eng','srep','punch','hkplan','board','resv','guests','pkgs'].forEach(v => $('#view-' + v).hidden = t !== v);
+  ['passon','lost','rooms','team','map','laundry','eng','srep','punch','dayoff','hkplan','board','resv','guests','pkgs'].forEach(v => $('#view-' + v).hidden = t !== v);
   if (t === 'guests') setTimeout(gqShow); else gqLeave();
   if (t === 'pkgs') setTimeout(pkShow); else pkLeave();
   if (t === 'board') setTimeout(bdShow);
   if (t === 'resv') setTimeout(rvShow);
   if (t === 'srep') setTimeout(srShow);
   if (t === 'punch') setTimeout(mpShow);
+  if (t === 'dayoff') setTimeout(dyShow);
   if (t === 'hkplan') setTimeout(hkShow);
   if (t === 'laundry') setTimeout(() => { lnRender(); lnLoad(); });
   if (t === 'eng') setTimeout(engShow);
@@ -4804,8 +4833,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.20.0';
+const APP_VERSION = '1.21.0';
 const CHANGES = [
+  {v: '1.21.0', d: '2026-11-14', en: ['New Day off request in Operations: pick your first day off and the day you come back to work, turn on PTO if it is paid time off, and send it', 'Your supervisor approves or denies it: the HK supervisor for housekeepers and housemen, Sub managers and Managers for everyone else', 'PTO then goes to a manager, who marks it processed once it is in payroll. You see each step in My requests, and you can cancel before it is processed', 'Supervisors and managers see how many requests wait for them on the Menu'],
+    es: ['Nuevo Day off request en Operations: elige tu día de salida y el día que regresas a trabajar, activa PTO si es tiempo libre pagado, y envíalo', 'Tu supervisor lo aprueba o lo niega: la supervisora de HK para camaristas y houseman, los Sub gerentes y Gerentes para todos los demás', 'Después el PTO pasa a un gerente, que lo marca procesado cuando ya está en la nómina. Ves cada paso en Mis solicitudes y puedes cancelar antes de que se procese', 'Supervisores y gerentes ven en el Menú cuántas solicitudes los esperan']},
   {v: '1.20.0', d: '2026-11-14', en: ['New Quick scan in Package log: point the camera at the label and the app reads the barcode or QR on its own, with a beep. It takes the tracking and carrier from the code and reads the name and room from the same picture', 'Save and scan next keeps the camera open, so you can log a pile of packages one after another', 'Works with a USB or Bluetooth barcode scanner too: scan on the Package log page and the new package opens with the tracking filled in', 'The app warns you when a tracking number was already logged, and when the label says perishable or urgent', 'A Light button turns on the phone’s flashlight in dark rooms, on phones that allow it'],
     es: ['Nuevo Escaneo rápido en Package log: apunta la cámara a la etiqueta y la app lee sola el código de barras o el QR, con un pitido. Toma el tracking y la mensajería del código y lee el nombre y la habitación de la misma imagen', 'Guardar y escanear otro deja la cámara abierta, para registrar una pila de paquetes uno tras otro', 'También funciona con un lector de códigos USB o Bluetooth: escanea en la página de Package log y se abre el paquete nuevo con el tracking puesto', 'La app te avisa cuando un tracking ya se registró, y cuando la etiqueta dice perecedero o urgente', 'El botón Luz prende la linterna del teléfono en cuartos oscuros, en los teléfonos que lo permiten']},
   {v: '1.19.0', d: '2026-11-14', en: ['The Menu now has three categories: Operations, Front Office and Housekeeping', 'Front Office now holds Pass-on, Shift Report and Orders, next to Reservations, Guest check-in and Package log', 'New Housekeeping category with Laundry, HK Game Plan and Board', 'A red number on a category tells you something is waiting inside it. Who sees each item is the same as before'],
@@ -5802,6 +5833,190 @@ function mpReview(){
   };
 }
 function mpShow(){ mpLoad(); mpRender(); mpFetch(); }
+/* ===== 1.21.0 Day off request: anyone asks for days off (first day off, the day they come back, PTO or not, a note).
+   A supervisor approves or denies it: the HK supervisor for housekeepers and housemen, Sub managers and Managers for everyone below them,
+   the superuser for everyone. A PTO request approved by a supervisor then waits for a Manager to process it (or deny it). */
+const DY_ERR = {BAD_START: ['Pick a first day off from today to one year ahead.', 'Elige un primer día libre desde hoy hasta dentro de un año.'],
+  BAD_RETURN: ['The day you come back must be after the first day off.', 'El día de regreso tiene que ser después del primer día libre.'],
+  TOO_LONG: ['Up to 60 days in one request.', 'Hasta 60 días en una solicitud.'],
+  OVERLAP: ['You already asked for some of these days.', 'Ya pediste algunos de estos días.'],
+  TOO_MANY: ['You already sent 10 requests today. Talk to your supervisor.', 'Ya enviaste 10 solicitudes hoy. Habla con tu supervisor.'],
+  BAD_NOTE: ['The note is too long.', 'La nota es muy larga.'],
+  ALREADY_DECIDED: ['Someone already answered this request.', 'Alguien ya respondió esta solicitud.'],
+  ALREADY_PROCESSED: ['This PTO was already processed.', 'Este PTO ya se procesó.'],
+  CANNOT_CANCEL: ['It can’t be cancelled anymore. Talk to your supervisor.', 'Ya no se puede cancelar. Habla con tu supervisor.'],
+  NOT_ALLOWED: ['You can’t do that.', 'No puedes hacer eso.'], NOT_FOUND: ['That request is no longer here.', 'Esa solicitud ya no está aquí.']};
+const dyErr = e => { const m = (e && e.message) || ''; const x = DY_ERR[m]; return x ? L2(x[0], x[1]) : m; };
+const dyAdd = (d, n) => { const x = new Date(d + 'T12:00:00'); x.setDate(x.getDate() + n); return x.toISOString().slice(0, 10); };
+const dyDays = (a, b) => (a && b) ? Math.round((new Date(b + 'T12:00:00') - new Date(a + 'T12:00:00')) / 86400000) : 0;
+const dyShort = d => d ? new Date(d + 'T12:00:00').toLocaleDateString(LANG === 'es' ? 'es-US' : 'en-US', {weekday: 'short', month: 'short', day: 'numeric'}) : '';
+const dyN = n => n === 1 ? L2('1 day off', '1 día libre') : L2(n + ' days off', n + ' días libres');
+const DY_ROLES = {fd: ['Front desk', 'Recepción'], hk: ['Housekeeper', 'Camarista'], hm: ['Houseman', 'Houseman'], eng: ['Engineering', 'Mantenimiento'],
+  sup: ['HK supervisor', 'Supervisora HK'], sub: ['Sub manager', 'Sub gerente'], mgr: ['Manager', 'Gerente']};
+const dyRole = r => DY_ROLES[r] ? L2(DY_ROLES[r][0], DY_ROLES[r][1]) : '';
+let DY = null, DYK = '', DYD = null, DYV = 'todo', DYBusy = false, DYN = 0;
+const dyBlank = () => ({start: '', back: '', pto: false, note: ''});
+function dyLoad(){ const k = ((S.me && S.me.id) || '') + '.' + ((S.hotel && S.hotel.id) || ''); if (DY && DYK === k) return; DYK = k; DY = dyBlank(); DYD = null; DYV = 'todo'; }
+function dySt(r){
+  if (r.status === 'pending') return ['wait', L2('Waiting for supervisor', 'Esperando al supervisor')];
+  if (r.status === 'approved' && r.pto) return ['wait', L2('Approved, waiting for manager', 'Aprobado, esperando al gerente')];
+  if (r.status === 'approved') return ['ok', L2('Approved', 'Aprobado')];
+  if (r.status === 'processed') return ['ok', L2('PTO processed', 'PTO procesado')];
+  if (r.status === 'denied') return ['no', L2('Denied', 'Negado')];
+  return ['off', L2('Cancelled', 'Cancelado')];
+}
+function dyCard(r, team){
+  const [cls, txt] = dySt(r), done = r.status !== 'pending' && !(r.status === 'approved' && r.pto);
+  const meta = [L2('Sent ', 'Enviado ') + mpWhen(r.created_at)];
+  if (r.decided_by) meta.push((r.status === 'denied' ? L2('Denied by ', 'Negado por ') : L2('Approved by ', 'Aprobado por ')) + r.decided_by + ', ' + mpWhen(r.decided_at));
+  if (r.processed_by) meta.push(L2('Processed by ', 'Procesado por ') + r.processed_by + ', ' + mpWhen(r.processed_at));
+  if (r.cancelled_at) meta.push(L2('Cancelled ', 'Cancelado ') + mpWhen(r.cancelled_at));
+  const btns = r.can_decide ? `<div class="btnrow"><button type="button" class="btn pri" data-dyok="${r.id}">${L2('Approve', 'Aprobar')}</button><button type="button" class="btn" data-dyno="${r.id}">${L2('Deny', 'Negar')}</button></div>`
+    : r.can_process ? `<div class="btnrow"><button type="button" class="btn pri" data-dyproc="${r.id}">${L2('Mark PTO processed', 'Marcar PTO procesado')}</button><button type="button" class="btn" data-dypno="${r.id}">${L2('Deny', 'Negar')}</button></div>`
+    : r.can_cancel ? `<button type="button" class="btn dycancel" data-dycancel="${r.id}">${L2('Cancel request', 'Cancelar solicitud')}</button>` : '';
+  return `<div class="mpcard dycard ${done ? 'dy-' + cls : ''}"><div class="mptop"><b>${esc(team ? r.name : dyN(r.days))}</b>${r.pto ? '<span class="dypto">PTO</span>' : ''}<span class="mpst ${cls}">${esc(txt)}</span></div>
+    ${team ? `<div class="mpmeta">${esc(dyRole(r.role))}</div>` : ''}
+    <div class="mpline">${esc(L2('Off ', 'Libre desde ') + dyShort(r.start_date))} · <b>${esc(L2('Back ', 'Regresa ') + dyShort(r.return_date))}</b>${team ? ' · ' + esc(dyN(r.days)) : ''}</div>
+    ${r.note ? `<div class="mpwhy">${esc(r.note)}</div>` : ''}
+    ${r.decided_note ? `<div class="mpwhy dyans"><span>${esc(L2('Answer: ', 'Respuesta: '))}</span>${esc(r.decided_note)}</div>` : ''}
+    <div class="mpmeta">${esc(meta.join(' · '))}</div>${btns}</div>`;
+}
+const dyTodo = () => ((DYD && DYD.team) || []).filter(r => r.can_decide);
+const dyProc = () => ((DYD && DYD.team) || []).filter(r => r.can_process);
+const dyRest = () => ((DYD && DYD.team) || []).filter(r => !r.can_decide && !r.can_process);
+function dyTeamHtml(){
+  if (!DYD) return `<p class="hint">${L2('Loading…', 'Cargando…')}</p>`;
+  const segs = [['todo', L2('To approve', 'Por aprobar'), dyTodo().length]];
+  if (DYD.processor) segs.push(['pto', L2('PTO to process', 'PTO por procesar'), dyProc().length]);
+  segs.push(['all', L2('Answered', 'Respondidas'), null]);
+  if (!segs.some(s => s[0] === DYV)) DYV = 'todo';
+  const list = DYV === 'todo' ? dyTodo() : DYV === 'pto' ? dyProc() : dyRest();
+  const empty = DYV === 'todo' ? L2('Nothing to approve.', 'Nada por aprobar.') : DYV === 'pto' ? L2('No PTO waiting to be processed.', 'No hay PTO esperando a procesarse.')
+    : L2('Nothing answered in the last 30 days.', 'Nada respondido en los últimos 30 días.');
+  return `<div class="mpseg dyseg" role="group">${segs.map(([k, t, n]) => `<button type="button" data-dyv="${k}" aria-pressed="${DYV === k}">${esc(t)}${n != null ? ` <i>${n}</i>` : ''}</button>`).join('')}</div>`
+    + (list.length ? list.map(r => dyCard(r, true)).join('') : `<p class="hint">${empty}</p>`);
+}
+function dyMineHtml(){
+  if (!DYD) return `<p class="hint">${L2('Loading…', 'Cargando…')}</p>`;
+  if (!DYD.mine.length) return `<p class="hint">${L2('You haven’t asked for days off yet.', 'Todavía no has pedido días libres.')}</p>`;
+  return DYD.mine.map(r => dyCard(r, false)).join('');
+}
+function dyCountTxt(){ const n = dyDays(DY.start, DY.back); return DY.start && DY.back && n > 0 ? dyN(n) : ''; }
+function dyRender(){
+  dyLoad();
+  const box = $('#dyBody'); if (!box) return;
+  const boss = !!(DYD && DYD.boss), today = mpToday();
+  box.innerHTML = `<div class="enghead"><div class="grow"><h2>Day off request</h2>
+      <div class="sub">${L2('Ask for days off. Your supervisor approves them. PTO then goes to a manager to be processed.', 'Pide tus días libres. Tu supervisor los aprueba. El PTO después pasa a un gerente para procesarlo.')}</div></div></div>
+    ${boss ? `<div class="card mpteam"><h3 class="srh">${L2('Team requests', 'Solicitudes del equipo')}</h3><div id="dyTeam">${dyTeamHtml()}</div></div>` : ''}
+    <div class="card mpform">${boss ? `<h3 class="srh">${L2('New request', 'Nueva solicitud')}</h3>` : ''}
+      <div class="dydates">
+        <div class="field"><label for="dyStart">${L2('First day off', 'Día de salida')}</label><input id="dyStart" type="date" value="${esc(DY.start)}" min="${today}" max="${dyAdd(today, 365)}"><div class="mpday" id="dyStartL">${esc(mpDay(DY.start))}</div></div>
+        <div class="field"><label for="dyBack">${L2('Back to work', 'Día de regreso')}</label><input id="dyBack" type="date" value="${esc(DY.back)}" min="${dyAdd(DY.start || today, 1)}"><div class="mpday" id="dyBackL">${esc(mpDay(DY.back))}</div></div>
+      </div>
+      <div class="dycount" id="dyCount" aria-live="polite">${esc(dyCountTxt())}</div>
+      <button type="button" class="dyswitch" id="dyPto" role="switch" aria-checked="${DY.pto}"><span class="dytrack"><span class="dyknob"></span></span>
+        <span class="dysw"><b>PTO</b><span>${L2('Paid time off. After your supervisor approves it, a manager processes it.', 'Tiempo libre pagado. Después de que tu supervisor lo apruebe, un gerente lo procesa.')}</span></span></button>
+      <div class="field"><label for="dyNote">${L2('Note (optional)', 'Nota (opcional)')}</label><textarea id="dyNote" rows="2" maxlength="300" placeholder="${esc(L2('Example: family trip', 'Ejemplo: viaje familiar'))}">${esc(DY.note)}</textarea></div>
+      <button type="button" class="btn pri mpgo" id="dyReview">${L2('Review and send', 'Revisar y enviar')}</button>
+    </div>
+    <div class="card mplist"><h3 class="srh">${L2('My requests', 'Mis solicitudes')}</h3><div id="dyMine">${dyMineHtml()}</div></div>`;
+}
+function dyCount(){
+  const c = $('#dyCnt'); if (!c) return;
+  const n = DYD ? dyTodo().length + dyProc().length : 0;
+  c.textContent = n ? String(n) : ''; c.hidden = !n;
+}
+function dySet(d){
+  if (!d) return; const wasBoss = !!(DYD && DYD.boss); DYD = d; dyCount();
+  if (S.tab !== 'dayoff') return;
+  if (!!d.boss !== wasBoss || !$('#dyMine')) return dyRender();
+  const t = $('#dyTeam'), m = $('#dyMine'); if (t) t.innerHTML = dyTeamHtml(); if (m) m.innerHTML = dyMineHtml();
+}
+async function dyFetch(quiet){
+  if (!S.token || !S.me || DYBusy) return; DYBusy = true;
+  try { dySet(await call('sc_dayoff', {})); } catch (e) { if (!quiet) toast(esc(dyErr(e))); } finally { DYBusy = false; }
+}
+function dyCheck(){
+  const bad = (msg, el) => { toast(msg); const x = $(el); if (x) x.focus(); return false; };
+  const today = mpToday();
+  if (!DY.start || DY.start < today || DY.start > dyAdd(today, 365)) return bad(L2('Pick your first day off.', 'Elige tu día de salida.'), '#dyStart');
+  if (!DY.back) return bad(L2('Pick the day you come back to work.', 'Elige el día que regresas a trabajar.'), '#dyBack');
+  if (DY.back <= DY.start) return bad(DY_ERR.BAD_RETURN[LANG === 'es' ? 1 : 0], '#dyBack');
+  if (dyDays(DY.start, DY.back) > 60) return bad(DY_ERR.TOO_LONG[LANG === 'es' ? 1 : 0], '#dyBack');
+  return true;
+}
+function dyReview(){
+  if (!dyCheck()) return;
+  const row = (k, v) => `<div class="mpsum"><span>${esc(k)}</span><b>${esc(v)}</b></div>`;
+  openModal(`<div data-noi18n><h2>${L2('Check before sending', 'Revisa antes de enviar')}</h2>
+    <p class="hint">${DY.pto ? L2('Your supervisor approves it, then a manager processes the PTO.', 'Tu supervisor lo aprueba y después un gerente procesa el PTO.') : L2('Your supervisor will approve or deny it.', 'Tu supervisor lo aprobará o lo negará.')}</p>
+    <div class="mpsums">${row(L2('First day off', 'Día de salida'), mpDay(DY.start))}${row(L2('Back to work', 'Día de regreso'), mpDay(DY.back))}${row(L2('Days off', 'Días libres'), String(dyDays(DY.start, DY.back)))}${row('PTO', DY.pto ? L2('Yes', 'Sí') : 'No')}${DY.note.trim() ? row(L2('Note', 'Nota'), DY.note.trim()) : ''}</div>
+    <div class="btnrow" style="margin-top:12px"><button class="btn pri" type="button" id="dySend">${L2('Send', 'Enviar')}</button><button class="btn" type="button" data-close>${L2('Edit', 'Corregir')}</button></div></div>`);
+  $('#dySend').onclick = async () => {
+    const b = $('#dySend'); b.disabled = true; b.textContent = L2('Sending…', 'Enviando…');
+    let d;
+    try { d = await call('sc_dayoff_new', {p_start: DY.start, p_return: DY.back, p_pto: DY.pto, p_note: DY.note.trim()}); }
+    catch (err) { b.disabled = false; b.textContent = L2('Send', 'Enviar'); return toast(esc(dyErr(err))); }
+    closeModal(); DY = dyBlank(); DYD = d; dyRender(); dyCount();
+    toast(L2('Request sent to your supervisor', 'Solicitud enviada a tu supervisor'), 'new');
+    const m = $('#dyMine'); if (m && m.scrollIntoView) m.scrollIntoView({block: 'start'});
+  };
+}
+// approve, deny, process, cancel: one small window to confirm, with an optional answer when denying
+function dyAsk(r, kind){
+  const title = {ok: L2('Approve these days off?', '¿Aprobar estos días libres?'), no: L2('Deny these days off?', '¿Negar estos días libres?'),
+    proc: L2('Mark this PTO as processed?', '¿Marcar este PTO como procesado?'), pno: L2('Deny this PTO?', '¿Negar este PTO?'),
+    cancel: L2('Cancel your request?', '¿Cancelar tu solicitud?')}[kind];
+  const hint = kind === 'ok' && r.pto ? L2('It is PTO, so it then goes to a manager to be processed.', 'Es PTO, así que después pasa a un gerente para procesarlo.')
+    : kind === 'proc' ? L2('Do it after the PTO is entered in payroll.', 'Hazlo después de cargar el PTO en la nómina.') : '';
+  const deny = kind === 'no' || kind === 'pno';
+  const btn = {ok: L2('Approve', 'Aprobar'), no: L2('Deny', 'Negar'), proc: L2('Mark processed', 'Marcar procesado'), pno: L2('Deny', 'Negar'), cancel: L2('Cancel request', 'Cancelar solicitud')}[kind];
+  openModal(`<div data-noi18n><h2>${esc(title)}</h2>
+    <p class="hint">${esc((r.name ? r.name + ' · ' : '') + dyShort(r.start_date) + ' → ' + dyShort(r.return_date) + ' · ' + dyN(r.days) + (r.pto ? ' · PTO' : ''))}</p>
+    ${hint ? `<p class="hint">${esc(hint)}</p>` : ''}
+    ${deny ? `<div class="field"><label for="dyAns">${L2('Reason (optional, the person sees it)', 'Razón (opcional, la persona la ve)')}</label><textarea id="dyAns" rows="2" maxlength="300"></textarea></div>` : ''}
+    <div class="btnrow" style="margin-top:12px"><button class="btn pri" type="button" id="dyGo">${esc(btn)}</button><button class="btn" type="button" data-close>${L2('Back', 'Volver')}</button></div></div>`);
+  $('#dyGo').onclick = async () => {
+    const b = $('#dyGo'); b.disabled = true; const note = deny ? ($('#dyAns').value || '').trim() : '';
+    try {
+      const d = kind === 'cancel' ? await call('sc_dayoff_cancel', {p_id: r.id})
+        : kind === 'ok' || kind === 'no' ? await call('sc_dayoff_decide', {p_id: r.id, p_ok: kind === 'ok', p_note: note})
+        : await call('sc_dayoff_process', {p_id: r.id, p_ok: kind === 'proc', p_note: note});
+      closeModal(); dySet(d);
+      toast({ok: L2('Approved', 'Aprobado'), no: L2('Denied', 'Negado'), proc: L2('PTO processed', 'PTO procesado'), pno: L2('Denied', 'Negado'), cancel: L2('Request cancelled', 'Solicitud cancelada')}[kind], 'new');
+    } catch (err) { b.disabled = false; toast(esc(dyErr(err))); if (/ALREADY_|NOT_FOUND|CANNOT_CANCEL/.test(err.message)) { closeModal(); dyFetch(true); } }
+  };
+}
+function dyShow(){ dyLoad(); dyRender(); dyFetch(); }
+const dyFind = id => [...((DYD && DYD.team) || []), ...((DYD && DYD.mine) || [])].find(r => r.id === id);
+$('#view-dayoff').addEventListener('input', e => {
+  const t = e.target; if (!DY) return;
+  if (t.id === 'dyNote') DY.note = t.value;
+});
+$('#view-dayoff').addEventListener('change', e => {
+  const t = e.target; if (!DY) return;
+  if (t.id === 'dyStart') { DY.start = t.value; $('#dyStartL').textContent = mpDay(t.value); const bk = $('#dyBack');
+    bk.min = dyAdd(t.value || mpToday(), 1); if (t.value && (!DY.back || DY.back <= t.value)) { DY.back = dyAdd(t.value, 1); bk.value = DY.back; $('#dyBackL').textContent = mpDay(DY.back); } }
+  if (t.id === 'dyBack') { DY.back = t.value; $('#dyBackL').textContent = mpDay(t.value); }
+  const c = $('#dyCount'); if (c) c.textContent = dyCountTxt();
+});
+$('#view-dayoff').addEventListener('click', e => {
+  const sw = e.target.closest('#dyPto'); if (sw) { DY.pto = !DY.pto; sw.setAttribute('aria-checked', String(DY.pto)); return; }
+  if (e.target.closest('#dyReview')) return dyReview();
+  const v = e.target.closest('[data-dyv]'); if (v) { DYV = v.dataset.dyv; const t = $('#dyTeam'); if (t) t.innerHTML = dyTeamHtml(); return; }
+  for (const [a, k] of [['dyok', 'ok'], ['dyno', 'no'], ['dyproc', 'proc'], ['dypno', 'pno'], ['dycancel', 'cancel']]) {
+    const b = e.target.closest(`[data-${a}]`); if (b) { const r = dyFind(b.dataset[a]); if (r) dyAsk(r, k); return; }
+  }
+});
+// supervisors see how many wait for them on the Menu: checked every minute, every 15 s on this screen
+setInterval(() => {
+  if (!S.token || !S.me || document.visibilityState !== 'visible' || navigator.onLine === false) return;
+  if ((S.menuHid || []).includes('dayoff')) return;
+  DYN++; if (S.tab === 'dayoff' || ((!DYD || DYD.boss) && DYN % 4 === 0)) dyFetch(true);
+}, 15000);
+document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible' && S.token && S.me && DYD && DYD.boss) dyFetch(true); });
+if (S.token && S.me) setTimeout(() => { if (!(S.menuHid || []).includes('dayoff')) dyFetch(true); }, 2500);
 /* 1.14.0 Board: the HK supervisor gives each housekeeper her rooms; check-outs go first to the houseman to strip;
    the housekeeper taps Start, Pause and Ready (MPR = minutes from Start to Ready without the pauses); the supervisor closes them as Vacant/Ready */
 const BD_ROOMS = {"MGT": "100-159,200-259,261", "FDT": "1100-1125,1200-1229,2100-2126,2200-2227,3100-3104,3107-3122,3200-3205,3208-3223,4100-4123,4200-4223", "HWY": "106-136,201-238,301-338"};
