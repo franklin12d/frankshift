@@ -1440,7 +1440,7 @@ body{background:var(--bg)}
   .tabs .mtools{margin-top:auto!important;border-top:1px solid var(--line);padding-top:8px!important;align-items:stretch;width:100%}
   .tabs .mtools button.iconbtn{width:100%!important;height:36px!important}
   .app .tabs,.app.menu-open .tabs{padding-bottom:76px!important}
-  .app > .railme{position:fixed;left:10px;bottom:10px;z-index:31;width:216px;height:52px;border-radius:12px;border:0;padding:0 6px;background:var(--surface);display:flex!important;align-items:center;gap:10px;cursor:pointer;text-align:left;color:var(--ink)}
+  .app > .railme{position:fixed;left:1px;bottom:0;z-index:31;width:234px;height:68px;border-radius:0;border:0;border-top:1px solid var(--line);padding:0 16px;background:var(--surface);display:flex!important;align-items:center;gap:10px;cursor:pointer;text-align:left;color:var(--ink)}
   .app > .railme:hover{background:var(--surface-2)}
   .app > .railme .rmn{display:flex;flex-direction:column;min-width:0;gap:1px}
   .app > .railme .rmn b{font:600 14px var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
@@ -1458,6 +1458,25 @@ body{background:var(--bg)}
   .app .tabs .railhd[data-cg="res"]{order:3}.app .tabs button[data-cg="res"]{order:4}
   .app .tabs .railhd[data-cg="hk"]{order:5}.app .tabs button[data-cg="hk"]{order:6}
   .app .tabs .mtools{order:9}
+  /* 1.23.0: the sidebar can shrink to icons only, to leave more room for the chat or the open section */
+  .app .tabs .raillogo .railtog{flex:none!important;width:32px!important;height:32px!important;min-height:0!important;padding:0!important;margin:0 0 0 auto!important;border-radius:8px!important;display:grid!important;place-items:center!important;color:var(--ink-3)!important;order:9}
+  .app .tabs .raillogo .railtog:hover{background:var(--surface-2)!important;color:var(--ink)!important}
+  .app .tabs .raillogo .railtog svg{width:18px;height:18px;transition:transform .15s}
+  .app.railmin{padding-left:76px}
+  .app.railmin .tabs,.app.railmin.menu-open .tabs{width:76px!important;padding:12px 0!important;padding-bottom:76px!important;align-items:center}
+  .app.railmin .tabs .raillogo{flex-direction:column;align-items:center;height:auto;gap:6px;margin:0 0 4px}
+  .app.railmin .tabs .raillogo b{display:none}
+  .app.railmin .tabs .raillogo .railtog{margin:0!important}
+  .app.railmin .tabs .raillogo .railtog svg{transform:rotate(180deg)}
+  .app.railmin .tabs button[data-tab],.app.railmin .tabs .mtools button.iconbtn{width:52px!important;height:38px!important;padding:0!important;justify-content:center!important;gap:0!important}
+  .app.railmin .tabs .tl,.app.railmin.menu-open .tabs .tl{display:none!important}
+  .app.railmin .tabs .tic .cnt{top:2px!important;right:0!important;transform:none!important;min-width:18px;height:18px;line-height:18px!important;padding:0 5px!important;font-size:10.5px!important;box-shadow:0 0 0 2px var(--surface)}
+  .app.railmin .tabs .railhd{width:36px;height:1px;padding:0;margin:6px 0;font-size:0;background:var(--line)}
+  .app.railmin .tabs .railhd[data-cg="ops"]{display:none!important}
+  .app.railmin .tabs .mtools{align-items:center}
+  .app.railmin > .railme{width:74px;padding:0;justify-content:center}
+  .app.railmin > .railme .rmn{display:none}
+  .app.railmin ~ .railtip,.railtip.min{left:82px}
   /* list (orders) left of the chat */
   .main{grid-template-columns:minmax(330px,400px) minmax(0,1fr)!important}
   .main .panel{order:-1;border-right:1px solid var(--line);background:var(--surface)!important}
@@ -4844,8 +4863,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.22.0';
+const APP_VERSION = '1.23.0';
 const CHANGES = [
+  {v: '1.23.0', d: '2026-11-14', en: ['On a computer you can minimize the Menu to icons only with the button next to FrankShift, and open it again with the same button', 'With the Menu minimized, the chat or the section you have open gets the extra room, and each icon shows its name when you point at it', 'Your computer remembers your choice'],
+    es: ['En la computadora puedes minimizar el Menú a solo iconos con el botón junto a FrankShift, y volver a abrirlo con el mismo botón', 'Con el Menú minimizado, el chat o la sección que tienes abierta gana el espacio, y cada icono muestra su nombre al pasar el mouse', 'Tu computadora recuerda lo que elegiste']},
   {v: '1.22.0', d: '2026-11-14', en: ['On a computer the Menu is now a wider sidebar: every section shows its name, grouped under Operations, Front Office and Housekeeping, so you find it at a glance', 'Your name and photo sit at the bottom of the sidebar', 'The map zooms in and out faster with the mouse wheel'],
     es: ['En la computadora el Menú ahora es una barra lateral más amplia: cada sección muestra su nombre, agrupada en Operations, Front Office y Housekeeping, para encontrarla de un vistazo', 'Tu nombre y foto están abajo en la barra lateral', 'El mapa acerca y aleja más rápido con la rueda del mouse']},
   {v: '1.21.0', d: '2026-11-14', en: ['New Day off request in Operations: pick your first day off and the day you come back to work, turn on PTO if it is paid time off, and send it', 'Your supervisor approves or denies it: the HK supervisor for housekeepers and housemen, Sub managers and Managers for everyone else', 'PTO then goes to a manager, who marks it processed once it is in payroll. You see each step in My requests, and you can cancel before it is processed', 'Supervisors and managers see how many requests wait for them on the Menu'],
@@ -5669,6 +5690,15 @@ function srPoBody(x, acts, extra){
 
 /* ===== v1.5.0 desktop: icon rail, orders list, chat with its own header (phones keep the Menu) ===== */
 const DESK_MQ = window.matchMedia ? window.matchMedia('(min-width:900px)') : { matches: false, addEventListener(){} };
+// 1.23.0: shrink the sidebar to icons only (kept on this device)
+S.railMin = ls.get('sc.railMin', false) === true;
+function railMin(on, quiet){
+  S.railMin = !!on; if (!quiet) ls.set('sc.railMin', S.railMin);
+  const app = $('#app'); if (app) app.classList.toggle('railmin', S.railMin);
+  const tg = $('#railTog'); if (tg) { const t = S.railMin ? L2('Expand menu', 'Expandir menú') : L2('Minimize menu', 'Minimizar menú'); tg.setAttribute('aria-label', t); tg.setAttribute('aria-expanded', String(!S.railMin)); tg.dataset.tip = t; }
+  const tip = document.querySelector('.railtip'); if (tip) { tip.hidden = true; tip.classList.toggle('min', S.railMin); }
+  if (!quiet) try { window.dispatchEvent(new Event('resize')); } catch {}
+}
 const ICO_SEARCH = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="11" cy="11" r="7"/><path d="m20 20-3.5-3.5"/></svg>';
 const ICO_CARET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true" style="width:14px;height:14px"><path d="m6 9 6 6 6-6"/></svg>';
 (function deskBuild(){
@@ -5677,7 +5707,13 @@ const ICO_CARET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
   const mark = document.querySelector('header.top .brand svg.mark');
   if (mark) {
     const lg = document.createElement('div'); lg.className = 'raillogo deskonly'; lg.setAttribute('aria-hidden', 'true');
-    lg.innerHTML = mark.outerHTML.replace(/fsG1/g, 'fsG1r') + '<b>FrankShift</b>'; tabs.prepend(lg);
+    lg.innerHTML = mark.outerHTML.replace(/fsG1/g, 'fsG1r') + '<b aria-hidden="true">FrankShift</b>'; tabs.prepend(lg);
+    const svg = lg.querySelector('svg'); if (svg) svg.setAttribute('aria-hidden', 'true');
+    lg.removeAttribute('aria-hidden');
+    const tg = document.createElement('button'); tg.type = 'button'; tg.className = 'railtog'; tg.id = 'railTog'; tg.setAttribute('data-noi18n', '');
+    tg.innerHTML = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M9 4v16"/><path d="m16 10-2 2 2 2"/></svg>';
+    lg.appendChild(tg); tg.onclick = e => { e.stopPropagation(); railMin(!S.railMin); };
+    railMin(S.railMin, true);
   }
   // profile photo at the bottom of the rail
   const me = document.createElement('button'); me.type = 'button'; me.className = 'railme deskonly'; me.setAttribute('data-noi18n', '');
@@ -5693,11 +5729,13 @@ const ICO_CARET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
   tabs.addEventListener('mouseover', e => {
     if (!DESK_MQ.matches) return;
     const b = e.target.closest('button'); if (!b) { tip.hidden = true; return; }
-    const tl = b.querySelector('.tl'), t = ((tl || {}).textContent || '').trim();
-    if (!t || !tl || tl.scrollWidth <= tl.clientWidth + 1) { tip.hidden = true; return; }
+    const tl = b.querySelector('.tl'), t = b.dataset.tip || ((tl || {}).textContent || '').trim();
+    if (!t || (!b.dataset.tip && !S.railMin && (!tl || tl.scrollWidth <= tl.clientWidth + 1))) { tip.hidden = true; return; }
     const r = b.getBoundingClientRect(); tip.textContent = t; tip.style.top = Math.round(r.top + r.height / 2 - 15) + 'px'; tip.hidden = false;
   });
   tabs.addEventListener('mouseleave', () => { tip.hidden = true; });
+  me.addEventListener('mouseenter', () => { if (!DESK_MQ.matches || !S.railMin) return; const r = me.getBoundingClientRect(); tip.textContent = L2('Your account', 'Tu cuenta'); tip.style.top = Math.round(r.top + r.height / 2 - 15) + 'px'; tip.hidden = false; });
+  me.addEventListener('mouseleave', () => { tip.hidden = true; });
   tabs.addEventListener('click', () => { tip.hidden = true; });
   // chat header
   const ch = document.createElement('div'); ch.className = 'chathead deskonly'; ch.setAttribute('data-noi18n', '');
