@@ -4713,8 +4713,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.16.4';
+const APP_VERSION = '1.16.5';
 const CHANGES = [
+  {v: '1.16.5', d: '2026-11-14', en: ['Maingate and Highway maps: same look as Fundamental, with lawns, parking lines, trees along the edge, solid green rooms with shadows, orange stairs, white room numbers and a label for each wing. Search, floors, separate floors, top view, pins and orders work as before'],
+    es: ['Mapas de Maingate y Highway: el mismo aspecto que Fundamental, con jardines, líneas de estacionamiento, árboles en el borde, habitaciones verdes sólidas con sombra, escaleras naranjas, números en blanco y el nombre de cada ala. La búsqueda, los pisos, separar pisos, la vista de planta, los pines y las órdenes funcionan igual']},
   {v: '1.16.4', d: '2026-11-14', en: ['Fundamental map: new look from the site map, with a cream ground, teal lawns, parking lines, trees, solid green rooms, orange stairs and white room numbers. Search, floors, separate floors, top view, pins and orders work as before'],
     es: ['Mapa de Fundamental: nuevo aspecto tomado del site map, con terreno crema, jardines verde agua, líneas de estacionamiento, árboles, habitaciones verdes sólidas, escaleras naranjas y números en blanco. La búsqueda, los pisos, separar pisos, la vista de planta, los pines y las órdenes funcionan igual']},
   {v: '1.16.3', d: '2026-11-14', en: ['Team: sort people by department. Each department gets its own heading with how many people it has, and the app remembers your choice. The user list download follows the same order'],

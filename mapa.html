@@ -107,7 +107,7 @@ document.addEventListener('DOMContentLoaded',function(){document.title=L(documen
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Mapa de ingeniería · FrankShift</title>
 <meta name="theme-color" content="#2559A7">
-<script>(function(){var t="auto";try{t=JSON.parse(localStorage.getItem("sc.theme")||"\"auto\"")}catch(e){}var d=t==="dark"||(t!=="light"&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");try{if(new URLSearchParams(location.search).get("h")==="FDT"){document.documentElement.setAttribute("data-hotel","FDT");var tc=document.querySelector('meta[name="theme-color"]');if(tc)tc.setAttribute("content",d?"#1B2729":"#FFFFFF");}}catch(e){}})();</script>
+<script>(function(){var t="auto";try{t=JSON.parse(localStorage.getItem("sc.theme")||"\"auto\"")}catch(e){}var d=t==="dark"||(t!=="light"&&window.matchMedia&&matchMedia("(prefers-color-scheme: dark)").matches);document.documentElement.setAttribute("data-theme",d?"dark":"light");try{var hh=new URLSearchParams(location.search).get("h");document.documentElement.setAttribute("data-hotel",hh==="FDT"||hh==="HWY"?hh:"MGT");document.documentElement.setAttribute("data-site","");{var tc=document.querySelector('meta[name="theme-color"]');if(tc)tc.setAttribute("content",d?"#1B2729":"#FFFFFF");}}catch(e){}})();</script>
 <link rel="icon" href="icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -142,37 +142,38 @@ document.addEventListener('DOMContentLoaded',function(){document.title=L(documen
   --st-open:#FF4B42; --st-asg:#FF9A3D; --st-prog:#FFD43B; --st-done:#34C26F;
   color-scheme:dark;
 }
-/* Fundamental: site map look (cream ground, teal lawns, green rooms, orange stairs) */
-:root[data-hotel="FDT"]{
+/* Los tres hoteles: site map look (cream ground, teal lawns, green rooms, orange stairs) */
+:root[data-site]{
   --frame:#EFEBE1; --ground:#E8E3D7; --field:#E3DED0; --park:#C9CAC4; --path:#EEEBE4; --walk:#F7F5F0; --stripe:#F4F4F1; --rail:#FFFFFF;
   --lawn:#7BC9B6; --tree:#3E9E7E; --tree2:#5DB38D; --trunk:#8C6B47; --pool:#4CC0D6; --stair:#EE7F1B; --bldg:#E2D0AA;
   --g1:#5B8E24; --g2:#C9E07F; --g3:#E1F2BB; --edge:#23400B; --labelInk:#15262A; --chip:#FFFFFF; --badge:#15262A; --badgeInk:#FFFFFF; --parkChip:#4F5B5E;
   --brand:#FFFFFF; --surface:#FFFFFF; --bg:#F3F0E8; --ink:#15262A; --muted:#5C6F72; --line:#E3DED3;
   color-scheme:light;
 }
-:root[data-hotel="FDT"][data-theme="dark"]{
+:root[data-site][data-theme="dark"]{
   --frame:#141D1F; --ground:#1A2426; --field:#1F2A2C; --park:#3B4547; --path:#2B3638; --walk:#3A4648; --stripe:#7E8A8C; --rail:#C9D2D3;
   --lawn:#2C6B5E; --tree:#2F7D63; --tree2:#3F9174; --trunk:#6B5238; --pool:#2E9DB4; --stair:#D9741A; --bldg:#8F7F62;
   --g1:#5E8F2A; --g2:#9DB65F; --g3:#C6D99A; --edge:#0F1E06; --labelInk:#15262A; --chip:#E8EEEA; --badge:#F3C623; --badgeInk:#15262A; --parkChip:#4F5B5E;
   --brand:#1B2729; --surface:#1B2729; --bg:#121B1D; --ink:#E8EEEC; --muted:#9DB0B2; --line:#2E3D40;
   color-scheme:dark;
 }
-:root[data-hotel="FDT"] body{font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
-:root[data-hotel="FDT"] .zoom button,:root[data-hotel="FDT"] .cmenu button,:root[data-hotel="FDT"] .sh-head h2,:root[data-hotel="FDT"] .item .num,:root[data-hotel="FDT"] .item .num.area,:root[data-hotel="FDT"] .plan text,:root[data-hotel="FDT"] .qbtn{font-family:"Figtree",system-ui,sans-serif}
-:root[data-hotel="FDT"] .sh-head h2{font-family:"Bricolage Grotesque","Figtree",sans-serif}
-:root[data-hotel="FDT"] .top{color:var(--ink);border-bottom:1px solid var(--line)}
-:root[data-hotel="FDT"] .top h1{font:700 19px/1.1 "Bricolage Grotesque","Figtree",sans-serif;letter-spacing:-.2px}
-:root[data-hotel="FDT"] .top h1 span{font:500 13px/1.25 "Figtree",sans-serif;letter-spacing:0;opacity:1;color:var(--muted);margin-top:2px}
-:root[data-hotel="FDT"] .search{width:clamp(112px,30vw,240px);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:9px 12px;font-weight:500}
-:root[data-hotel="FDT"] .search::placeholder{color:var(--muted)}
-:root[data-hotel="FDT"] .seg,:root[data-hotel="FDT"] .ctrls .tool,:root[data-hotel="FDT"] .zoom{border-color:var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(21,38,42,.08),0 4px 14px rgba(21,38,42,.08)}
-:root[data-hotel="FDT"] .ctrls .seg{padding:3px;gap:2px}
-:root[data-hotel="FDT"] .ctrls .seg button{border-radius:9px;min-height:34px}
-:root[data-hotel="FDT"] .ctrls .seg button+button{border-left:0}
-:root[data-hotel="FDT"] .ctrls [data-floor="1"]::before,:root[data-hotel="FDT"] .ctrls [data-floor="2"]::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;box-shadow:inset 0 0 0 1px rgba(21,38,42,.18)}
-:root[data-hotel="FDT"] .ctrls [data-floor="1"]::before{background:var(--g1)}
-:root[data-hotel="FDT"] .ctrls [data-floor="2"]::before{background:var(--g2)}
-:root[data-hotel="FDT"] .dot{border-radius:4px}
+:root[data-site] body{font-family:"Figtree",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif}
+:root[data-site] .zoom button,:root[data-site] .cmenu button,:root[data-site] .sh-head h2,:root[data-site] .item .num,:root[data-site] .item .num.area,:root[data-site] .plan text,:root[data-site] .qbtn{font-family:"Figtree",system-ui,sans-serif}
+:root[data-site] .sh-head h2{font-family:"Bricolage Grotesque","Figtree",sans-serif}
+:root[data-site] .top{color:var(--ink);border-bottom:1px solid var(--line)}
+:root[data-site] .top h1{font:700 19px/1.1 "Bricolage Grotesque","Figtree",sans-serif;letter-spacing:-.2px}
+:root[data-site] .top h1 span{font:500 13px/1.25 "Figtree",sans-serif;letter-spacing:0;opacity:1;color:var(--muted);margin-top:2px}
+:root[data-site] .search{width:clamp(112px,30vw,240px);border:1px solid var(--line);background:var(--bg);color:var(--ink);border-radius:12px;padding:9px 12px;font-weight:500}
+:root[data-site] .search::placeholder{color:var(--muted)}
+:root[data-site] .seg,:root[data-site] .ctrls .tool,:root[data-site] .zoom{border-color:var(--line);border-radius:12px;box-shadow:0 1px 2px rgba(21,38,42,.08),0 4px 14px rgba(21,38,42,.08)}
+:root[data-site] .ctrls .seg{padding:3px;gap:2px}
+:root[data-site] .ctrls .seg button{border-radius:9px;min-height:34px}
+:root[data-site] .ctrls .seg button+button{border-left:0}
+:root[data-site] .ctrls [data-floor="1"]::before,:root[data-site] .ctrls [data-floor="2"]::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;box-shadow:inset 0 0 0 1px rgba(21,38,42,.18)}
+:root[data-site] .ctrls [data-floor="1"]::before{background:var(--g1)}
+:root[data-site] .ctrls [data-floor="2"]::before{background:var(--g2)}
+:root[data-site] .ctrls [data-floor="3"]::before{content:"";display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px;box-shadow:inset 0 0 0 1px rgba(21,38,42,.18);background:var(--g3)}
+:root[data-site] .dot{border-radius:4px}
 *,*::before,*::after{box-sizing:inherit}
 html,body{height:100%;margin:0}
 body{background:var(--frame);color:var(--ink);font:400 15px/1.45 "Rubik",system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;overflow:hidden;-webkit-tap-highlight-color:transparent}
@@ -401,8 +402,8 @@ const sleep=ms=>new Promise(r=>setTimeout(r,ms));
 /* ===== Qué hotel: FrankShift pasa ?h=; sin eso, Maingate ===== */
 const MAPS={MGT:{name:'MAINGATE',full:'Developer Inn Maingate',floors:2},FDT:{name:'FUNDAMENTAL',full:'Developer Inn Fundamental',floors:2},HWY:{name:'HIGHWAY',full:'Developer Inn Highway',floors:3}};
 const HOTEL=(function(){try{const h=new URLSearchParams(location.search).get('h');return MAPS[h]?h:'MGT';}catch(e){return'MGT';}})();
-const SITE=HOTEL==='FDT';   // Fundamental lleva el estilo del site map de referencia
-$('.title h1 span').textContent=SITE?'Fundamental':MAPS[HOTEL].name;$('#scene').setAttribute('aria-label',L('Maqueta 3D del '+MAPS[HOTEL].full));
+const SITE=true;   // los tres hoteles llevan el estilo del site map de referencia (antes solo Fundamental)
+$('.title h1 span').textContent=SITE?MAPS[HOTEL].name.charAt(0)+MAPS[HOTEL].name.slice(1).toLowerCase():MAPS[HOTEL].name;$('#scene').setAttribute('aria-label',L('Maqueta 3D del '+MAPS[HOTEL].full));
 /* ===== Plano tomado del site map oficial (coordenadas en píxeles del mapa) ===== */
 const S={FDT:0.19,HWY:0.27}[HOTEL]||0.135, OX={FDT:338,HWY:330}[HOTEL]||490, OY={FDT:306,HWY:305}[HOTEL]||472;
 const NF=MAPS[HOTEL].floors;if(NF>2)$('[data-floor="3"]').hidden=false;          // escala px → metros y centro
@@ -478,21 +479,34 @@ function strip(group,matKey,a,b,wpx,y){
   m.position.set((A.x+B.x)/2,y||.02,(A.z+B.z)/2);m.rotation.y=Math.atan2(-dir.z,dir.x);group.add(m);
 }
 // Terreno, estacionamientos y caminos como en el site map
+/* ===== Maingate y Highway: terreno con el estilo del site map (coordenadas en puntos del plano) ===== */
+const MP=m=>m/S;   // metros → puntos del plano de este hotel
+function siteBase(x0,y0,x1,y1,skip){ // terreno de afuera, jardín del hotel y árboles en el borde
+  const out=MP(160);flat(deco,'ground',x0-out,y0-out,x1+out,y1+out,-.05,.06).receiveShadow=true;
+  flat(deco,'lawn',x0,y0,x1,y1,-.012,.02).receiveShadow=true;
+  let i=0;const step=MP(8),ins=MP(1.6),ok=(x,y)=>!(skip||[]).some(r=>x>r[0]&&x<r[2]&&y>r[1]&&y<r[3]);
+  for(let x=x0+step/2;x<x1;x+=step){if(ok(x,y0+ins))lowTreeAt(x,y0+ins,i++);if(ok(x,y1-ins))lowTreeAt(x,y1-ins,i++);}
+  for(let y=y0+step*1.5;y<y1-step;y+=step){if(ok(x0+ins,y))lowTreeAt(x0+ins,y,i++);if(ok(x1-ins,y))lowTreeAt(x1-ins,y,i++);}
+  return i;
+}
+function lot(x0,y0,x1,y1){const m=flat(deco,'park',x0,y0,x1,y1,.01);m.receiveShadow=true;return m;}
+function stalls(x0,y0,x1,y1,alongX){ // líneas de estacionamiento cada 3 m dentro de la franja
+  const st=MP(3),w=MP(.15);
+  if(alongX)for(let x=x0;x<=x1+.01;x+=st)flat(deco,'stripe',x-w/2,y0,x+w/2,y1,.03,.02);
+  else for(let y=y0;y<=y1+.01;y+=st)flat(deco,'stripe',x0,y-w/2,x1,y+w/2,.03,.02);
+}
+function treesAt(list,i0){list.forEach(([x,y],j)=>lowTreeAt(x,y,(i0||0)+j));}
 function buildMGT(){
-flat(deco,'ground',40,35,940,910,-.05,.06);
-flat(deco,'park',50,460,122,800,.01);
-flat(deco,'park',90,755,930,862,.01);
-flat(deco,'park',795,130,915,760,.01);
+const nT=siteBase(40,35,940,910,[[50,460,122,800],[90,755,930,862],[795,130,915,760]]);
+lot(50,460,122,800);lot(90,755,930,862);lot(795,130,915,760);
+stalls(54,465,94,795,false);stalls(95,759,925,796,true);stalls(95,821,925,858,true);stalls(799,135,836,750,false);stalls(874,135,911,750,false);
 const plaza=new THREE.Mesh(new THREE.CylinderGeometry(92*S,92*S,.05,48),M.path);plaza.position.copy(P(437,282));plaza.position.y=.02;deco.add(plaza);
 strip(deco,'path',[372,322],[290,372],18);
 strip(deco,'path',[505,252],[585,205],18);
 strip(deco,'path',[452,362],[488,470],18);
 strip(deco,'path',[488,470],[600,460],18);
 strip(deco,'path',[560,600],[640,600],22);
-[[160,300],[358,335],[382,352],[462,435],[508,450],[375,545],[200,615],[515,712],[536,704],[585,722],[733,545],[670,105],[700,105],[815,110],[515,135],[600,368]].forEach(([x,y])=>{
-  const g=new THREE.Group(),c=new THREE.Mesh(new THREE.SphereGeometry(1.5,14,10),M.tree);c.scale.y=1.25;c.position.y=2.6;
-  const t=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,1.4,6),M.tree);t.position.y=.7;g.add(c,t);g.position.copy(P(x,y));deco.add(g);
-});
+treesAt([[160,300],[358,335],[382,352],[462,435],[508,450],[375,545],[200,615],[515,712],[536,704],[585,722],[733,545],[670,105],[700,105],[815,110],[515,135],[600,368]],nT);
 
 }
 /* ===== Habitaciones ===== */
@@ -586,8 +600,9 @@ const FDT_TREES=(function(){const t=[];
   [[47,9.4],[50.5,11.5],[46.6,13.5],[60.4,10],[47.2,34],[59.6,24],[46.6,22],[17,8],[43.6,47.4],[16,89.8],[48,89.8],[22,89.8]].forEach(p=>t.push(p));
   for(let i=0;i<9;i++)t.push([82+Math.cos(i)*18,70+Math.sin(i*1.7)*12]);return t;})();
 const icoG=new THREE.IcosahedronGeometry(1,0),trunkG=new THREE.CylinderGeometry(.14,.2,1.2,6);
-function lowTree(u,v,i){
-  const k=6.43*S,s=.8+((i*37)%10)/22,p=R(u,v);
+function lowTree(u,v,i){lowTreeAt(RU(u),RV(v),i);}
+function lowTreeAt(x,y,i){
+  const k=1.2217,s=.8+((i*37)%10)/22,p=P(x,y);
   const tr=new THREE.Mesh(trunkG,M.trunk);tr.scale.set(k,k*s,k);tr.position.set(p.x,.6*k,p.z);
   const cr=new THREE.Mesh(icoG,CROWN[(i*53)%4]);cr.scale.set(k*s,k*s*1.15,k*s);cr.position.set(p.x,(1.2+s*.9)*k,p.z);cr.rotation.y=i;
   tr.castShadow=cr.castShadow=true;deco.add(tr,cr);
@@ -658,9 +673,11 @@ const HWY_AREAS=[
   {id:'esc-sur',    name:'Escalera sur', sub:'Junto a 106 y 205', at:[475,447], w:12,d:12,h:9.4, rot:0, col:'--stair', op:.85, both:true}
 ];
 function buildHWY(){
-  flat(deco,'ground',55,30,600,585,-.05,.06);
+  const nT=siteBase(55,30,600,585,[[110,52,560,100],[255,100,483,560],[525,52,560,575],[255,540,560,575],[140,90,300,430]]);
   // asfalto del estacionamiento y la entrada, como el gris del plano
-  flat(deco,'park',110,52,560,100,.01);flat(deco,'park',255,100,483,560,.01);flat(deco,'park',525,52,560,560,.01);flat(deco,'park',255,540,560,575,.01);
+  lot(110,52,560,100);lot(255,100,483,560);lot(525,52,560,560);lot(255,540,560,575);
+  stalls(114,54,556,72,true);stalls(114,80,556,98,true);stalls(257,150,276,530,false);stalls(462,150,481,530,false);
+  stalls(350,170,369,500,false);stalls(369,170,388,500,false);stalls(540,110,558,520,false);stalls(290,556,520,574,true);
   strip(deco,'park',[150,95],[290,420],60,.01);
   const pad=(x0,y0,x1,y1)=>flat(deco,'path',x0,y0,x1,y1,.03,.06);
   pad(212,103,500,146);pad(480,140,525,530);
@@ -691,10 +708,7 @@ function buildHWY(){
       addRoom({num:String(136-j),floor:1,block:k.b,c,along,front,sAl,sAc});
       addRoom({num:String(238-j),floor:2,block:k.b,c,along,front,sAl,sAc});
       if(N>2)addRoom({num:String(338-j),floor:3,block:k.b,c,along,front,sAl,sAc});}}
-  [[135,62],[95,165],[108,250],[150,335],[240,395],[150,520],[290,548],[330,566],[420,46],[445,58],[578,80],[582,300],[585,470],[395,525],[210,450]].forEach(([x,y])=>{
-    const g=new THREE.Group(),c=new THREE.Mesh(new THREE.SphereGeometry(1.5,14,10),M.tree);c.scale.y=1.25;c.position.y=2.6;
-    const t=new THREE.Mesh(new THREE.CylinderGeometry(.12,.12,1.4,6),M.tree);t.position.y=.7;g.add(c,t);g.position.copy(P(x,y));deco.add(g);
-  });
+  treesAt([[135,62],[95,165],[108,250],[150,335],[240,395],[150,520],[290,548],[330,566],[420,46],[445,58],[578,80],[582,300],[585,470],[395,525],[210,450]],nT);
 }
 
 const AREAS=HOTEL==='FDT'?FDT_AREAS:HOTEL==='HWY'?HWY_AREAS:AREAS_MGT;
@@ -754,9 +768,11 @@ function buildLabels(){
   extraLabels.forEach(s=>{deco.remove(s);s.material.map.dispose();s.material.dispose();});extraLabels.length=0;
   (HOTEL==='HWY'?[['Estacionamiento',[330,200]],['Estacionamiento',[380,430]],['Kyngs Heath Rd',[480,40]],['W Irlo Bronson Memorial Hwy',[430,572]]]:HOTEL==='FDT'?[['Estacionamiento',[110,300]],['Estacionamiento',[330,44]],['Estacionamiento',[556,176]],['Estacionamiento',[330,450]]]:
   [['Estacionamiento',[86,620]],['Estacionamiento',[470,810]],['Estacionamiento',[855,450]],['Irlo Bronson Blvd',[500,890]],['Polynesian Isle Blvd',[855,112]]]).forEach(([s,p])=>{
-    const l=sprite(s,true,SITE?2.3:2.4,'park');const v=P(p[0],p[1]);l.position.set(v.x,1.3,v.z);deco.add(l);extraLabels.push(l);
+    const l=sprite(s,true,SITE?2.3:2.4,s==='Estacionamiento'?'park':'tag');const v=P(p[0],p[1]);l.position.set(v.x,1.3,v.z);deco.add(l);extraLabels.push(l);
   });
-  if(SITE)[['Edificio 2',[221,52]],['Edificio 1',[112,430]],['Edificio 4',[452,40]],['Edificio 3',[580,276]]].forEach(([s,p])=>{
+  if(SITE)({FDT:[['Edificio 2',[221,52]],['Edificio 1',[112,430]],['Edificio 4',[452,40]],['Edificio 3',[580,276]]],
+    HWY:[['Ala norte',[335,78]],['Ala este',[548,330]]],
+    MGT:[['Ala oeste',[192,470]],['Ala noreste',[762,298]],['Ala sur',[426,700]],['Ala central',[600,452]]]})[HOTEL].forEach(([s,p])=>{
     const l=sprite(s,false,2.6,'badge');const v=P(p[0],p[1]);l.position.set(v.x,2*H+1.4,v.z);deco.add(l);extraLabels.push(l);});
 }
 
