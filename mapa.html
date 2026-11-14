@@ -865,7 +865,9 @@ function dblZoom(x,y){hideMenu();const k=pickAt(x,y);if(!k)return;flyTo(new V(k.
 function zoomBy(f){hideMenu();flyTo(null,clampR(orbit.r*f));}
 // the wheel zooms toward the pointer, so what is under it stays under it
 canvas.addEventListener('wheel',e=>{e.preventDefault();hideMenu();
-  const nr=clampR(orbit.r*(1+e.deltaY*0.0012));const k=pickAt(e.clientX,e.clientY);
+  // 1.22.0: about three times faster per notch; lines and pages count as pixels, and a trackpad pinch (Ctrl) zooms quicker
+  let dy=e.deltaY*(e.deltaMode===1?33:e.deltaMode===2?800:1);dy=Math.max(-240,Math.min(240,dy));
+  const nr=clampR(orbit.r*Math.exp(dy*(e.ctrlKey?0.012:0.0032)));const k=pickAt(e.clientX,e.clientY);
   if(k&&nr!==orbit.r){const f=1-nr/orbit.r;orbit.target.x+=(k.p.x-orbit.target.x)*f;orbit.target.z+=(k.p.z-orbit.target.z)*f;keepIn();}
   orbit.r=nr;updateCam();},{passive:false});
 $('#zIn').addEventListener('click',()=>zoomBy(0.6));

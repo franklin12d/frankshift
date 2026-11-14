@@ -967,12 +967,7 @@ header.top .brand .bt.hpkon{cursor:pointer}
   .app .tabs .mcats[data-n="3"] .mcat{flex-direction:column!important;gap:3px!important;padding:6px 1px!important;min-height:52px!important;min-width:0!important}
   .app .tabs .mcats[data-n="3"] .mcat .tl{font-size:12px!important;letter-spacing:-.15px!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
 }
-@media (min-width:900px){
-  .tabs .mcats{flex-direction:column;align-items:center;gap:3px;padding:3px;margin:0 0 8px;border-radius:16px;width:60px}
-  .app .tabs .mcats .mcat{flex:none!important;width:54px!important;height:40px!important;min-height:0!important;padding:0!important;border-radius:12px!important}
-  .app .tabs .mcats .mcat .tl{display:none!important}
-  .app .tabs .mcats .mcat .tic svg{width:20px!important;height:20px!important}
-}
+.tabs .railhd{display:none}
 .btn.danger{background:var(--urgent);color:#fff;border-color:transparent}
 .rvcode{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--hotel-soft,var(--accent-soft));color:var(--hotel,var(--accent));font:700 12px var(--f-body);letter-spacing:.04em;vertical-align:middle}
 .rvimp{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -1419,34 +1414,50 @@ body{background:var(--bg)}
 /* ===== v1.5.0 desktop: icon rail on the left, orders list in the middle, chat on the right (phones unchanged) ===== */
 .deskonly{display:none}
 @media (min-width:900px){
-  .app{padding-left:76px}
+  .app{padding-left:236px}
   header.top,.ticker{display:none!important}
   .deskonly{display:flex}
   /* rail */
-  .app .tabs,.app.menu-open .tabs{display:flex!important;position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:76px!important;max-height:none!important;z-index:30;flex-direction:column;align-items:center;gap:4px!important;
-    padding:12px 0 12px!important;background:var(--surface)!important;border:0!important;border-right:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important;overflow-y:auto;overflow-x:hidden}
+  .app .tabs,.app.menu-open .tabs{display:flex!important;position:fixed!important;left:0!important;top:0!important;bottom:0!important;width:236px!important;max-height:none!important;z-index:30;flex-direction:column;align-items:stretch;gap:2px!important;
+    padding:12px 10px 12px!important;background:var(--surface)!important;border:0!important;border-right:1px solid var(--line)!important;border-radius:0!important;box-shadow:none!important;overflow-y:auto;overflow-x:hidden}
   .app.menu-open .tabs::before{display:none}
   .menuscrim{display:none!important}
-  .tabs .raillogo{width:40px;height:40px;margin:2px 0 10px;flex:none;display:grid;place-items:center}
-  .tabs .raillogo svg{width:36px;height:36px;display:block!important}
-  .app .tabs button,.app.menu-open .tabs button{position:relative;flex:none!important;width:52px!important;height:52px!important;min-height:0!important;padding:0!important;margin:0!important;border:0!important;border-radius:16px!important;background:none!important;
-    display:grid!important;place-items:center!important;color:var(--ink-2)!important;cursor:pointer;box-shadow:none!important}
+  .tabs .raillogo{display:flex;align-items:center;gap:10px;height:40px;margin:0 6px 4px;flex:none}
+  .tabs .raillogo svg{width:34px;height:34px;flex:none;display:block!important}
+  .tabs .raillogo b{font:700 18px var(--f-display);color:var(--ink);letter-spacing:-.01em}
+  .app .tabs button,.app.menu-open .tabs button{position:relative;flex:none!important;width:100%!important;height:36px!important;min-height:0!important;padding:0 10px!important;margin:0!important;border:0!important;border-radius:10px!important;background:none!important;
+    display:flex!important;flex-direction:row!important;align-items:center!important;justify-content:flex-start!important;gap:12px!important;line-height:1.2;text-align:left;color:var(--ink-2)!important;cursor:pointer;box-shadow:none!important}
   .app .tabs button[hidden]{display:none!important}
   .app .tabs button::after{display:none!important}
   .app .tabs button:hover{background:var(--surface-2)!important;color:var(--ink)!important}
   .app .tabs button[aria-selected="true"]{background:var(--hotel-soft,var(--accent-soft))!important;color:var(--hotel,var(--accent))!important}
   .app .tabs .tic,.app.menu-open .tabs .tic{position:static!important;width:auto!important;height:auto!important;background:none!important;color:inherit!important;display:grid;place-items:center}
-  .app .tabs .tic svg{width:24px!important;height:24px!important}
-  .app .tabs .tl{display:none!important}
-  .app .tabs .tic .cnt,.app.menu-open .tabs .tic .cnt{position:absolute!important;top:5px!important;right:4px!important;left:auto!important;transform:none!important;min-width:18px;height:18px;line-height:18px!important;padding:0 5px!important;font-size:10.5px!important;border-radius:999px;box-shadow:0 0 0 2px var(--surface)}
-  .tabs .mtools{margin-top:auto!important;border-top:1px solid var(--line);padding-top:8px!important;align-items:center;width:100%}
-  .tabs .mtools button.iconbtn{width:52px!important;height:52px!important}
+  .app .tabs .tic svg{width:20px!important;height:20px!important}
+  .app .tabs .tl,.app.menu-open .tabs .tl{display:block!important;flex:1 1 auto!important;min-width:0;max-width:none!important;white-space:nowrap!important;overflow:hidden;text-overflow:ellipsis;text-align:left!important;font:500 14.5px var(--f-body)!important;padding-right:2px}
+  .app .tabs button:has(.cnt:not([hidden]):not(:empty)) .tl{padding-right:32px}
+  .app .tabs button[aria-selected="true"] .tl{font-weight:650!important}
+  .app .tabs .tic .cnt,.app.menu-open .tabs .tic .cnt{position:absolute!important;top:50%!important;right:8px!important;left:auto!important;transform:translateY(-50%)!important;min-width:20px;height:20px;line-height:20px!important;padding:0 6px!important;font-size:11.5px!important;border-radius:999px;box-shadow:none}
+  .tabs .mtools{margin-top:auto!important;border-top:1px solid var(--line);padding-top:8px!important;align-items:stretch;width:100%}
+  .tabs .mtools button.iconbtn{width:100%!important;height:36px!important}
   .app .tabs,.app.menu-open .tabs{padding-bottom:76px!important}
-  .app > .railme{position:fixed;left:12px;bottom:12px;z-index:31;width:52px;height:52px;border-radius:50%;border:0;padding:0;background:none;display:grid!important;place-items:center;cursor:pointer}
+  .app > .railme{position:fixed;left:10px;bottom:10px;z-index:31;width:216px;height:52px;border-radius:12px;border:0;padding:0 6px;background:var(--surface);display:flex!important;align-items:center;gap:10px;cursor:pointer;text-align:left;color:var(--ink)}
   .app > .railme:hover{background:var(--surface-2)}
-  .app > .railme .av{width:42px;height:42px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;background-size:cover;background-position:center}
-  .railtip{position:fixed;z-index:95;left:82px;padding:6px 10px;border-radius:8px;background:var(--ink);color:var(--surface);font:600 13px var(--f-body);white-space:nowrap;pointer-events:none;box-shadow:var(--shadow)}
+  .app > .railme .rmn{display:flex;flex-direction:column;min-width:0;gap:1px}
+  .app > .railme .rmn b{font:600 14px var(--f-body);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+  .app > .railme .rmn small{font:500 12px var(--f-body);color:var(--ink-3)}
+  .app > .railme .av{flex:none;width:40px;height:40px;border-radius:50%;display:grid;place-items:center;color:#fff;font-weight:700;font-size:14px;background-size:cover;background-position:center}
+  .railtip{position:fixed;z-index:95;left:242px;padding:6px 10px;border-radius:8px;background:var(--ink);color:var(--surface);font:600 13px var(--f-body);white-space:nowrap;pointer-events:none;box-shadow:var(--shadow)}
   .railtip[hidden]{display:none}
+  /* 1.22.0: every section in view, grouped under its category */
+  .app .tabs .mcats{display:none!important}
+  .app .tabs button.catoff:not(.menuoff):not([hidden]),.app.menu-open .tabs button.catoff:not(.menuoff):not([hidden]){display:flex!important}
+  .app .tabs .railhd{display:block;flex:none;padding:10px 10px 4px;font:700 11.5px var(--f-body);letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3)}
+  .app .tabs .railhd[hidden]{display:none!important}
+  .app .tabs .raillogo{order:0}
+  .app .tabs .railhd[data-cg="ops"]{order:1}.app .tabs button[data-cg="ops"]{order:2}
+  .app .tabs .railhd[data-cg="res"]{order:3}.app .tabs button[data-cg="res"]{order:4}
+  .app .tabs .railhd[data-cg="hk"]{order:5}.app .tabs button[data-cg="hk"]{order:6}
+  .app .tabs .mtools{order:9}
   /* list (orders) left of the chat */
   .main{grid-template-columns:minmax(330px,400px) minmax(0,1fr)!important}
   .main .panel{order:-1;border-right:1px solid var(--line);background:var(--surface)!important}
@@ -4833,8 +4844,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.21.0';
+const APP_VERSION = '1.22.0';
 const CHANGES = [
+  {v: '1.22.0', d: '2026-11-14', en: ['On a computer the Menu is now a wider sidebar: every section shows its name, grouped under Operations, Front Office and Housekeeping, so you find it at a glance', 'Your name and photo sit at the bottom of the sidebar', 'The map zooms in and out faster with the mouse wheel'],
+    es: ['En la computadora el Menú ahora es una barra lateral más amplia: cada sección muestra su nombre, agrupada en Operations, Front Office y Housekeeping, para encontrarla de un vistazo', 'Tu nombre y foto están abajo en la barra lateral', 'El mapa acerca y aleja más rápido con la rueda del mouse']},
   {v: '1.21.0', d: '2026-11-14', en: ['New Day off request in Operations: pick your first day off and the day you come back to work, turn on PTO if it is paid time off, and send it', 'Your supervisor approves or denies it: the HK supervisor for housekeepers and housemen, Sub managers and Managers for everyone else', 'PTO then goes to a manager, who marks it processed once it is in payroll. You see each step in My requests, and you can cancel before it is processed', 'Supervisors and managers see how many requests wait for them on the Menu'],
     es: ['Nuevo Day off request en Operations: elige tu día de salida y el día que regresas a trabajar, activa PTO si es tiempo libre pagado, y envíalo', 'Tu supervisor lo aprueba o lo niega: la supervisora de HK para camaristas y houseman, los Sub gerentes y Gerentes para todos los demás', 'Después el PTO pasa a un gerente, que lo marca procesado cuando ya está en la nómina. Ves cada paso en Mis solicitudes y puedes cancelar antes de que se procese', 'Supervisores y gerentes ven en el Menú cuántas solicitudes los esperan']},
   {v: '1.20.0', d: '2026-11-14', en: ['New Quick scan in Package log: point the camera at the label and the app reads the barcode or QR on its own, with a beep. It takes the tracking and carrier from the code and reads the name and room from the same picture', 'Save and scan next keeps the camera open, so you can log a pile of packages one after another', 'Works with a USB or Bluetooth barcode scanner too: scan on the Package log page and the new package opens with the tracking filled in', 'The app warns you when a tracking number was already logged, and when the label says perishable or urgent', 'A Light button turns on the phone’s flashlight in dark rooms, on phones that allow it'],
@@ -5664,27 +5677,27 @@ const ICO_CARET = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" st
   const mark = document.querySelector('header.top .brand svg.mark');
   if (mark) {
     const lg = document.createElement('div'); lg.className = 'raillogo deskonly'; lg.setAttribute('aria-hidden', 'true');
-    lg.innerHTML = mark.outerHTML.replace(/fsG1/g, 'fsG1r'); tabs.prepend(lg);
+    lg.innerHTML = mark.outerHTML.replace(/fsG1/g, 'fsG1r') + '<b>FrankShift</b>'; tabs.prepend(lg);
   }
   // profile photo at the bottom of the rail
   const me = document.createElement('button'); me.type = 'button'; me.className = 'railme deskonly'; me.setAttribute('data-noi18n', '');
-  me.innerHTML = '<span class="av"></span>'; $('#app').appendChild(me);
+  me.innerHTML = '<span class="av"></span><span class="rmn"><b></b><small></small></span>'; $('#app').appendChild(me);
   me.onclick = () => $('#whoBtn').click();
   const src = $('#whoAv');
-  const syncMe = () => { const a = me.firstChild; a.className = src.className; a.textContent = src.textContent; a.style.cssText = src.style.cssText; me.setAttribute('aria-label', L2('Your account', 'Tu cuenta')); };
-  new MutationObserver(syncMe).observe(src, { attributes: true, childList: true, characterData: true, subtree: true }); syncMe();
-  // names on hover (the rail shows icons only)
+  const syncMe = () => { const a = me.firstChild; a.className = src.className; a.textContent = src.textContent; a.style.cssText = src.style.cssText; me.setAttribute('aria-label', L2('Your account', 'Tu cuenta'));
+    const nm = ($('#whoName') || {}).textContent || ''; me.querySelector('.rmn b').textContent = nm; me.querySelector('.rmn small').textContent = L2('Your account', 'Tu cuenta'); };
+  new MutationObserver(syncMe).observe(src, { attributes: true, childList: true, characterData: true, subtree: true });
+  if ($('#whoName')) new MutationObserver(syncMe).observe($('#whoName'), { childList: true, characterData: true, subtree: true }); syncMe();
+  // 1.22.0: the sidebar shows the names; a tip only shows a name that does not fit
   const tip = document.createElement('div'); tip.className = 'railtip'; tip.hidden = true; tip.setAttribute('data-noi18n', ''); document.body.appendChild(tip);
   tabs.addEventListener('mouseover', e => {
     if (!DESK_MQ.matches) return;
     const b = e.target.closest('button'); if (!b) { tip.hidden = true; return; }
-    const t = b.classList.contains('railme') ? L2('Your account', 'Tu cuenta') : ((b.querySelector('.tl') || {}).textContent || '').trim();
-    if (!t) { tip.hidden = true; return; }
+    const tl = b.querySelector('.tl'), t = ((tl || {}).textContent || '').trim();
+    if (!t || !tl || tl.scrollWidth <= tl.clientWidth + 1) { tip.hidden = true; return; }
     const r = b.getBoundingClientRect(); tip.textContent = t; tip.style.top = Math.round(r.top + r.height / 2 - 15) + 'px'; tip.hidden = false;
   });
   tabs.addEventListener('mouseleave', () => { tip.hidden = true; });
-  me.addEventListener('mouseenter', () => { if (!DESK_MQ.matches) return; const r = me.getBoundingClientRect(); tip.textContent = L2('Your account', 'Tu cuenta'); tip.style.top = Math.round(r.top + r.height / 2 - 15) + 'px'; tip.hidden = false; });
-  me.addEventListener('mouseleave', () => { tip.hidden = true; });
   tabs.addEventListener('click', () => { tip.hidden = true; });
   // chat header
   const ch = document.createElement('div'); ch.className = 'chathead deskonly'; ch.setAttribute('data-noi18n', '');
@@ -7705,6 +7718,9 @@ S.cat = catOk(ls.get('sc.cat', 'ops'));
     hk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 19v-7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v7M2 15h20M2 19v2M22 19v2M6 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>'};
   g.innerHTML = MCATS.map(([k, en, es]) => `<button type="button" class="mcat" data-cat="${k}" aria-pressed="${S.cat === k}" title="${esc(L2(en, es))}"><span class="tic">${ico[k]}<span class="ccnt" hidden></span></span><span class="tl">${esc(L2(en, es))}</span></button>`).join('');
   tabs.insertBefore(g, first);
+  // 1.22.0: on a computer every section shows, under its category's heading
+  tabs.querySelectorAll('button[data-tab]').forEach(b => { b.dataset.cg = catOf(b.dataset.tab); });
+  MCATS.forEach(([k, en, es]) => { const hd = document.createElement('div'); hd.className = 'railhd'; hd.dataset.cg = k; hd.setAttribute('aria-hidden', 'true'); hd.setAttribute('data-noi18n', ''); hd.textContent = L2(en, es); tabs.appendChild(hd); });
   g.addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; e.stopPropagation(); catSet(b.dataset.cat, true); });
   // a category shows the sum of the red numbers waiting inside it
   try { new MutationObserver(ms => { if (ms.some(m => !(m.target.closest && m.target.closest('#mCats')) && !(m.target.parentNode && m.target.parentNode.closest && m.target.parentNode.closest('#mCats')))) catCounts(); })
@@ -7727,6 +7743,7 @@ function catPaint(){
   const g = $('#mCats');
   if (g) { g.hidden = shown.length < 2; g.querySelectorAll('[data-cat]').forEach(b => { b.hidden = !shown.includes(b.dataset.cat); b.setAttribute('aria-pressed', b.dataset.cat === S.cat); }); g.dataset.n = shown.length; }
   document.querySelectorAll('#tabs button[data-tab]').forEach(b => b.classList.toggle('catoff', catOf(b.dataset.tab) !== S.cat));
+  document.querySelectorAll('#tabs .railhd').forEach(x => { const off = shown.length < 2 || !shown.includes(x.dataset.cg); if (x.hidden !== off) x.hidden = off; });
   catCounts();
 }
 function catSet(c, go){
