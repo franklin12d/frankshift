@@ -542,6 +542,9 @@ html[data-theme="dark"] body[data-hotel="HWY"]{--hotel:#60A5FA;--hotel-soft:#142
 .tsearch{display:flex;align-items:center;gap:10px;margin-bottom:10px;position:sticky;top:0;z-index:2;background:var(--surface);padding:4px 0}
 .tsearch input{flex:1;min-width:0;font:inherit;font-size:16px;padding:11px 14px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--ink)}
 .tsearch .small{white-space:nowrap}
+.tsort{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:-2px 0 10px;font-size:13px;color:var(--ink-2)}
+.tgrp{font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:.04em;color:var(--ink-3);padding:14px 2px 6px;border-bottom:1px solid var(--line)}
+.tgrp:first-child{padding-top:2px}
 .msg{position:relative;touch-action:pan-y}
 .msg.swiping{transition:none}
 .msg.snap{transition:transform .2s ease}
@@ -1533,7 +1536,7 @@ body{background:var(--bg)}
       <button class="btn pri" type="submit">Add to team</button>
     </form>
     <div class="card" id="menuRoles"><div data-noi18n id="mrBody"></div></div>
-    <div class="card"><h2>Team at <span id="teamHotel"></span></h2><p class="small" style="margin:-4px 0 10px">Each person signs in with their user and PIN. New users and PIN resets get a 6-digit start code from you that works once for 3 days.</p><div class="btnrow" style="margin-bottom:10px"><button class="btn sm pri" id="usersCodes">Start codes for who is not active</button><button class="btn sm" id="usersCsv">Download user list</button></div><div class="devsum" id="devSum" hidden></div><p class="small" id="accHint" data-noi18n hidden style="margin:-2px 0 10px"></p><div class="tsearch"><input id="teamSearch" type="search" placeholder="Search name or user" aria-label="Search the team" autocomplete="off"><span class="small" id="teamFound"></span></div><div class="list" id="staffList"></div></div>
+    <div class="card"><h2>Team at <span id="teamHotel"></span></h2><p class="small" style="margin:-4px 0 10px">Each person signs in with their user and PIN. New users and PIN resets get a 6-digit start code from you that works once for 3 days.</p><div class="btnrow" style="margin-bottom:10px"><button class="btn sm pri" id="usersCodes">Start codes for who is not active</button><button class="btn sm" id="usersCsv">Download user list</button></div><div class="devsum" id="devSum" hidden></div><p class="small" id="accHint" data-noi18n hidden style="margin:-2px 0 10px"></p><div class="tsearch"><input id="teamSearch" type="search" placeholder="Search name or user" aria-label="Search the team" autocomplete="off"><span class="small" id="teamFound"></span></div><div class="tsort"><span>Sort by</span><div class="seg" role="group" id="teamSort" aria-label="Sort the team" data-noi18n><button type="button" data-v="name">Name</button><button type="button" data-v="dept">Department</button></div></div><div class="list" id="staffList"></div></div>
   </div></section>
 </div>
 
@@ -1758,6 +1761,8 @@ const ES = {
 "Housekeeping": "Housekeeping",
 "Maintenance": "Mantenimiento",
 "Department": "Departamento",
+"Sort by": "Ordenar por",
+"Sort the team": "Ordenar el equipo",
 "Front desk · Housekeeping · Engineering": "Recepción · Housekeeping · Mantenimiento",
 "Now serving": "Atendiendo",
 "Open orders, highest priority first": "Órdenes abiertas, primero las más importantes",
@@ -3525,7 +3530,7 @@ async function loadTeam(){
         ${staffCtl(s)}</div></div>`).join('');
     S.adminStaff = staff;
     devSummary();
-    filterTeam();
+    teamArrange();
   } catch (e) { toast(esc(e.message)); }
 }
 // what a manager may do on each person's row (the server checks the same)
@@ -3642,8 +3647,44 @@ function filterTeam(){
     r.hidden = !show; if (show) n++;
   });
   $('#teamFound').textContent = q ? (n === 1 ? '1 person' : n + ' people') : '';
+  teamHeads();
 }
 $('#teamSearch').addEventListener('input', filterTeam);
+/* Sort the team by name (the server's order: active first, then first name) or by department (same order inside each one) */
+const TEAM_DEPTS = [['mgr', 'Managers', 'Gerentes'], ['sub', 'Sub managers', 'Sub gerentes'], ['fd', 'Front desk', 'Recepción'], ['sup', 'HK supervisors', 'Supervisoras HK'],
+  ['hk', 'Housekeepers', 'Camaristas'], ['hm', 'Housemen', 'Houseman'], ['eng', 'Engineering', 'Mantenimiento']];
+const teamSortMode = () => ls.get('sc.teamSort', 'name') === 'dept' ? 'dept' : 'name';
+const teamDeptIdx = role => { const i = TEAM_DEPTS.findIndex(d => d[0] === role); return i < 0 ? TEAM_DEPTS.length : i; };
+function teamSorted(list){
+  const all = list.slice(); if (teamSortMode() !== 'dept') return all;
+  return all.map((x, i) => [x, i]).sort((a, b) => teamDeptIdx(a[0].role) - teamDeptIdx(b[0].role) || a[1] - b[1]).map(a => a[0]);
+}
+function teamArrange(){
+  const box = $('#staffList'); if (!box) return;
+  box.querySelectorAll('.tgrp').forEach(h => h.remove());
+  const byId = {}; [...box.querySelectorAll('[data-staff]')].forEach(r => { byId[r.dataset.staff] = r; });
+  const dept = teamSortMode() === 'dept'; let last;
+  teamSorted(S.adminStaff || []).forEach(st => {
+    const r = byId[st.id]; if (!r) return;
+    if (dept && st.role !== last) { const h = document.createElement('div'); h.className = 'tgrp'; h.dataset.grp = st.role; h.setAttribute('data-noi18n', ''); box.appendChild(h); last = st.role; }
+    box.appendChild(r);
+  });
+  document.querySelectorAll('#teamSort button').forEach(b => { b.setAttribute('aria-pressed', String(b.dataset.v === teamSortMode())); b.textContent = b.dataset.v === 'dept' ? L2('Department', 'Departamento') : L2('Name', 'Nombre'); });
+  const ts = $('#teamSort'); if (ts) ts.setAttribute('aria-label', L2('Sort the team', 'Ordenar el equipo'));
+  filterTeam();
+}
+function teamHeads(){
+  document.querySelectorAll('#staffList .tgrp').forEach(h => {
+    let n = 0, el = h.nextElementSibling;
+    while (el && !el.classList.contains('tgrp')) { if (el.matches('[data-staff]') && !el.hidden) n++; el = el.nextElementSibling; }
+    const d = TEAM_DEPTS.find(x => x[0] === h.dataset.grp);
+    h.textContent = (d ? L2(d[1], d[2]) : L2('Other', 'Otros')) + ' · ' + n; h.hidden = !n;
+  });
+}
+$('#teamSort').addEventListener('click', e => {
+  const b = e.target.closest('button[data-v]'); if (!b || b.dataset.v === teamSortMode()) return;
+  ls.set('sc.teamSort', b.dataset.v); teamArrange();
+});
 function inviteText(s, code, until){
   const url = location.origin + location.pathname, hotel = S.hotel ? S.hotel.name : 'your hotel', first = s.first_name || '';
   const fresh = !!code, uEn = until ? new Date(until).toLocaleString('en-US', {month:'short', day:'numeric', hour:'numeric', minute:'2-digit', timeZone: TZ}) : '',
@@ -3690,7 +3731,7 @@ $('#staffForm').addEventListener('submit', async e => {
   catch (err) { $('#sfErr').textContent = err.message; }
 });
 $('#usersCsv').onclick = () => {
-  const rows = (S.adminStaff || []).filter(x => x.active);
+  const rows = teamSorted(S.adminStaff || []).filter(x => x.active);
   const q = v => { v = v == null ? '' : String(v); return /[",\n]/.test(v) ? '"' + v.replace(/"/g, '""') + '"' : v; };
   const csv = ['User,First name,Last name,Department,PIN'].concat(rows.map(x => [x.username, x.first_name, x.last_name, roleOf(x.role).label, x.pin_set ? 'Own PIN' : 'Not active yet'].map(q).join(','))).join('\n');
   const a = document.createElement('a'); a.href = URL.createObjectURL(new Blob(['\ufeff' + csv], {type: 'text/csv'}));
@@ -4672,8 +4713,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.16.2';
+const APP_VERSION = '1.16.3';
 const CHANGES = [
+  {v: '1.16.3', d: '2026-11-14', en: ['Team: sort people by department. Each department gets its own heading with how many people it has, and the app remembers your choice. The user list download follows the same order'],
+    es: ['Equipo: ordena a la gente por departamento. Cada departamento sale con su título y cuántas personas tiene, y la app recuerda lo que elegiste. La lista de usuarios que descargas sale en el mismo orden']},
   {v: '1.16.2', d: '2026-11-14', en: ['Alerts now show a hotel bell: in colour inside the alert, and as a bell in the Android status bar instead of a white square'],
     es: ['Las alertas ahora muestran una campanita de hotel: a color dentro de la alerta, y como campanita en la barra de Android en lugar de un cuadro blanco']},
   {v: '1.16.1', d: '2026-11-13', en: ['Reservations: the account number is the confirmation number, so reports that call it account number map to it when you import them', 'Reservations shows the 2027 blackout dates (MLK weekend, Presidents Day, Daytona 500, Spring Break, Easter, NPE Convention, MegaCon, Premiere Beauty, EDC, Warped Tour). A stay on those dates is marked Blackout and asks you to confirm the rate twice before saving'],
