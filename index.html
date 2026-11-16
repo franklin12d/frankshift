@@ -1590,6 +1590,162 @@ body{background:var(--bg)}
   .desktitle .dth.sw{cursor:pointer}
   .desktitle .dth i,.chathead .hsw i{width:8px;height:8px;border-radius:50%;background:var(--hotel,var(--accent));display:inline-block}
 }
+
+/* ===== FrankShift theme v10 (1.26.0): lavender and white with purple, orange as the second color; dark is near black with purple and yellow ===== */
+:root[data-theme="light"],:root:not([data-theme]){
+  --bg:#F1EEFB; --surface:#FFFFFF; --surface-2:#F5F2FD; --line:#E6E0F5;
+  --ink:#1A1530; --ink-2:#4A4463; --ink-3:#6F6988;
+  --accent:#6A4DF4; --accent-ink:#FFFFFF; --accent-soft:#EFEBFF; --accent-2:#F7853F; --accent-2-soft:#FFF0E6;
+  --handoff:#F3EFFF; --handoff-line:#D9CFFC;
+  --grad:linear-gradient(135deg,#7D5FFF 0%,#5A3BEA 100%);
+  --rail:linear-gradient(180deg,#6E50F6 0%,#5535E0 100%); --rail-ink:#FFFFFF; --rail-ink-2:rgba(255,255,255,.80); --rail-ink-3:rgba(255,255,255,.62);
+  --rail-end:#5535E0; --rail-hover:rgba(255,255,255,.13); --rail-on:#FFFFFF; --rail-on-ink:#4F2FDB; --rail-line:rgba(255,255,255,.18);
+  --bub:#F1EEFA; --bub-ink:#1A1530; --feedbg:#FBFAFF;
+  --shadow:0 1px 2px rgba(64,40,150,.04),0 8px 24px rgba(64,40,150,.07);
+  --shadow-lift:0 2px 6px rgba(64,40,150,.06),0 18px 40px rgba(64,40,150,.15);
+  --h-MGT:#E5484D; --h-FDT:#12A150; --h-HWY:#2F6BFF; color-scheme:light}
+:root[data-theme="dark"]{
+  --bg:#0C0B11; --surface:#16151E; --surface-2:#201E2B; --line:#2A2838;
+  --ink:#F4F2FA; --ink-2:#BCB7CE; --ink-3:#8E89A4;
+  --accent:#8C74FF; --accent-ink:#FFFFFF; --accent-soft:#29234A; --accent-2:#F3D046; --accent-2-soft:#35300F;
+  --handoff:#221D3B; --handoff-line:#463C86;
+  --grad:linear-gradient(135deg,#9A85FF 0%,#6C50F0 100%);
+  --rail:#13121A; --rail-ink:#F4F2FA; --rail-ink-2:#B3AEC6; --rail-ink-3:#7F7A95;
+  --rail-end:#13121A; --rail-hover:#211F2C; --rail-on:#8C74FF; --rail-on-ink:#FFFFFF; --rail-line:#262433;
+  --bub:#24222F; --bub-ink:#F4F2FA; --feedbg:#111018;
+  --shadow:0 1px 2px rgba(0,0,0,.45),0 8px 24px rgba(0,0,0,.35);
+  --shadow-lift:0 2px 6px rgba(0,0,0,.45),0 18px 40px rgba(0,0,0,.55);
+  --h-MGT:#FF6B70; --h-FDT:#3DDC84; --h-HWY:#6C9BFF; color-scheme:dark}
+:root{--hotel:var(--accent);--hotel-soft:var(--accent-soft)}
+html[data-theme] body[data-hotel="MGT"],html:not([data-theme]) body[data-hotel="MGT"]{--hotel:var(--h-MGT);--hotel-soft:color-mix(in srgb,var(--h-MGT) 14%,var(--surface))}
+html[data-theme] body[data-hotel="FDT"],html:not([data-theme]) body[data-hotel="FDT"]{--hotel:var(--h-FDT);--hotel-soft:color-mix(in srgb,var(--h-FDT) 14%,var(--surface))}
+html[data-theme] body[data-hotel="HWY"],html:not([data-theme]) body[data-hotel="HWY"]{--hotel:var(--h-HWY);--hotel-soft:color-mix(in srgb,var(--h-HWY) 14%,var(--surface))}
+html[data-theme="dark"] body[data-hotel][data-hotel]{--hotel-soft:color-mix(in srgb,var(--hotel) 20%,var(--surface))}
+.card{border-radius:20px}
+.kpcard,.dk{border-radius:20px}
+.order{border-radius:18px}
+.primary,.btn.pri{background:var(--grad);box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 28%,transparent)}
+.seg{background:var(--surface-2)}
+.seg button[aria-pressed="true"]{background:var(--accent);color:#fff;box-shadow:0 4px 12px color-mix(in srgb,var(--accent) 30%,transparent)}
+.msg.mine:not(.note):not(.handoff) .body{background:var(--grad);box-shadow:0 6px 16px color-mix(in srgb,var(--accent) 26%,transparent)}
+.loginwrap{background:radial-gradient(900px 520px at 50% -10%,color-mix(in srgb,var(--accent) 26%,transparent),transparent 60%),var(--bg)}
+.enghead h2{color:var(--accent)}
+
+@media (min-width:900px){
+  /* the sidebar: solid purple with white words, the open section a white pill (dark: near black with a purple pill) */
+  .app .tabs,.app.menu-open .tabs{background:var(--rail)!important;border-right:0!important;color:var(--rail-ink)}
+  .tabs .raillogo b{color:var(--rail-ink)}
+  .tabs .raillogo > svg{background:#fff;border-radius:11px;padding:3px}
+  .app .tabs button,.app.menu-open .tabs button{color:var(--rail-ink-2)!important;border-radius:12px!important}
+  .app .tabs button:hover{background:var(--rail-hover)!important;color:var(--rail-ink)!important}
+  .app .tabs button[aria-selected="true"]{background:var(--rail-on)!important;color:var(--rail-on-ink)!important;box-shadow:0 6px 18px rgba(20,8,80,.22)!important}
+  .app .tabs .railhd{color:var(--rail-ink-3)}
+  .app.railmin .tabs .railhd{background:var(--rail-line)}
+  .app .tabs .raillogo .railtog{color:var(--rail-ink-3)!important}
+  .app .tabs .raillogo .railtog:hover{background:var(--rail-hover)!important;color:var(--rail-ink)!important}
+  .tabs .mtools{border-top-color:var(--rail-line)!important}
+  .tabs .mtools button.iconbtn{color:var(--rail-ink-2)!important}
+  .app > .railme{background:var(--rail-end);border-top:1px solid var(--rail-line);color:var(--rail-ink)}
+  .app > .railme:hover{background:color-mix(in srgb,var(--rail-end) 88%,#fff)}
+  .app > .railme .rmn small{color:var(--rail-ink-3)}
+  .app > .railme .av{box-shadow:0 0 0 2px rgba(255,255,255,.55)}
+  .app.railmin .tabs .tic .cnt{box-shadow:0 0 0 2px #5A3BEA}
+  .main .panel{background:var(--bg)!important}
+  .dsearch input{border-radius:14px}
+  .filters button[aria-pressed="true"]{background:var(--accent)!important;color:#fff!important;border-color:transparent!important}
+  .desktitle,.chathead{background:var(--surface)}
+  .feed{background-color:var(--feedbg);background-image:radial-gradient(color-mix(in srgb,var(--accent) 12%,transparent) 1px,transparent 1.2px)}
+}
+@media (min-width:900px){ html[data-theme="dark"] .app > .railme .av{box-shadow:none} html[data-theme="dark"] .app.railmin .tabs .tic .cnt{box-shadow:0 0 0 2px var(--rail)} }
+
+/* KPI 1.26.0: hotel color band on each card, occupancy ring, smooth trend with a pointer, forecast bars, revenue donut, this year against last year */
+.kpcard{padding:0 0 14px;overflow:hidden;gap:12px}
+.kpcard > .kptiles,.kpcard > .kpfacts,.kpcard > .dnone{margin:0 16px}
+.kpband{--hc:var(--accent);display:flex;align-items:center;gap:10px;padding:11px 16px;background:var(--hc);color:#fff;min-height:48px}
+.kpband b{font:700 17px var(--f-display);letter-spacing:-.01em;color:#fff}
+.kpband .kpcode{font:700 11px var(--f-body);letter-spacing:.08em;background:rgba(255,255,255,.22);border-radius:999px;padding:3px 8px}
+.kpband .kprep{color:rgba(255,255,255,.88);margin-left:auto;font-size:12px}
+.kpband .kprep.late{color:#fff;background:rgba(0,0,0,.22);border-radius:999px;padding:3px 9px;font-weight:700}
+.kpcard.kptot{border-top:0}
+.kpcard.kptot .kpband{background:var(--grad)}
+html[data-theme="dark"] .kpband{background:color-mix(in srgb,var(--hc) 62%,#000)}
+html[data-theme="dark"] .kpcard.kptot .kpband{background:linear-gradient(135deg,#6B55E0,#4A33C8)}
+.kpdonc{display:flex;flex-direction:column}.kpdonc .kpdon{flex:1;justify-content:center}
+.kpband[data-h="MGT"]{--hc:var(--h-MGT)}.kpband[data-h="FDT"]{--hc:var(--h-FDT)}.kpband[data-h="HWY"]{--hc:var(--h-HWY)}
+.kpt{border-radius:16px;background:var(--surface-2)}
+.kpt.kpocc{display:grid;grid-template-columns:minmax(0,1fr) auto;align-items:center;column-gap:8px}
+.kpt.kpocc .kptly{grid-column:1/-1}
+.kpring{width:46px;height:46px;grid-row:1/3;grid-column:2}
+.kpring circle{fill:none;stroke-width:6}
+.kpring .bg{stroke:color-mix(in srgb,var(--ink) 10%,transparent)}
+.kpring .fg{stroke-linecap:round;transition:stroke-dasharray .4s}
+.kpd{border-radius:999px;padding:1px 7px;font-size:11.5px}
+.kpd.up{background:var(--ok-soft)}.kpd.down{background:var(--urgent-soft)}
+.kpfacts{font-size:12.5px}
+.kpdot{display:inline-block;width:10px;height:10px;border-radius:50%;background:var(--hc,var(--accent));flex:none}
+/* trend */
+.kpwrapc{position:relative}
+.kpchart .kpmark{stroke:var(--ink-3);stroke-width:1.2;stroke-dasharray:4 4}
+.kpchart .kpg{stroke:var(--line);stroke-dasharray:3 5}
+.kptip{position:absolute;top:6px;pointer-events:none;background:var(--ink);color:var(--surface);border-radius:12px;padding:8px 11px;font-size:12.5px;line-height:1.45;box-shadow:var(--shadow-lift);white-space:nowrap;z-index:2}
+.kptip[hidden]{display:none}
+.kptip b{display:block;font-size:11.5px;opacity:.75;font-weight:600}
+.kptip span{display:flex;align-items:center;gap:6px;font-variant-numeric:tabular-nums}
+.kptip i{width:8px;height:8px;border-radius:50%;display:inline-block}
+.kplegend i{border-radius:50%}
+/* forecast */
+.kpfcl{display:grid;gap:12px;margin:4px 0 6px}
+.kpfcr{display:grid;grid-template-columns:minmax(110px,1.1fr) 1.4fr 1.4fr minmax(90px,.8fr) minmax(70px,.6fr);gap:14px;align-items:center;padding:10px 12px;border-radius:16px;background:var(--surface-2)}
+.kpfcr.tot{background:var(--accent-soft)}
+.kpfcn2{display:flex;align-items:center;gap:8px;font-weight:700;min-width:0}
+.kpfcn2 span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.kpbar{display:flex;flex-direction:column;gap:5px;min-width:0}
+.kpbar small{display:flex;justify-content:space-between;gap:6px;font-size:12px;color:var(--ink-2)}
+.kpbar small b{color:var(--ink);font-variant-numeric:tabular-nums}
+.kpbar i{display:block;height:8px;border-radius:999px;background:color-mix(in srgb,var(--ink) 9%,transparent);overflow:hidden}
+.kpbar i u{display:block;height:100%;border-radius:999px;background:var(--hc,var(--accent))}
+.kpfcm{display:flex;flex-direction:column;gap:2px;font-size:12px;color:var(--ink-2)}
+.kpfcm b{font-size:15px;color:var(--ink);font-variant-numeric:tabular-nums}
+.kpbars{width:100%;height:auto;display:block;margin-top:6px}
+.kpbars text{font-size:11px;fill:var(--ink-3);font-family:var(--f-body)}
+.kpbars .kpbg{fill:color-mix(in srgb,var(--accent) 12%,transparent)}
+.kpbars .kpb{fill:var(--accent)}
+.kpbars .kpb.hot{fill:var(--accent-2)}
+.kpbars .kpbcol{cursor:pointer}
+.kpbars .kpbcol:hover .kpb:not(.hot),.kpbars .kpbcol.on .kpb:not(.hot){fill:color-mix(in srgb,var(--accent) 75%,var(--ink))}
+.kpbars .kppill rect{fill:var(--ink)}.kpbars .kppill text{fill:var(--surface);font-weight:700;font-size:11.5px}
+.kpbars .kpwk{font-weight:700;fill:var(--ink-2)}
+details.kpmore{margin-top:10px}
+details.kpmore summary{cursor:pointer;font-weight:600;font-size:13px;color:var(--accent);list-style:none;display:inline-flex;align-items:center;gap:6px;padding:6px 12px;border-radius:999px;background:var(--accent-soft)}
+details.kpmore summary::-webkit-details-marker{display:none}
+details.kpmore[open] summary{margin-bottom:8px}
+/* revenue donut and this year against last year */
+.kprow2{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.5fr);gap:12px}
+.kpdon{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.kpdon svg{width:170px;height:170px;flex:none}
+.kpdon svg text{font-family:var(--f-display);fill:var(--ink)}
+.kpdon svg .kpdsm{font-size:11px;fill:var(--ink-3);font-family:var(--f-body)}
+.kpdonl{display:flex;flex-direction:column;gap:10px;flex:1;min-width:150px}
+.kpdonl span{display:flex;align-items:center;gap:8px;font-size:13px}
+.kpdonl b{margin-left:auto;font-variant-numeric:tabular-nums}
+.kpdonl em{font-style:normal;color:var(--ink-3);font-size:12px;min-width:42px;text-align:right}
+.kpvs{width:100%;height:auto;display:block}
+.kpvs text{font-size:11.5px;fill:var(--ink-3);font-family:var(--f-body)}
+.kpvs .kpvl{fill:var(--ink);font-weight:700;font-size:11.5px}
+.kpvs .kpvh{fill:var(--ink-2);font-weight:600;font-size:12.5px}
+.kpvleg{display:flex;gap:16px;font-size:12.5px;color:var(--ink-2);margin:4px 0 2px}
+.kpvleg i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+@media (max-width:900px){.kprow2{grid-template-columns:1fr}}
+@media (max-width:640px){
+  .kpfcr{grid-template-columns:1fr 1fr;gap:10px 14px}
+  .kpfcr .kpfcn2{grid-column:1/-1}
+  .kpdon{justify-content:center}
+  .kpdon svg{width:140px;height:140px}
+  .kpdonl{min-width:0;flex:1 1 100%}
+  .kpvsc .kptrh .kpseg{flex-wrap:wrap}
+  .kpvsc .kptrh .kpseg button{flex:1 1 auto;white-space:nowrap;padding-inline:10px}
+}
+.kpsub{margin:16px 0 0;font:600 13px var(--f-body);color:var(--ink-2)}
 </style>
 </head>
 <body>
@@ -1863,7 +2019,7 @@ const themeNow = () => THEME === 'auto' ? (THEME_MQ && THEME_MQ.matches ? 'dark'
 function applyTheme(){
   const root = document.documentElement;
   const t = themeNow(); root.setAttribute('data-theme', t);
-  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute('content', t === 'dark' ? '#141E33' : '#FFFFFF'));
+  document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.setAttribute('content', t === 'dark' ? '#16151E' : '#FFFFFF'));
   const f = document.getElementById('mapFrame'); try { if (f && f.contentWindow && f.contentWindow.fsTheme) f.contentWindow.fsTheme(t); } catch {}
 }
 applyTheme(); document.documentElement.lang = LANG;
@@ -4959,8 +5115,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.25.0';
+const APP_VERSION = '1.26.0';
 const CHANGES = [
+  {v: '1.26.0', d: '2026-11-16', en: ['New look: lavender and white with purple, rounder cards, and on a computer a purple menu on the left', 'Dark mode is near black with purple and yellow', 'Each hotel has its own color everywhere: Maingate red, Fundamental green, Highway blue', 'KPI: every hotel card has a band in its color with the hotel name, and occupancy as a ring', 'KPI: room revenue by hotel as a donut, and each number against last year as bars', 'KPI: the Forecast as bars for the next 7 days and the rest of the month, and the next 14 days as columns with the fullest day marked', 'KPI: the 30-day trend as smooth lines; point at or tap a day to see each hotel’s number'],
+    es: ['Nuevo estilo: lavanda y blanco con morado, tarjetas más redondas y, en la computadora, el menú de la izquierda en morado', 'El modo oscuro es casi negro con morado y amarillo', 'Cada hotel tiene su color en todo el app: Maingate rojo, Fundamental verde, Highway azul', 'KPI: cada tarjeta de hotel tiene una cinta de su color con el nombre del hotel, y la ocupación como anillo', 'KPI: ingreso de cuartos por hotel en una dona, y cada número contra el año pasado en barras', 'KPI: el Forecast con barras para los próximos 7 días y el resto del mes, y los próximos 14 días en columnas con el día más lleno marcado', 'KPI: la tendencia de 30 días con líneas suaves; señala o toca un día para ver el número de cada hotel']},
   {v: '1.25.0', d: '2026-11-16', en: ['New KPI section in Operations, only for Managers and the superuser. The superuser can let anyone else see it with the KPI button on their row in Manager', 'It reads each hotel’s SynXis Statistics report: occupancy, ADR, RevPAR and room revenue, for yesterday, the month and the year, against last year', 'The hotels side by side plus their total, worked out from the rooms and revenue of each one', 'The last 30 days as a chart and a table for each number', 'What is on the books from each hotel’s Forecast: next 7 days, rest of the month, room revenue and pick-up since the report before, and the next 14 days', 'The reports come in every morning from the email, or drop Statistics and Forecast PDFs to load them; the app checks which hotel each one is from'],
     es: ['Nueva sección KPI en Operations, solo para Managers y el superusuario. El superusuario puede dejar que otra persona la vea con el botón KPI de su fila en Gerente', 'Lee el reporte Statistics de SynXis de cada hotel: ocupación, ADR, RevPAR e ingreso de cuartos, de ayer, el mes y el año, contra el año pasado', 'Los hoteles lado a lado y su total, calculado con los cuartos e ingresos de cada uno', 'Los últimos 30 días en gráfica y tabla para cada número', 'Lo que hay en libros según el Forecast de cada hotel: próximos 7 días, resto del mes, ingreso de cuartos y pick-up desde el reporte anterior, y los próximos 14 días', 'Los reportes llegan cada mañana del correo, o suelta PDF de Statistics y Forecast para cargarlos; la app revisa de qué hotel es cada uno']},
   {v: '1.24.0', d: '2026-11-16', en: ['The Board now follows one order for the day, shown on top with how many rooms wait at each step: Check-outs, To strip, To clean, To inspect, Ready to sell', 'Front desk adds the day’s check-outs and marks each one Vacant and Out of system, with Late check out from 11:30 AM to 4 PM or an Extension. A confirmed extension becomes a Stayover', 'From 11:00 a check-out still occupied with no late check out shows in red as To verify, for Front desk and the supervisor', 'The houseman strips only the vacant rooms, and can mark a room vacant himself', 'Each housekeeper’s list comes in the order to do it, with big buttons. The supervisor can send a room back with a note and up to 5 photos, and it goes first on her list', 'Sounds and a red number for what waits on you: rooms to inspect or verify, vacant rooms to strip, rooms ready to clean or sent back. The bell on the Board turns the sound on or off'],
@@ -8125,48 +8283,116 @@ function kpiLatest(D){
   const by = new Map(); (D.days || []).forEach(r => by.set(r.hotel, r)); // days come sorted by day
   return by;
 }
+// 1.26.0: each hotel keeps its own color everywhere (the band on its card, its line, its bar, its slice)
+const kpHC = id => ['MGT', 'FDT', 'HWY'].includes(id) ? `var(--h-${id})` : 'var(--accent)';
+function kpiRing(v, c){
+  const C = 2 * Math.PI * 19, f = Math.max(0, Math.min(100, +v || 0)) / 100;
+  return `<svg class="kpring" viewBox="0 0 46 46" aria-hidden="true"><circle class="bg" cx="23" cy="23" r="19"/><circle class="fg" cx="23" cy="23" r="19" style="stroke:${c}" stroke-dasharray="${(C * f).toFixed(1)} ${C.toFixed(1)}" transform="rotate(-90 23 23)"/></svg>`;
+}
 function kpiCard(title, list, rep, p, opts){
   const cy = kpiCalc(list, p), ly = kpiCalc(list, p, true); if (!cy) return '';
+  const c = opts.total ? 'var(--accent)' : kpHC(opts.hotel);
   const tile = k => { const [f, en, es] = KPI_M[k];
-    return `<div class="kpt"><div class="kptl">${esc(L2(en, es))}</div><div class="kptn">${f(cy[k])}</div><div class="kptly">${L2('Last year', 'Año pasado')} ${f(ly && ly[k])} ${kpiDelta(k, cy[k], ly && ly[k])}</div></div>`; };
+    return `<div class="kpt${k === 'occ' ? ' kpocc' : ''}"><div class="kptl">${esc(L2(en, es))}</div><div class="kptn">${f(cy[k])}</div>${k === 'occ' ? kpiRing(cy.occ, c) : ''}<div class="kptly">${L2('Last year', 'Año pasado')} ${f(ly && ly[k])} ${kpiDelta(k, cy[k], ly && ly[k])}</div></div>`; };
   const facts = [[L2('Occupied', 'Ocupados'), `${kpiInt(cy.occupied)} ${L2('of', 'de')} ${kpiInt(cy.rentable)}`], [L2('Total revenue', 'Ingreso total'), kpiMoney0(cy.hotel_rev)],
     ['OOO', kpiInt(cy.ooo)], ['Comps', kpiInt(cy.comp)], [L2('Bookings made', 'Reservas hechas'), kpiInt(cy.made)], [L2('Cancellations', 'Cancelaciones'), kpiInt(cy.cancel)],
     ['No show', kpiInt(cy.noshow)], ['Walk-in', kpiInt(cy.walkin)]];
   return `<div class="kpcard${opts.total ? ' kptot' : ''}"${opts.hotel ? ` data-kph="${esc(opts.hotel)}"` : ''}>
-    <div class="kph"><b>${esc(title)}</b>${rep}</div>
+    <div class="kph kpband"${opts.hotel ? ` data-h="${esc(opts.hotel)}"` : ''}><b>${esc(title)}</b>${opts.hotel ? `<span class="kpcode">${esc(opts.hotel)}</span>` : ''}${rep}</div>
     <div class="kptiles">${['occ', 'adr', 'revpar', 'room_rev'].map(tile).join('')}</div>
     <div class="kpfacts">${facts.map(([l, v]) => `<span><i>${esc(l)}</i> ${v}</span>`).join('')}</div></div>`;
 }
-const KPI_COL = ['#2457F5', '#0E9F8E', '#D97706', '#C026D3'];
+// a smooth line through the points (no overshoot past the next point)
+function kpiSmooth(pts){
+  if (pts.length < 2) return pts.length ? `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}` : '';
+  let d = `M${pts[0][0].toFixed(1)} ${pts[0][1].toFixed(1)}`;
+  for (let i = 0; i < pts.length - 1; i++) {
+    const [x0, y0] = pts[i - 1] || pts[i], [x1, y1] = pts[i], [x2, y2] = pts[i + 1], [x3, y3] = pts[i + 2] || pts[i + 1], t = 0.18;
+    let c1y = y1 + (y2 - y0) * t, c2y = y2 - (y3 - y1) * t; const lo = Math.min(y1, y2), hi = Math.max(y1, y2);
+    c1y = Math.max(lo, Math.min(hi, c1y)); c2y = Math.max(lo, Math.min(hi, c2y));
+    d += ` C${(x1 + (x2 - x0) * t).toFixed(1)} ${c1y.toFixed(1)} ${(x2 - (x3 - x1) * t).toFixed(1)} ${c2y.toFixed(1)} ${x2.toFixed(1)} ${y2.toFixed(1)}`;
+  }
+  return d;
+}
 function kpiChart(D, hotels, metric){
   const all = (D.days || []).map(r => r.day), last = all.reduce((m, d) => d > m ? d : m, ''); if (!last) return '';
   const first = all.reduce((m, d) => d < m ? d : m, last), from = first > kpiAdd(last, -29) ? first : kpiAdd(last, -29), days = [];
   for (let d = from; d <= last; d = kpiAdd(d, 1)) days.push(d);
   const at = new Map((D.days || []).map(r => [r.hotel + '|' + r.day, r.v]));
-  const series = hotels.map((h, j) => ({h, c: KPI_COL[j % KPI_COL.length], pts: days.map(d => { const v = at.get(h.id + '|' + d); return v && v[metric] ? +v[metric][0] : null; })}));
-  const vals = series.flatMap(s => s.pts).filter(v => v != null); if (vals.length < 2) return `<div class="dnone">${L2('The trend shows once there are two days of reports.', 'La tendencia sale cuando haya reportes de dos días.')}</div>`;
-  const bw = ($('#kpBody') || {}).clientWidth || 640, W = Math.round(Math.max(300, Math.min(1120, bw - 34))), H = W < 500 ? 190 : 230, L = 46, R = 12, T = 10, B = 24;
+  const series = hotels.map(h => ({h, c: kpHC(h.id), pts: days.map(d => { const v = at.get(h.id + '|' + d); return v && v[metric] ? +v[metric][0] : null; })}));
+  const vals = series.flatMap(s => s.pts).filter(v => v != null); if (vals.length < 2 || days.length < 2) return `<div class="dnone">${L2('The trend shows once there are two days of reports.', 'La tendencia sale cuando haya reportes de dos días.')}</div>`;
+  const bw = ($('#kpBody') || {}).clientWidth || 640, W = Math.round(Math.max(300, Math.min(1120, bw - 34))), H = W < 500 ? 210 : 260, L = 46, R = 14, T = 14, B = 26;
   let lo = Math.min(...vals), hi = Math.max(...vals);
-  if (metric === 'occ') { lo = 0; hi = Math.max(hi, 100); } else { lo = Math.min(0, lo); const st = Math.pow(10, Math.floor(Math.log10(hi || 1))) / 2; hi = Math.ceil(hi * 1.05 / st) * st || 1; }
+  if (metric === 'occ') { hi = 100; lo = Math.max(0, Math.floor((lo - 8) / 10) * 10); } else { const st = Math.pow(10, Math.floor(Math.log10(hi || 1))) / 2; lo = Math.max(0, Math.floor(lo * 0.9 / st) * st); hi = Math.ceil(hi * 1.05 / st) * st || 1; }
   const x = i => L + i * (W - L - R) / (days.length - 1), y = v => T + (H - T - B) * (1 - (v - lo) / ((hi - lo) || 1));
-  const f = KPI_M[metric][0], grid = [0, .25, .5, .75, 1].map(t => lo + (hi - lo) * t), ax = v => metric === 'occ' ? Math.round(v) + '%' : '$' + Math.round(v).toLocaleString(LOC());
-  const lines = series.map(s => { let d = '', pen = false; s.pts.forEach((v, i) => { if (v == null) { pen = false; return; } d += (pen ? 'L' : 'M') + x(i).toFixed(1) + ' ' + y(v).toFixed(1); pen = true; });
-    const dots = s.pts.map((v, i) => v == null ? '' : `<circle cx="${x(i).toFixed(1)}" cy="${y(v).toFixed(1)}" r="2.6" fill="${s.c}"><title>${esc(hotelShort(s.h.id))} · ${esc(kpiDayLbl(days[i]))} · ${f(v)}</title></circle>`).join('');
-    return `<path d="${d}" fill="none" stroke="${s.c}" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"/>${dots}`; }).join('');
+  const grid = [0, .25, .5, .75, 1].map(t => lo + (hi - lo) * t), ax = v => metric === 'occ' ? Math.round(v) + '%' : '$' + Math.round(v).toLocaleString(LOC());
+  const defs = series.map((s, j) => `<linearGradient id="kpgr${j}" x1="0" x2="0" y1="0" y2="1"><stop offset="0" style="stop-color:${s.c};stop-opacity:.13"/><stop offset="1" style="stop-color:${s.c};stop-opacity:0"/></linearGradient>`).join('');
+  const lines = series.map((s, j) => { const segs = []; let cur = [];
+    s.pts.forEach((v, i) => { if (v == null) { if (cur.length) segs.push(cur); cur = []; } else cur.push([x(i), y(v)]); }); if (cur.length) segs.push(cur);
+    return segs.map(g => { const d = kpiSmooth(g), base = (H - B).toFixed(1);
+      const area = g.length > 1 ? `<path d="${d} L${g[g.length - 1][0].toFixed(1)} ${base} L${g[0][0].toFixed(1)} ${base} Z" fill="url(#kpgr${j})" stroke="none"/>` : '';
+      return `${area}<path d="${d}" fill="none" style="stroke:${s.c}" stroke-width="2.6" stroke-linejoin="round" stroke-linecap="round"/>${g.length === 1 ? `<circle cx="${g[0][0].toFixed(1)}" cy="${g[0][1].toFixed(1)}" r="3" style="fill:${s.c}"/>` : ''}`; }).join(''); }).join('');
   const every = Math.max(1, Math.ceil(days.length / (W < 500 ? 4 : 8)));
   const xl = days.map((d, i) => (i % every === 0 && days.length - 1 - i >= every / 2) || i === days.length - 1 ? `<text x="${x(i).toFixed(1)}" y="${H - 6}" text-anchor="${i === days.length - 1 ? 'end' : i === 0 ? 'start' : 'middle'}">${esc(kpiDayLbl(d, {month: 'short', day: 'numeric'}))}</text>` : '').join('');
-  return `<svg class="kpchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(L2(KPI_M[metric][1], KPI_M[metric][2]))}">
-    ${grid.map(g => `<line x1="${L}" x2="${W - R}" y1="${y(g).toFixed(1)}" y2="${y(g).toFixed(1)}" class="kpg"/><text x="${L - 6}" y="${(y(g) + 4).toFixed(1)}" text-anchor="end">${ax(g)}</text>`).join('')}
-    ${xl}${lines}</svg>
+  KPI.cht = {days, series, metric, W, L, R, T, B, H, lo, hi};
+  return `<div class="kpwrapc"><svg class="kpchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(L2(KPI_M[metric][1], KPI_M[metric][2]))}"><defs>${defs}</defs>
+    ${grid.map(g => `<line x1="${L}" x2="${W - R}" y1="${y(g).toFixed(1)}" y2="${y(g).toFixed(1)}" class="kpg"/><text x="${L - 8}" y="${(y(g) + 4).toFixed(1)}" text-anchor="end">${ax(g)}</text>`).join('')}
+    ${xl}${lines}<line class="kpmark" x1="0" x2="0" y1="${T}" y2="${H - B}" visibility="hidden"/>${series.map((s, j) => `<circle class="kphv" data-j="${j}" r="5" style="fill:var(--surface);stroke:${s.c}" stroke-width="3" visibility="hidden"/>`).join('')}
+    <rect class="kphit" x="${L}" y="0" width="${W - L - R}" height="${H}" fill="transparent"/></svg><div class="kptip" hidden></div></div>
     <div class="kplegend">${series.map(s => `<span><i style="background:${s.c}"></i>${esc(hotelShort(s.h.id))}</span>`).join('')}</div>`;
 }
+// move the dashed marker and the value pill to the day under the pointer
+function kpiHover(wrap, clientX){
+  const C = KPI.cht, svg = wrap && wrap.querySelector('svg'); if (!C || !svg) return;
+  const rc = svg.getBoundingClientRect(), px = (clientX - rc.left) * C.W / rc.width, step = (C.W - C.L - C.R) / (C.days.length - 1);
+  const i = Math.max(0, Math.min(C.days.length - 1, Math.round((px - C.L) / step))), xi = C.L + i * step;
+  const y = v => C.T + (C.H - C.T - C.B) * (1 - (v - C.lo) / ((C.hi - C.lo) || 1)), f = KPI_M[C.metric][0];
+  const mk = svg.querySelector('.kpmark'); mk.setAttribute('x1', xi); mk.setAttribute('x2', xi); mk.setAttribute('visibility', 'visible');
+  svg.querySelectorAll('.kphv').forEach(c => { const v = C.series[+c.dataset.j].pts[i]; if (v == null) { c.setAttribute('visibility', 'hidden'); return; } c.setAttribute('cx', xi); c.setAttribute('cy', y(v)); c.setAttribute('visibility', 'visible'); });
+  const tip = wrap.querySelector('.kptip'), rows = C.series.filter(s => s.pts[i] != null);
+  if (!rows.length) { tip.hidden = true; return; }
+  tip.innerHTML = `<b>${esc(kpiDayLbl(C.days[i]))}</b>` + rows.map(s => `<span><i style="background:${s.c}"></i>${esc(hotelShort(s.h.id))} <strong>${f(s.pts[i])}</strong></span>`).join('');
+  tip.hidden = false; const left = xi * rc.width / C.W, tw = tip.offsetWidth;
+  tip.style.left = (left + 14 + tw < rc.width ? left + 14 : Math.max(0, left - 14 - tw)) + 'px';
+}
+function kpiHoverOff(wrap){ if (!wrap) return; const svg = wrap.querySelector('svg'); if (!svg) return;
+  svg.querySelectorAll('.kpmark,.kphv').forEach(e => e.setAttribute('visibility', 'hidden')); const t = wrap.querySelector('.kptip'); if (t) t.hidden = true; }
 function kpiTable(D, hotels, metric){
   const last = (D.days || []).reduce((m, r) => r.day > m ? r.day : m, ''); if (!last) return '';
   const at = new Map((D.days || []).map(r => [r.hotel + '|' + r.day, r.v])), f = KPI_M[metric][0], rows = [];
   for (let i = 0; i < 14; i++) { const d = kpiAdd(last, -i), list = hotels.map(h => at.get(h.id + '|' + d)); if (list.every(v => !v)) continue;
     const tot = hotels.length > 1 && list.every(Boolean) ? kpiCalc(list, 0)[metric] : null;
     rows.push(`<tr><td>${esc(kpiDayLbl(d))}</td>${list.map(v => `<td>${v && v[metric] ? f(v[metric][0]) : '—'}</td>`).join('')}${hotels.length > 1 ? `<td><b>${tot == null ? '—' : f(tot)}</b></td>` : ''}</tr>`); }
-  return `<div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th>${L2('Day', 'Día')}</th>${hotels.map(h => `<th>${esc(hotelShort(h.id))}</th>`).join('')}${hotels.length > 1 ? `<th>Total</th>` : ''}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
+  return `<details class="kpmore"><summary>${L2('See day by day', 'Ver día por día')}</summary><div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th>${L2('Day', 'Día')}</th>${hotels.map(h => `<th>${esc(hotelShort(h.id))}</th>`).join('')}${hotels.length > 1 ? `<th>Total</th>` : ''}</tr></thead><tbody>${rows.join('')}</tbody></table></div></details>`;
+}
+// room revenue of each hotel for the period, as a donut
+function kpiDonut(fresh, hotels, p){
+  const parts = hotels.map(h => { const r = fresh.find(x => x.hotel === h.id); const c = r && kpiCalc([r.v], p); return c && c.room_rev ? {h, v: +c.room_rev} : null; }).filter(Boolean);
+  const tot = parts.reduce((s, x) => s + x.v, 0); if (parts.length < 2 || !tot) return '';
+  const R = 62, C = 2 * Math.PI * R, gap = 3; let off = 0;
+  const arcs = parts.map(x => { const len = x.v / tot * C, a = `<circle cx="85" cy="85" r="${R}" fill="none" style="stroke:${kpHC(x.h.id)}" stroke-width="22" stroke-dasharray="${Math.max(0, len - gap).toFixed(1)} ${C.toFixed(1)}" stroke-dashoffset="${(-off).toFixed(1)}" transform="rotate(-90 85 85)"/>`; off += len; return a; }).join('');
+  return `<div class="card kpdonc"><div class="kptrh"><h3 class="srh">${L2('Room revenue by hotel', 'Ingreso de cuartos por hotel')}</h3></div>
+    <div class="kpdon"><svg viewBox="0 0 170 170" role="img" aria-label="${esc(L2('Room revenue by hotel', 'Ingreso de cuartos por hotel'))}">${arcs}
+      <text x="85" y="82" text-anchor="middle" font-size="21" font-weight="800">${kpiMoney0(tot)}</text><text class="kpdsm" x="85" y="102" text-anchor="middle">${esc(L2('the 3 hotels', 'los 3 hoteles').replace('3', parts.length))}</text></svg>
+    <div class="kpdonl">${parts.map(x => `<span><i class="kpdot" style="--hc:${kpHC(x.h.id)}"></i>${esc(hotelShort(x.h.id))}<b>${kpiMoney0(x.v)}</b><em>${Math.round(x.v / tot * 100)}%</em></span>`).join('')}</div></div></div>`;
+}
+// the chosen number, this year against last year, hotel by hotel
+function kpiVs(fresh, hotels, p, metric){
+  const f = KPI_M[metric][0], groups = hotels.map(h => { const r = fresh.find(x => x.hotel === h.id); if (!r) return null;
+    const a = kpiCalc([r.v], p), b = kpiCalc([r.v], p, true); return {n: hotelShort(h.id), id: h.id, a: a && a[metric], b: b && b[metric]}; }).filter(Boolean);
+  if (fresh.length > 1) { const a = kpiCalc(fresh.map(r => r.v), p), b = kpiCalc(fresh.map(r => r.v), p, true); groups.push({n: 'Total', id: '', a: a && a[metric], b: b && b[metric]}); }
+  const vals = groups.flatMap(g => [g.a, g.b]).filter(v => v != null).map(Number); if (!vals.length) return '';
+  const bw = ($('#kpBody') || {}).clientWidth || 640, W = Math.round(Math.max(300, Math.min(bw > 900 ? 620 : 1120, (bw > 900 ? bw * 0.58 : bw) - 34))), H = 210, T = 22, B = 28;
+  const hi = metric === 'occ' ? 100 : Math.max(...vals) * 1.12 || 1, gw = W / groups.length, bwid = Math.min(34, gw * 0.28), y = v => T + (H - T - B) * (1 - v / hi);
+  const narrow = gw < 120, lab = v => !narrow ? f(v).replace('.00', '') : metric === 'occ' ? Math.round(v) + '%' : metric === 'room_rev' ? '$' + (v / 1000).toLocaleString(LOC(), {maximumFractionDigits: 1}) + 'k' : '$' + Math.round(v);
+  const bar = (v, x, fill) => v == null ? '' : `<rect x="${x.toFixed(1)}" y="${y(+v).toFixed(1)}" width="${bwid.toFixed(1)}" height="${Math.max(2, H - B - y(+v)).toFixed(1)}" rx="${Math.min(9, bwid / 2).toFixed(1)}" style="fill:${fill}"/>
+    <text class="kpvl" x="${(x + bwid / 2).toFixed(1)}" y="${(y(+v) - 6).toFixed(1)}" text-anchor="middle"${narrow ? ' style="font-size:10px"' : ''}>${lab(v)}</text>`;
+  const svg = groups.map((g, i) => { const cx = gw * i + gw / 2;
+    return bar(g.a, cx - bwid - 3, 'var(--accent)') + bar(g.b, cx + 3, 'var(--accent-2)') + `<text class="kpvh" x="${cx.toFixed(1)}" y="${H - 8}" text-anchor="middle">${esc(g.n)}</text>`; }).join('');
+  const mchips = `<div class="seg kpseg" role="group" aria-label="${esc(L2('Number', 'Número'))}">${Object.entries(KPI_M).map(([k, [, en, es]]) => `<button type="button" data-kpm="${k}" aria-pressed="${k === metric}">${esc(L2(en, es))}</button>`).join('')}</div>`;
+  return `<div class="card kpvsc"><div class="kptrh"><h3 class="srh">${esc(L2(KPI_M[metric][1] + ' against last year', KPI_M[metric][2] + ' contra el año pasado'))}</h3>${mchips}</div>
+    <div class="kpvleg"><span><i style="background:var(--accent)"></i>${L2('This year', 'Este año')}</span><span><i style="background:var(--accent-2)"></i>${L2('Last year', 'Año pasado')}</span></div>
+    <svg class="kpvs" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(L2('This year against last year', 'Este año contra el año pasado'))}"><line x1="0" x2="${W}" y1="${H - B}" y2="${H - B}" class="kpg" style="stroke:var(--line)"/>${svg}</svg></div>`;
 }
 // what's on the books: the newest Forecast of each hotel, next 7 days, rest of the month, and pick-up since the report before
 function kpiFc(D, hotels){
@@ -8183,18 +8409,36 @@ function kpiFc(D, hotels){
   const pick = ids => { let a = 0, b = 0, any = false;
     for (const [k, v] of cur) { const [id] = k.split('|'); if (!ids.includes(id) || !prev.has(k)) continue; any = true; a += fcBooked(v); b += fcBooked(prev.get(k)); }
     if (!any) return '—'; const d = a - b; return `<span class="kpd ${d >= 0 ? 'up' : 'down'}">${d > 0 ? '+' : d < 0 ? '−' : ''}${kpiInt(Math.abs(d))}</span>`; };
-  const scopes = (hs.length > 1 ? [[L2('Total', 'Total'), hs.map(h => h.id)]] : []).concat(hs.map(h => [hotelShort(h.id), [h.id]]));
-  const sum = scopes.map(([n, ids]) => { const w = span(ids, today, kpiAdd(today, 6), cur), m = span(ids, today, end, cur);
-    return `<tr${ids.length > 1 ? ' class="kpfctot"' : ''}><td>${esc(n)}</td><td>${w ? kpiPct(w.occ) : '—'}</td><td>${m ? kpiPct(m.occ) : '—'}</td><td>${m ? kpiMoney0(m.rev) : '—'}</td><td>${pick(ids)}</td></tr>`; }).join('');
+  const pbar = (l, v, c) => `<div class="kpbar" style="--hc:${c}"><small>${esc(l)} <b>${v == null ? '—' : kpiPct(v)}</b></small><i><u style="width:${Math.max(0, Math.min(100, v || 0)).toFixed(1)}%"></u></i></div>`;
+  const scopes = (hs.length > 1 ? [[L2('Total', 'Total'), hs.map(h => h.id), 'var(--accent)']] : []).concat(hs.map(h => [hotelShort(h.id), [h.id], kpHC(h.id)]));
+  const sum = scopes.map(([n, ids, c]) => { const w = span(ids, today, kpiAdd(today, 6), cur), m = span(ids, today, end, cur);
+    return `<div class="kpfcr${ids.length > 1 ? ' tot kpfctot' : ''}"><div class="kpfcn2"><i class="kpdot" style="--hc:${c}"></i><span>${esc(n)}</span></div>
+      ${pbar(L2('Next 7 days', 'Próximos 7 días'), w && w.occ, c)}${pbar(L2('Rest of month', 'Resto del mes'), m && m.occ, c)}
+      <div class="kpfcm">${L2('Room revenue, rest of month', 'Ingreso de cuartos, resto del mes')}<b>${m ? kpiMoney0(m.rev) : '—'}</b></div>
+      <div class="kpfcm">${L2('Pick-up', 'Pick-up')}<b>${pick(ids)}</b></div></div>`; }).join('');
+  // next 14 days as rounded bars, all the hotels together; the fullest day in orange with its number
   const days = []; for (let i = 0; i < 14; i++) days.push(kpiAdd(today, i));
+  const occ = days.map(d => { const list = hs.map(h => cur.get(h.id + '|' + d)); if (!list.every(Boolean)) return null;
+    const b = list.reduce((s, v) => s + fcBooked(v), 0), r = list.reduce((s, v) => s + (v.rentable || 0), 0); return r ? b / r * 100 : null; });
+  let bars = ''; const nn = occ.filter(v => v != null);
+  if (nn.length) {
+    const bw = ($('#kpBody') || {}).clientWidth || 640, W = Math.round(Math.max(300, Math.min(1120, bw - 34))), H = W < 500 ? 190 : 220, T = 30, B = 40, gw = W / days.length, bwid = Math.min(30, gw * 0.56);
+    const top = occ.indexOf(Math.max(...nn)), y = v => T + (H - T - B) * (1 - v / 100), wk = d => kpiDayLbl(d, {weekday: 'narrow'});
+    bars = `<svg class="kpbars" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(L2('Occupancy on the books, next 14 days', 'Ocupación en libros, próximos 14 días'))}">` + days.map((d, i) => { const cx = gw * i + gw / 2, v = occ[i], x = cx - bwid / 2;
+      const pill = v == null ? '' : `<g class="kppill"${i === top ? '' : ' visibility="hidden"'}><rect x="${(cx - 23).toFixed(1)}" y="${(y(v) - 26).toFixed(1)}" width="46" height="20" rx="10"/><text x="${cx.toFixed(1)}" y="${(y(v) - 12).toFixed(1)}" text-anchor="middle">${Math.round(v)}%</text></g>`;
+      return `<g class="kpbcol" data-i="${i}"><title>${esc(kpiDayLbl(d))} · ${v == null ? '—' : kpiPct(v)}</title><rect class="kpbg" x="${x.toFixed(1)}" y="${T}" width="${bwid.toFixed(1)}" height="${H - T - B}" rx="${(bwid / 2).toFixed(1)}"/>
+        ${v == null ? '' : `<rect class="kpb${i === top ? ' hot' : ''}" x="${x.toFixed(1)}" y="${y(v).toFixed(1)}" width="${bwid.toFixed(1)}" height="${Math.max(bwid, H - B - y(v)).toFixed(1)}" rx="${(bwid / 2).toFixed(1)}"/>`}${pill}
+        <text class="${i === 0 ? 'kpwk' : ''}" x="${cx.toFixed(1)}" y="${H - 22}" text-anchor="middle">${esc(wk(d))}</text><text x="${cx.toFixed(1)}" y="${H - 6}" text-anchor="middle">${esc(kpiDayLbl(d, {day: 'numeric'}))}</text></g>`; }).join('') + '</svg>';
+  }
   const rows = days.map(d => { const list = hs.map(h => cur.get(h.id + '|' + d)); if (list.every(v => !v)) return '';
     const b = list.reduce((s, v) => s + fcBooked(v), 0), r = list.reduce((s, v) => s + (v ? v.rentable || 0 : 0), 0);
     return `<tr><td>${esc(kpiDayLbl(d))}</td>${list.map(v => `<td>${v ? kpiPct(v.occ) : '—'}</td>`).join('')}${hs.length > 1 ? `<td><b>${r && list.every(Boolean) ? kpiPct(b / r * 100) : '—'}</b></td>` : ''}</tr>`; }).join('');
   const lastAs = [...asof.values()].sort().pop();
   return `<div class="card kpfc"><div class="kptrh"><h3 class="srh">${L2('On the books (Forecast)', 'En libros (Forecast)')}</h3><span class="kprep">${esc(L2('Report of ', 'Reporte del ') + kpiDayLbl(lastAs, {month: 'short', day: 'numeric'}))}</span></div>
-    <div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th></th><th>${L2('Next 7 days', 'Próximos 7 días')}</th><th>${L2('Rest of month', 'Resto del mes')}</th><th>${L2('Room revenue, rest of month', 'Ingreso de cuartos, resto del mes')}</th><th>${L2('Pick-up', 'Pick-up')}</th></tr></thead><tbody>${sum}</tbody></table></div>
+    <div class="kpfcl">${sum}</div>
     <p class="small kpfcn">${L2('Occupancy on the books, group blocks included. Pick-up: rooms gained or lost since the report before.', 'Ocupación en libros, con bloqueos de grupo. Pick-up: cuartos ganados o perdidos desde el reporte anterior.')}</p>
-    ${rows ? `<div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th>${L2('Day', 'Día')}</th>${hs.map(h => `<th>${esc(hotelShort(h.id))}</th>`).join('')}${hs.length > 1 ? '<th>Total</th>' : ''}</tr></thead><tbody>${rows}</tbody></table></div>` : ''}</div>`;
+    ${bars ? `<h4 class="kpsub">${L2('Next 14 days, ' + (hs.length > 1 ? 'all hotels' : hotelShort(hs[0].id)), 'Próximos 14 días, ' + (hs.length > 1 ? 'todos los hoteles' : hotelShort(hs[0].id)))}</h4>${bars}` : ''}
+    ${rows ? `<details class="kpmore"><summary>${L2('See each hotel day by day', 'Ver cada hotel día por día')}</summary><div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th>${L2('Day', 'Día')}</th>${hs.map(h => `<th>${esc(hotelShort(h.id))}</th>`).join('')}${hs.length > 1 ? '<th>Total</th>' : ''}</tr></thead><tbody>${rows}</tbody></table></div></details>` : ''}</div>`;
 }
 function kpiRender(){
   const box = $('#kpBody'); if (!box) return;
@@ -8216,13 +8460,14 @@ function kpiRender(){
   const lacking = hotels.filter(h => !by.get(h.id) || by.get(h.id).day < newest).map(h => hotelShort(h.id));
   const cards = (fresh.length > 1 ? kpiCard(L2(`All ${fresh.length} hotels`, `Los ${fresh.length} hoteles`), fresh.map(r => r.v), '', p, {total: true}) : '')
     + hotels.map(h => { const r = by.get(h.id); return r ? kpiCard(hotelShort(h.id), [r.v], rep(r), p, {hotel: h.id})
-        : `<div class="kpcard kpnone"><div class="kph"><b>${esc(hotelShort(h.id))}</b></div><div class="dnone">${L2('No report yet.', 'Aún no hay reporte.')}</div></div>`; }).join('');
-  const mchips = `<div class="seg kpseg" role="group" aria-label="${esc(L2('Number', 'Número'))}">${Object.entries(KPI_M).map(([k, [, en, es]]) => `<button type="button" data-kpm="${k}" aria-pressed="${k === KPI.metric}">${esc(L2(en, es))}</button>`).join('')}</div>`;
+        : `<div class="kpcard kpnone"><div class="kph kpband" data-h="${esc(h.id)}"><b>${esc(hotelShort(h.id))}</b><span class="kpcode">${esc(h.id)}</span></div><div class="dnone">${L2('No report yet.', 'Aún no hay reporte.')}</div></div>`; }).join('');
+  const donut = kpiDonut(fresh, hotels, p), vs = kpiVs(fresh, hotels, p, KPI.metric);
   box.innerHTML = head + `<div class="kptop">${seg}<span class="kpwhen">${esc(when)}</span></div>
     ${lacking.length && fresh.length ? `<div class="kpwarn">${esc(L2('Missing the ' + kpiDayLbl(newest, {month: 'short', day: 'numeric'}) + ' report for: ', 'Falta el reporte del ' + kpiDayLbl(newest, {day: 'numeric', month: 'short'}) + ' de: ') + lacking.join(', '))}</div>` : ''}
     <div class="kpgrid">${cards}</div>
+    ${donut || vs ? `<div class="${donut && vs ? 'kprow2' : ''}">${donut}${vs}</div>` : ''}
     ${kpiFc(D, hotels)}
-    <div class="card kptrend"><div class="kptrh"><h3 class="srh">${L2('Last 30 days', 'Últimos 30 días')}</h3>${mchips}</div>${kpiChart(D, hotels, KPI.metric)}${kpiTable(D, hotels, KPI.metric)}</div>
+    <div class="card kptrend"><div class="kptrh"><h3 class="srh">${L2('Last 30 days', 'Últimos 30 días')}</h3><span class="kpwhen">${esc(L2(KPI_M[KPI.metric][1], KPI_M[KPI.metric][2]))}</span></div>${kpiChart(D, hotels, KPI.metric)}${kpiTable(D, hotels, KPI.metric)}</div>
     <div class="card">${drop}</div>`;
 }
 const KPI_ERR = {UNKNOWN_HOTEL: ["That report isn't from one of our hotels.", 'Ese reporte no es de uno de nuestros hoteles.'], WRONG_HOTEL: ["That report is from a hotel you don't use.", 'Ese reporte es de un hotel que tú no usas.'],
@@ -8246,12 +8491,21 @@ async function kpiTake(files){
   if (bad.length) toast(esc(bad.join(' · ')));
   await kpiLoad(true); kpiRender();
 }
+// a forecast bar shows its number when pointed at or tapped; the fullest day keeps its number too
+function kpiBarOn(b){ const svg = b.closest('svg'); if (!svg) return;
+  svg.querySelectorAll('.kpbcol').forEach(g => { const on = g === b, p = g.querySelector('.kppill'); g.classList.toggle('on', on); if (p) p.setAttribute('visibility', on || g.querySelector('.kpb.hot') ? 'visible' : 'hidden'); }); }
 (function kpiWire(){
   const v = $('#view-kpi'); if (!v) return;
   v.addEventListener('click', e => {
     const a = e.target.closest('[data-kpper]'); if (a) { KPI.per = +a.dataset.kpper; ls.set('sc.kpper', KPI.per); kpiRender(); return; }
-    const m = e.target.closest('[data-kpm]'); if (m) { KPI.metric = m.dataset.kpm; ls.set('sc.kpm', KPI.metric); kpiRender(); }
+    const m = e.target.closest('[data-kpm]'); if (m) { KPI.metric = m.dataset.kpm; ls.set('sc.kpm', KPI.metric); kpiRender(); return; }
+    const b = e.target.closest('.kpbcol'); if (b) kpiBarOn(b);
   });
+  v.addEventListener('mouseover', e => { const b = e.target.closest('.kpbcol'); if (b) kpiBarOn(b); });
+  v.addEventListener('mousemove', e => { const w = e.target.closest('.kpwrapc'); if (w) kpiHover(w, e.clientX); });
+  v.addEventListener('mouseout', e => { const w = e.target.closest('.kpwrapc'); if (w && !w.contains(e.relatedTarget)) kpiHoverOff(w); });
+  const th = e => { const w = e.target.closest('.kpwrapc'); if (w && e.touches[0]) kpiHover(w, e.touches[0].clientX); };
+  v.addEventListener('touchstart', th, {passive: true}); v.addEventListener('touchmove', th, {passive: true});
   v.addEventListener('change', e => { if (e.target.matches('[data-kpin]')) { kpiTake(e.target.files); e.target.value = ''; } });
   v.addEventListener('dragover', e => { if (e.target.closest('[data-kpdrop]')) { e.preventDefault(); e.target.closest('[data-kpdrop]').classList.add('over'); } });
   v.addEventListener('dragleave', e => { const d = e.target.closest('[data-kpdrop]'); if (d) d.classList.remove('over'); });
