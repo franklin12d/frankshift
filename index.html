@@ -5115,8 +5115,9 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.26.0';
+const APP_VERSION = '1.26.1';
 const CHANGES = [
+  {v: '1.26.1', d: '2026-11-16', en: ['KPI: each hotel band now says “Synxis report:” with the date and time of its last update'], es: ['KPI: la banda de cada hotel ahora dice “Reporte Synxis:” con la fecha y hora de su última actualización']},
   {v: '1.26.0', d: '2026-11-16', en: ['New look: lavender and white with purple, rounder cards, and on a computer a purple menu on the left', 'Dark mode is near black with purple and yellow', 'Each hotel has its own color everywhere: Maingate red, Fundamental green, Highway blue', 'KPI: every hotel card has a band in its color with the hotel name, and occupancy as a ring', 'KPI: room revenue by hotel as a donut, and each number against last year as bars', 'KPI: the Forecast as bars for the next 7 days and the rest of the month, and the next 14 days as columns with the fullest day marked', 'KPI: the 30-day trend as smooth lines; point at or tap a day to see each hotel’s number'],
     es: ['Nuevo estilo: lavanda y blanco con morado, tarjetas más redondas y, en la computadora, el menú de la izquierda en morado', 'El modo oscuro es casi negro con morado y amarillo', 'Cada hotel tiene su color en todo el app: Maingate rojo, Fundamental verde, Highway azul', 'KPI: cada tarjeta de hotel tiene una cinta de su color con el nombre del hotel, y la ocupación como anillo', 'KPI: ingreso de cuartos por hotel en una dona, y cada número contra el año pasado en barras', 'KPI: el Forecast con barras para los próximos 7 días y el resto del mes, y los próximos 14 días en columnas con el día más lleno marcado', 'KPI: la tendencia de 30 días con líneas suaves; señala o toca un día para ver el número de cada hotel']},
   {v: '1.25.0', d: '2026-11-16', en: ['New KPI section in Operations, only for Managers and the superuser. The superuser can let anyone else see it with the KPI button on their row in Manager', 'It reads each hotel’s SynXis Statistics report: occupancy, ADR, RevPAR and room revenue, for yesterday, the month and the year, against last year', 'The hotels side by side plus their total, worked out from the rooms and revenue of each one', 'The last 30 days as a chart and a table for each number', 'What is on the books from each hotel’s Forecast: next 7 days, rest of the month, room revenue and pick-up since the report before, and the next 14 days', 'The reports come in every morning from the email, or drop Statistics and Forecast PDFs to load them; the app checks which hotel each one is from'],
@@ -8453,8 +8454,11 @@ function kpiRender(){
   const perL = [[0, L2('Yesterday', 'Ayer')], [1, L2('Month to date', 'Mes')], [2, L2('Year to date', 'Año')]];
   const seg = `<div class="seg kpseg" role="group" aria-label="${esc(L2('Period', 'Periodo'))}">${perL.map(([v, l]) => `<button type="button" data-kpper="${v}" aria-pressed="${v === p}">${esc(l)}</button>`).join('')}</div>`;
   const when = p === 0 ? kpiDayLbl(newest, {weekday: 'long', month: 'long', day: 'numeric'}) : p === 1 ? L2('Through ', 'Hasta el ') + kpiDayLbl(newest, {month: 'long', day: 'numeric'}) : L2('Through ', 'Hasta el ') + kpiDayLbl(newest, {month: 'long', day: 'numeric', year: 'numeric'});
-  const rep = r => { const late = r.day < newest;
-    return `<span class="kprep${late ? ' late' : ''}">${late ? L2('Last report: ', 'Último reporte: ') + esc(kpiDayLbl(r.day, {month: 'short', day: 'numeric'})) : r.source === 'email' ? L2('From the email', 'Del correo') : esc(L2('Uploaded by ', 'Subido por ') + (r.by || ''))}</span>`; };
+  // 1.26.1: the band says where the numbers come from and when they were last updated
+  const rep = r => { const late = r.day < newest, t = r.at ? new Date(r.at) : null;
+    const upd = t && !isNaN(t) ? t.toLocaleString(LOC(), {timeZone: TZ, month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}) : kpiDayLbl(r.day, {month: 'short', day: 'numeric'});
+    const tip = L2('Report for ', 'Reporte del ') + kpiDayLbl(r.day, {month: 'short', day: 'numeric'}) + (r.source === 'email' ? L2(', from the email', ', del correo') : r.by ? L2(', uploaded by ', ', subido por ') + r.by : '');
+    return `<span class="kprep${late ? ' late' : ''}" title="${esc(tip)}">${esc(L2('Synxis report: ', 'Reporte Synxis: ') + upd)}</span>`; };
   // total of the hotels whose report is for the newest day
   const fresh = hotels.map(h => by.get(h.id)).filter(r => r && r.day === newest);
   const lacking = hotels.filter(h => !by.get(h.id) || by.get(h.id).day < newest).map(h => hotelShort(h.id));
