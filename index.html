@@ -292,6 +292,8 @@ body{margin:0}
 .kpchart text{font-size:11px;fill:var(--ink-3);font-family:var(--f-body)}
 .kpchart .kpg{stroke:var(--line);stroke-width:1}
 .kplegend{display:flex;gap:14px;flex-wrap:wrap;font-size:12.5px;margin:6px 0 10px}.kplegend i{display:inline-block;width:10px;height:10px;border-radius:3px;margin-right:6px;vertical-align:-1px}
+.kpfc .kptable{margin-top:4px}.kpfctot td{font-weight:700}.kpfcn{margin:8px 0 12px;color:var(--muted)}
+.btn.on{border-color:var(--acc);color:var(--acc)}
 .kptable td,.kptable th{text-align:right}.kptable td:first-child,.kptable th:first-child{text-align:left}
 @media (max-width:520px){.kpgrid{grid-template-columns:1fr}.kptn{font-size:21px}.kpseg{width:100%}.kpseg button{flex:1}}
 
@@ -3733,6 +3735,7 @@ async function loadTeam(){
     const [rep, staff, dev, rules, mine] = await Promise.all([mgr ? call('sc_report', {p_days: 7}) : null, call('sc_staff_admin', {}), mgr ? call('sc_device_status', {}).catch(() => null) : null,
       call('sc_menu_rules', {}).catch(() => null), call('sc_menu', {}).catch(() => null)]);
     if (mine) menuSet(mine);
+    if (S.owner) { try { S.kpiAcc = new Set((await call('sc_kpi_access', {})) || []); } catch { S.kpiAcc = null; } } else S.kpiAcc = null;
     MR.rules = rules || {roles: {}, staff: {}};
     $('#sfRole').innerHTML = rolesICanGive().map(r => `<option value="${r.id}">${r.label}</option>`).join('');
     menuRolesRender();
@@ -3757,7 +3760,8 @@ function staffCtl(s){
   const self = s.id === S.me.id, sub = S.me.role === 'sub' && !S.owner;
   if (s.can_edit === false) return `<div class="small lockln" data-noi18n>${esc(L2('Only the superuser can change this account.', 'Solo el superusuario puede cambiar esta cuenta.'))}</div>`;
   const own = MR.rules && MR.rules.staff && MR.rules.staff[s.id];
-  const menuBtn = !self && s.active ? `<button class="btn sm" data-menu data-noi18n>${esc(L2('Menu', 'Menú') + (own ? ' ✓' : ''))}</button>` : '';
+  const menuBtn = (!self && s.active ? `<button class="btn sm" data-menu data-noi18n>${esc(L2('Menu', 'Menú') + (own ? ' ✓' : ''))}</button>` : '')
+    + (S.owner && S.kpiAcc && !self && s.active && s.role !== 'mgr' ? `<button class="btn sm${S.kpiAcc.has(s.id) ? ' on' : ''}" data-kpiacc data-noi18n aria-pressed="${S.kpiAcc.has(s.id)}" title="${esc(L2('Let this person see KPI', 'Que esta persona vea KPI'))}">KPI${S.kpiAcc.has(s.id) ? ' ✓' : ''}</button>` : '');
   const codeBtn = s.active && !s.pin_set ? '<button class="btn sm pri" data-code>Start code</button>' : s.active ? '<button class="btn sm pri" data-share>Share</button>' : '';
   const resetBtn = !self && (s.pin_set || s.locked || s.reset_requested) ? `<button class="btn sm ${s.reset_requested ? 'pri' : ''}" data-reset>Reset PIN</button>` : '';
   if (sub) return `<div class="btnrow" style="margin-top:6px">${resetBtn}${codeBtn}${menuBtn}</div>${accessHtml(s)}`;
@@ -3777,11 +3781,19 @@ function menuSet(d){
   document.querySelectorAll('button[data-tab]').forEach(b => b.classList.toggle('menuoff', hid.has(b.dataset.tab)));
   { const gt = $('#gqTab'); if (gt && !(S.owner || (S.me && S.me.role === 'fd'))) gt.classList.add('menuoff'); } // guest check-in: Front desk and the superuser only
   { const pt = $('#pkTab'); if (pt && !(S.owner || (S.me && (S.me.role === 'fd' || S.me.role === 'mgr')))) pt.classList.add('menuoff'); } // package log: Front desk, Managers and the superuser
-  { const kt = $('#kpTab'); if (kt) kt.classList.toggle('menuoff', !(S.owner || (S.me && (S.me.role === 'mgr' || S.me.role === 'sub')))); } // KPI: Managers, Sub Managers and the superuser
+  { const kt = $('#kpTab'); if (kt) kt.classList.toggle('menuoff', !kpiAllowed()); } // KPI: Managers, the superuser and the people the superuser adds
   if (S.tab && hid.has(S.tab === 'lost' ? 'passon' : S.tab)) setTab('chat');
   try { catPaint(); } catch {}
 }
-async function menuFetch(){ if (!S.token || !S.me) return; try { menuSet(await call('sc_menu', {})); } catch {} }
+async function menuFetch(){ if (!S.token || !S.me) return; try { menuSet(await call('sc_menu', {})); } catch {} kpiOkFetch(); }
+S.kpiOk = ls.get('sc.kpiOk', null);
+// KPI is for Managers and the superuser; the superuser can add anyone else. The server answers who sees it (an older server: by role)
+async function kpiOkFetch(){
+  try { const ok = await call('sc_kpi_ok', {}); S.kpiOk = !!ok; ls.set('sc.kpiOk', S.kpiOk); } catch (e) { if (/Could not find the function|PGRST202/.test(e.message)) S.kpiOk = null; else return; }
+  const kt = $('#kpTab'); if (kt) kt.classList.toggle('menuoff', !kpiAllowed());
+  try { catPaint(); } catch {}
+  if (S.tab === 'kpi' && !kpiAllowed()) setTab('chat');
+}
 const menuChecks = hidden => `<div class="mnchk">${MENU_SECS.map(([k, en, es]) => `<label><input type="checkbox" data-mn="${k}" ${hidden.includes(k) ? '' : 'checked'}><span>${esc(L2(en, es))}</span></label>`).join('')}</div>`;
 const menuPicked = box => MENU_SECS.map(x => x[0]).filter(k => { const c = box.querySelector(`[data-mn="${k}"]`); return c && !c.checked; });
 function menuRolesRender(){
@@ -3933,6 +3945,13 @@ $('#staffList').addEventListener('click', async e => {
   const row = e.target.closest('[data-staff]'); if (!row) return; const s = (S.adminStaff || []).find(x => x.id === row.dataset.staff); if (!s) return;
   const rs = row.querySelector('[data-role]'), role = rs ? rs.value : s.role; let active = s.active, reset = false;
   if (e.target.matches('[data-menu]')) return menuPerson(s);
+  if (e.target.matches('[data-kpiacc]')) {
+    const on = !(S.kpiAcc && S.kpiAcc.has(s.id)); e.target.disabled = true;
+    try { S.kpiAcc = new Set((await call('sc_kpi_access', {p_staff: s.id, p_on: on})) || []);
+      toast(esc(on ? L2(s.first_name + ' now sees KPI', s.first_name + ' ya ve KPI') : L2(s.first_name + ' no longer sees KPI', s.first_name + ' ya no ve KPI')), 'new'); loadTeam(); }
+    catch (err) { e.target.disabled = false; toast(esc(err.message)); }
+    return;
+  }
   if (e.target.matches('[data-photo]')) return pickAvatar(s.id);
   if (e.target.matches('[data-share]')) return shareInvite(s);
   if (e.target.matches('[data-code]')) return giveCode(s);
@@ -4226,7 +4245,7 @@ $('#forgotBtn').onclick = async () => {
   catch (err) { $('#loginErr').textContent = err.message; }
 };
 function signOut(expired){
-  const t = S.token; S.token = null; S.me = null; ls.del('sc.token'); ls.del('sc.me'); clearInterval(timer); S.knownLater.clear(); try { const f = $('#mapFrame'); f.removeAttribute('src'); f.dataset.h = ''; } catch {}
+  const t = S.token; S.token = null; S.me = null; ls.del('sc.token'); ls.del('sc.me'); ls.del('sc.kpiOk'); S.kpiOk = null; clearInterval(timer); S.knownLater.clear(); try { const f = $('#mapFrame'); f.removeAttribute('src'); f.dataset.h = ''; } catch {}
   if (t && !expired) rpc('sc_logout', {p_token: t}).catch(() => {});
   S.known.clear(); S.firstLoad = true; showLogin(expired ? ERR.SESSION_EXPIRED : '');
 }
@@ -4942,8 +4961,8 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
 const APP_VERSION = '1.25.0';
 const CHANGES = [
-  {v: '1.25.0', d: '2026-11-16', en: ['New KPI section in Operations, only for Managers, Sub Managers and the superuser', 'It reads each hotel’s SynXis Statistics report: occupancy, ADR, RevPAR and room revenue, for yesterday, the month and the year, against last year', 'The hotels side by side plus their total, worked out from the rooms and revenue of each one', 'The last 30 days as a chart and a table for each number', 'Drop one or more Statistics PDFs to load them; the app checks which hotel each one is from'],
-    es: ['Nueva sección KPI en Operations, solo para Managers, Sub Managers y el superusuario', 'Lee el reporte Statistics de SynXis de cada hotel: ocupación, ADR, RevPAR e ingreso de cuartos, de ayer, el mes y el año, contra el año pasado', 'Los hoteles lado a lado y su total, calculado con los cuartos e ingresos de cada uno', 'Los últimos 30 días en gráfica y tabla para cada número', 'Suelta uno o varios PDF de Statistics para cargarlos; la app revisa de qué hotel es cada uno']},
+  {v: '1.25.0', d: '2026-11-16', en: ['New KPI section in Operations, only for Managers and the superuser. The superuser can let anyone else see it with the KPI button on their row in Manager', 'It reads each hotel’s SynXis Statistics report: occupancy, ADR, RevPAR and room revenue, for yesterday, the month and the year, against last year', 'The hotels side by side plus their total, worked out from the rooms and revenue of each one', 'The last 30 days as a chart and a table for each number', 'What is on the books from each hotel’s Forecast: next 7 days, rest of the month, room revenue and pick-up since the report before, and the next 14 days', 'The reports come in every morning from the email, or drop Statistics and Forecast PDFs to load them; the app checks which hotel each one is from'],
+    es: ['Nueva sección KPI en Operations, solo para Managers y el superusuario. El superusuario puede dejar que otra persona la vea con el botón KPI de su fila en Gerente', 'Lee el reporte Statistics de SynXis de cada hotel: ocupación, ADR, RevPAR e ingreso de cuartos, de ayer, el mes y el año, contra el año pasado', 'Los hoteles lado a lado y su total, calculado con los cuartos e ingresos de cada uno', 'Los últimos 30 días en gráfica y tabla para cada número', 'Lo que hay en libros según el Forecast de cada hotel: próximos 7 días, resto del mes, ingreso de cuartos y pick-up desde el reporte anterior, y los próximos 14 días', 'Los reportes llegan cada mañana del correo, o suelta PDF de Statistics y Forecast para cargarlos; la app revisa de qué hotel es cada uno']},
   {v: '1.24.0', d: '2026-11-16', en: ['The Board now follows one order for the day, shown on top with how many rooms wait at each step: Check-outs, To strip, To clean, To inspect, Ready to sell', 'Front desk adds the day’s check-outs and marks each one Vacant and Out of system, with Late check out from 11:30 AM to 4 PM or an Extension. A confirmed extension becomes a Stayover', 'From 11:00 a check-out still occupied with no late check out shows in red as To verify, for Front desk and the supervisor', 'The houseman strips only the vacant rooms, and can mark a room vacant himself', 'Each housekeeper’s list comes in the order to do it, with big buttons. The supervisor can send a room back with a note and up to 5 photos, and it goes first on her list', 'Sounds and a red number for what waits on you: rooms to inspect or verify, vacant rooms to strip, rooms ready to clean or sent back. The bell on the Board turns the sound on or off'],
     es: ['El Board ahora sigue un solo orden para el día, arriba con cuántos cuartos esperan en cada paso: Salidas, Por stripear, Por limpiar, Por inspeccionar, Listas para vender', 'Front desk agrega las salidas del día y marca cada una Vacía y Fuera del sistema, con Late check out de 11:30 AM a 4 PM o Extensión. Una extensión confirmada pasa a Stayover', 'Desde las 11:00 una salida todavía ocupada y sin late check out sale en rojo como Por verificar, para Front desk y la supervisora', 'El houseman stripea solo los cuartos vacíos, y puede marcar un cuarto vacío él mismo', 'La lista de cada housekeeper viene en el orden para hacerla, con botones grandes. La supervisora puede devolver un cuarto con una nota y hasta 5 fotos, y sale primero en su lista', 'Sonidos y un número rojo para lo que te espera: cuartos por inspeccionar o verificar, vacíos por stripear, listos para limpiar o devueltos. La campana del Board prende o apaga el sonido']},
   {v: '1.23.0', d: '2026-11-14', en: ['On a computer you can minimize the Menu to icons only with the button next to FrankShift, and open it again with the same button', 'With the Menu minimized, the chat or the section you have open gets the extra room, and each icon shows its name when you point at it', 'Your computer remembers your choice'],
@@ -8042,6 +8061,29 @@ function kpiParse(pages){
   for (const i of [0, 1, 3]) if (v.rentable[i] > 0 && Math.abs(v.occupied[i] / v.rentable[i] * 100 - v.occ[i]) > 1) throw new Error('layout');
   return {day, code: hm[2], hotel: hm[1], v};
 }
+// SynXis "Forecast Report": one line per stay day. Date, Total, OOI/OOO, Rentable, Sold, Stay Overs, Check Outs, Arrivals, Day Use, GTD, Non-GTD,
+// Group not picked up, Left to sell, Occupied %, Room revenue, ADR, Adult/Child. as_of is the day it was run, in Orlando.
+function fcParse(pages){
+  const lines = pages.flat(), all = lines.map(l => l.join(' ')).join('\n');
+  if (!/Forecast Report/i.test(all)) throw new Error('kind');
+  const hm = /Hotel:\s*(.*?)\s*\((\d{3,8})\)/.exec(all); if (!hm) throw new Error('hotel');
+  const tm = /(\d{1,2}) (\w{3})\w* (\d{4}) (\d{2}):(\d{2}) UTC/.exec(all); if (!tm) throw new Error('date');
+  const mon = 'JanFebMarAprMayJunJulAugSepOctNovDec'.indexOf(tm[2].slice(0, 3)) / 3; if (mon < 0 || mon % 1) throw new Error('date');
+  const asof = new Date(Date.UTC(+tm[3], mon, +tm[1], +tm[4], +tm[5])).toLocaleDateString('en-CA', {timeZone: 'America/New_York'});
+  const rows = [];
+  for (const l of lines) {
+    const d = /^(\d{2})\/(\d{2})\/(\d{4})$/.exec(l[0]); if (!d || l.length < 16) continue;
+    const n = l.slice(0, 16).map(repNum); if (n.slice(1, 16).some(x => x == null)) throw new Error('layout');
+    const v = {total: n[1], ooo: n[2], rentable: n[3], sold: n[4], stay: n[5], dep: n[6], arr: n[7], dayuse: n[8], gtd: n[9], nongtd: n[10], group: n[11], left: n[12], occ: n[13], rev: n[14], adr: n[15]};
+    // the report's own occupancy must match its rooms, or the columns were read wrong
+    if (v.rentable > 0 && Math.abs((v.rentable - v.left) / v.rentable * 100 - v.occ) > 1.5) throw new Error('layout');
+    rows.push({d: `${d[3]}-${d[1]}-${d[2]}`, v});
+  }
+  if (!rows.length) throw new Error('layout');
+  return {kind: 'forecast', asof, code: hm[2], hotel: hm[1], rows};
+}
+// a forecast day's rooms on the books (group blocks included, as the report's own occupancy counts them)
+const fcBooked = v => v && v.rentable != null && v.left != null ? Math.max(0, v.rentable - v.left) : 0;
 // period: 0 yesterday, 1 month to date, 2 year to date; ly adds 3
 function kpiCalc(list, p, ly){
   const i = p + (ly ? 3 : 0), sum = k => list.reduce((s, v) => s + (v[k] ? +v[k][i] || 0 : 0), 0);
@@ -8055,7 +8097,7 @@ function kpiCalc(list, p, ly){
     walkin: sum('walkin'), avail, paid};
 }
 const KPI = {data: null, at: 0, loading: false, busy: false, per: 0, metric: 'occ', err: '', missing: false};
-const kpiAllowed = () => !!(S.me && (S.owner || S.me.role === 'mgr' || S.me.role === 'sub'));
+function kpiAllowed(){ return !!(S.me && (typeof S.kpiOk === 'boolean' ? S.kpiOk : (S.owner || S.me.role === 'mgr'))); }
 const kpiMoney = v => v == null ? '—' : '$' + Number(v).toLocaleString(LOC(), {minimumFractionDigits: 2, maximumFractionDigits: 2});
 const kpiMoney0 = v => v == null ? '—' : '$' + Number(v).toLocaleString(LOC(), {maximumFractionDigits: 0});
 const kpiPct = v => v == null ? '—' : Number(v).toLocaleString(LOC(), {minimumFractionDigits: 1, maximumFractionDigits: 1}) + '%';
@@ -8126,15 +8168,43 @@ function kpiTable(D, hotels, metric){
     rows.push(`<tr><td>${esc(kpiDayLbl(d))}</td>${list.map(v => `<td>${v && v[metric] ? f(v[metric][0]) : '—'}</td>`).join('')}${hotels.length > 1 ? `<td><b>${tot == null ? '—' : f(tot)}</b></td>` : ''}</tr>`); }
   return `<div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th>${L2('Day', 'Día')}</th>${hotels.map(h => `<th>${esc(hotelShort(h.id))}</th>`).join('')}${hotels.length > 1 ? `<th>Total</th>` : ''}</tr></thead><tbody>${rows.join('')}</tbody></table></div>`;
 }
+// what's on the books: the newest Forecast of each hotel, next 7 days, rest of the month, and pick-up since the report before
+function kpiFc(D, hotels){
+  if (!Array.isArray(D.fc)) return '';
+  const today = D.today || mpToday(), cur = new Map(), prev = new Map(), asof = new Map();
+  D.fc.forEach(r => { (r.n === 1 ? cur : prev).set(r.hotel + '|' + r.day, r.v); if (r.n === 1) asof.set(r.hotel, r.as_of); });
+  const hs = hotels.filter(h => asof.has(h.id));
+  const title = `<div class="kptrh"><h3 class="srh">${L2('On the books (Forecast)', 'En libros (Forecast)')}</h3></div>`;
+  if (!hs.length) return `<div class="card kpfc">${title}<div class="dnone">${L2('No Forecast yet. It comes in from the morning email, or drop the PDF below.', 'Aún no hay Forecast. Llega del correo de la mañana, o suelta abajo el PDF.')}</div></div>`;
+  const end = (() => { const d = new Date(Date.parse(today + 'T12:00:00Z')); return new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth() + 1, 0, 12)).toISOString().slice(0, 10); })();
+  const span = (ids, from, to, m) => { let b = 0, r = 0, rev = 0, any = false;
+    for (let d = from; d <= to; d = kpiAdd(d, 1)) for (const id of ids) { const v = m.get(id + '|' + d); if (!v) continue; any = true; b += fcBooked(v); r += v.rentable || 0; rev += v.rev || 0; }
+    return any ? {occ: r ? b / r * 100 : null, booked: b, rev} : null; };
+  const pick = ids => { let a = 0, b = 0, any = false;
+    for (const [k, v] of cur) { const [id] = k.split('|'); if (!ids.includes(id) || !prev.has(k)) continue; any = true; a += fcBooked(v); b += fcBooked(prev.get(k)); }
+    if (!any) return '—'; const d = a - b; return `<span class="kpd ${d >= 0 ? 'up' : 'down'}">${d > 0 ? '+' : d < 0 ? '−' : ''}${kpiInt(Math.abs(d))}</span>`; };
+  const scopes = (hs.length > 1 ? [[L2('Total', 'Total'), hs.map(h => h.id)]] : []).concat(hs.map(h => [hotelShort(h.id), [h.id]]));
+  const sum = scopes.map(([n, ids]) => { const w = span(ids, today, kpiAdd(today, 6), cur), m = span(ids, today, end, cur);
+    return `<tr${ids.length > 1 ? ' class="kpfctot"' : ''}><td>${esc(n)}</td><td>${w ? kpiPct(w.occ) : '—'}</td><td>${m ? kpiPct(m.occ) : '—'}</td><td>${m ? kpiMoney0(m.rev) : '—'}</td><td>${pick(ids)}</td></tr>`; }).join('');
+  const days = []; for (let i = 0; i < 14; i++) days.push(kpiAdd(today, i));
+  const rows = days.map(d => { const list = hs.map(h => cur.get(h.id + '|' + d)); if (list.every(v => !v)) return '';
+    const b = list.reduce((s, v) => s + fcBooked(v), 0), r = list.reduce((s, v) => s + (v ? v.rentable || 0 : 0), 0);
+    return `<tr><td>${esc(kpiDayLbl(d))}</td>${list.map(v => `<td>${v ? kpiPct(v.occ) : '—'}</td>`).join('')}${hs.length > 1 ? `<td><b>${r && list.every(Boolean) ? kpiPct(b / r * 100) : '—'}</b></td>` : ''}</tr>`; }).join('');
+  const lastAs = [...asof.values()].sort().pop();
+  return `<div class="card kpfc"><div class="kptrh"><h3 class="srh">${L2('On the books (Forecast)', 'En libros (Forecast)')}</h3><span class="kprep">${esc(L2('Report of ', 'Reporte del ') + kpiDayLbl(lastAs, {month: 'short', day: 'numeric'}))}</span></div>
+    <div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th></th><th>${L2('Next 7 days', 'Próximos 7 días')}</th><th>${L2('Rest of month', 'Resto del mes')}</th><th>${L2('Room revenue, rest of month', 'Ingreso de cuartos, resto del mes')}</th><th>${L2('Pick-up', 'Pick-up')}</th></tr></thead><tbody>${sum}</tbody></table></div>
+    <p class="small kpfcn">${L2('Occupancy on the books, group blocks included. Pick-up: rooms gained or lost since the report before.', 'Ocupación en libros, con bloqueos de grupo. Pick-up: cuartos ganados o perdidos desde el reporte anterior.')}</p>
+    ${rows ? `<div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th>${L2('Day', 'Día')}</th>${hs.map(h => `<th>${esc(hotelShort(h.id))}</th>`).join('')}${hs.length > 1 ? '<th>Total</th>' : ''}</tr></thead><tbody>${rows}</tbody></table></div>` : ''}</div>`;
+}
 function kpiRender(){
   const box = $('#kpBody'); if (!box) return;
-  const D = KPI.data, head = `<div class="enghead"><div class="grow"><h2>KPI</h2><div class="sub">${L2('From each hotel’s SynXis Statistics report. Only managers see this.', 'Del reporte Statistics de SynXis de cada hotel. Solo lo ven los gerentes.')}</div></div></div>`;
+  const D = KPI.data, head = `<div class="enghead"><div class="grow"><h2>KPI</h2><div class="sub">${L2('From each hotel’s SynXis Statistics and Forecast reports. Only managers see this.', 'De los reportes Statistics y Forecast de SynXis de cada hotel. Solo lo ven los gerentes.')}</div></div></div>`;
   const drop = `<label class="dfdrop kpdrop" data-kpdrop><input type="file" hidden data-kpin accept="application/pdf,.pdf" multiple>
-    <span>${KPI.busy ? L2('Reading the report…', 'Leyendo el reporte…') : L2('Drop one or more Statistics PDFs here, or click to choose them.', 'Suelta aquí uno o varios PDF de Statistics, o haz clic para elegirlos.')}</span></label>`;
+    <span>${KPI.busy ? L2('Reading the report…', 'Leyendo el reporte…') : L2('Drop Statistics or Forecast PDFs here, or click to choose them.', 'Suelta aquí PDF de Statistics o Forecast, o haz clic para elegirlos.')}</span></label>`;
   if (KPI.missing) { box.innerHTML = head + `<div class="card"><div class="dnone">${L2('KPI isn’t ready on the server yet.', 'KPI todavía no está listo en el servidor.')}</div></div>`; return; }
   if (!D) { box.innerHTML = head + `<div class="card"><div class="dnone">${KPI.err ? esc(L2('Couldn’t load the numbers. Try again in a moment.', 'No se pudieron cargar los números. Intenta de nuevo en un momento.')) : L2('Loading…', 'Cargando…')}</div></div>`; return; }
   const hotels = D.hotels || [], by = kpiLatest(D);
-  if (!by.size) { box.innerHTML = head + `<div class="card"><div class="dnone">${L2('No reports yet. They come in from the Statistics email, or drop the PDF here.', 'Aún no hay reportes. Llegan del correo de Statistics, o suelta aquí el PDF.')}</div>${drop}</div>`; return; }
+  if (!by.size) { box.innerHTML = head + ((D.fc || []).length ? kpiFc(D, hotels) : '') + `<div class="card"><div class="dnone">${L2('No reports yet. They come in from the morning emails, or drop the PDF here.', 'Aún no hay reportes. Llegan de los correos de la mañana, o suelta aquí el PDF.')}</div>${drop}</div>`; return; }
   const p = KPI.per, newest = [...by.values()].reduce((m, r) => r.day > m ? r.day : m, '');
   const perL = [[0, L2('Yesterday', 'Ayer')], [1, L2('Month to date', 'Mes')], [2, L2('Year to date', 'Año')]];
   const seg = `<div class="seg kpseg" role="group" aria-label="${esc(L2('Period', 'Periodo'))}">${perL.map(([v, l]) => `<button type="button" data-kpper="${v}" aria-pressed="${v === p}">${esc(l)}</button>`).join('')}</div>`;
@@ -8151,19 +8221,22 @@ function kpiRender(){
   box.innerHTML = head + `<div class="kptop">${seg}<span class="kpwhen">${esc(when)}</span></div>
     ${lacking.length && fresh.length ? `<div class="kpwarn">${esc(L2('Missing the ' + kpiDayLbl(newest, {month: 'short', day: 'numeric'}) + ' report for: ', 'Falta el reporte del ' + kpiDayLbl(newest, {day: 'numeric', month: 'short'}) + ' de: ') + lacking.join(', '))}</div>` : ''}
     <div class="kpgrid">${cards}</div>
+    ${kpiFc(D, hotels)}
     <div class="card kptrend"><div class="kptrh"><h3 class="srh">${L2('Last 30 days', 'Últimos 30 días')}</h3>${mchips}</div>${kpiChart(D, hotels, KPI.metric)}${kpiTable(D, hotels, KPI.metric)}</div>
     <div class="card">${drop}</div>`;
 }
 const KPI_ERR = {UNKNOWN_HOTEL: ["That report isn't from one of our hotels.", 'Ese reporte no es de uno de nuestros hoteles.'], WRONG_HOTEL: ["That report is from a hotel you don't use.", 'Ese reporte es de un hotel que tú no usas.'],
   BAD_DAY: ["The report's date doesn't look right.", 'La fecha del reporte no se ve bien.'], BAD_ROW: ["Some numbers in the report don't look right.", 'Algunos números del reporte no se ven bien.'],
-  MANAGER_ONLY: ['Only managers can upload these reports.', 'Solo los gerentes pueden subir estos reportes.'], forecast: ["That's a Forecast. Here it takes the Statistics report.", 'Ese es un Forecast. Aquí va el reporte Statistics.'],
-  kind: ["That isn't a Statistics report.", 'Ese no es un reporte Statistics.']};
+  MANAGER_ONLY: ['Only managers can upload these reports.', 'Solo los gerentes pueden subir estos reportes.'],
+  kind: ["That isn't a Statistics or Forecast report.", 'Ese no es un reporte Statistics ni Forecast.']};
 async function kpiTake(files){
   const list = [...(files || [])].filter(Boolean); if (!list.length || KPI.busy) return;
   KPI.busy = true; kpiRender(); const done = [], bad = [];
   for (const f of list.slice(0, 40)) {
     try {
-      let rep; try { rep = kpiParse(await pdfLines(new Uint8Array(await f.arrayBuffer()), inflateRaw)); } catch (e) { throw new Error(KPI_ERR[e.message] ? e.message : 'read'); }
+      let rep, pages; try { pages = await pdfLines(new Uint8Array(await f.arrayBuffer()), inflateRaw); rep = kpiParse(pages); }
+      catch (e) { if (e.message === 'forecast') { try { rep = fcParse(pages); } catch { throw new Error('read'); } } else throw new Error(KPI_ERR[e.message] ? e.message : 'read'); }
+      if (rep.kind === 'forecast') { const r = await call('sc_fc_put', {p_asof: rep.asof, p_code: rep.code, p_rows: rep.rows}); done.push('Forecast ' + hotelShort(r.hotel)); continue; }
       const r = await call('sc_kpi_put', {p_day: rep.day, p_code: rep.code, p_v: rep.v});
       done.push(hotelShort(r.hotel) + ' ' + kpiDayLbl(rep.day, {month: 'short', day: 'numeric'}));
     } catch (e) { const m = KPI_ERR[e.message]; bad.push(f.name + ': ' + (m ? L2(m[0], m[1]) : L2("couldn't read it", 'no se pudo leer'))); }
@@ -8188,7 +8261,7 @@ async function kpiTake(files){
 })();
 setInterval(() => { if (S.me && S.tab === 'kpi' && !document.hidden) kpiLoad(true); }, 300e3);
 window.addEventListener('resize', () => { if (S.tab === 'kpi' && KPI.data) { clearTimeout(KPI.rz); KPI.rz = setTimeout(kpiRender, 200); } });
-window.__fsKpi = {kpiParse, kpiCalc, KPI};
+window.__fsKpi = {kpiParse, fcParse, kpiCalc, kpiLoad, KPI};
 /* ---- the Menu's categories: Operations, Front Office and Housekeeping (1.19.0). 'res' stays the Front Office key so saved choices keep working ---- */
 const MCATS = [['ops', 'Operations', 'Operations'], ['res', 'Front Office', 'Front Office'], ['hk', 'Housekeeping', 'Housekeeping']];
 const CAT_TABS = {res: ['passon', 'srep', 'orders', 'resv', 'guests', 'pkgs'], hk: ['laundry', 'hkplan', 'board']};
