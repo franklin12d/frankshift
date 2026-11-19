@@ -1746,6 +1746,67 @@ details.kpmore[open] summary{margin-bottom:8px}
   .kpvsc .kptrh .kpseg button{flex:1 1 auto;white-space:nowrap;padding-inline:10px}
 }
 .kpsub{margin:16px 0 0;font:600 13px var(--f-body);color:var(--ink-2)}
+/* 1.27.0: Salidas de hoy for Front desk */
+.bdfdw{display:grid;grid-template-columns:minmax(0,1fr);gap:12px;margin-top:12px}
+.bdfdm,.bdfds,.bdfds .card{min-width:0}
+.bdfdbar .bdchips{min-width:0}
+.bdclk span{min-width:0;overflow-wrap:anywhere}
+#view-board .inner:has(.bdfdw){max-width:1320px}
+.bdfdw .bdout{margin-top:0}
+.bdfds{display:grid;gap:12px;order:-1}
+.bdfds .card{margin:0;padding:12px 14px}
+@media (min-width:640px){.bdfds{grid-template-columns:1fr 1fr}}
+@media (min-width:1560px){.bdfdw{grid-template-columns:minmax(0,1fr) 290px;align-items:start}.bdfds{order:0;grid-template-columns:1fr;position:sticky;top:12px}}
+.bdclk{display:grid;grid-template-columns:auto 1fr;grid-template-areas:"t t" "n s";align-items:center;gap:2px 12px;margin:10px 0 12px;padding:12px 14px;border-radius:16px;background:linear-gradient(135deg,var(--accent),color-mix(in srgb,var(--accent) 70%,#000));color:#fff}
+.bdclk span:first-child{grid-area:t;font:700 13px var(--f-body);opacity:.9}
+.bdclk b{grid-area:n;font:800 30px var(--f-body);font-variant-numeric:tabular-nums;line-height:1.1}
+.bdclk span:last-child{grid-area:s;font-size:14px;line-height:1.3}
+.bdclk.past{background:var(--surface-2);color:var(--ink);border:1px solid var(--line)}
+.bdclk.past.bad{background:#DC2626;color:#fff;border-color:#DC2626}
+.bdfdbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-bottom:10px}
+.bdfdbar .bdchips{flex:1 1 420px;margin:0}
+@media (min-width:700px){.bdfdbar .bdchips{flex-wrap:wrap;overflow:visible}}
+.bdfdtabs i{display:inline-block;min-width:22px;padding:1px 6px;margin-left:6px;border-radius:999px;background:var(--surface);color:var(--ink);font:800 12px var(--f-body);text-align:center;opacity:1}
+.bdfdtabs button[aria-pressed="true"] i{background:var(--accent);color:#fff}
+.bdfdtabs button[data-k="verify"] i{background:#DC2626;color:#fff}
+.bdfdtabs button[data-k="unconf"] i{background:#D97706;color:#fff}
+.bdfdtabs button[data-k="pms"] i{background:#16A34A;color:#fff}
+.bdfdq{flex:0 1 180px;min-width:140px}
+.bdfdq input{width:100%;min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--surface-2);color:var(--ink);font-size:16px;padding:0 12px}
+.bdfdl{container-type:inline-size;display:flex;flex-direction:column;gap:8px}
+.bdfr{--bc:var(--line);display:grid;grid-template-columns:1fr 1fr;gap:8px;padding:10px 12px;border:1px solid var(--line);border-left:5px solid var(--bc);border-radius:14px;background:var(--surface)}
+.bdfr[data-st="verify"]{--bc:#DC2626;background:color-mix(in srgb,#EF4444 9%,var(--surface))}
+.bdfr[data-st="ext"]{--bc:#7C3AED;background:color-mix(in srgb,#7C3AED 7%,var(--surface))}
+.bdfr[data-st="ready"],.bdfr[data-st="cleaning"],.bdfr[data-st="paused"],.bdfr[data-st="insp"]{--bc:var(--accent)}
+.bdfr[data-st="vacant"]{--bc:#16A34A}
+.bdfr .fc{min-width:0;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.bdfr .fcr,.bdfr .fch{grid-column:1/-1}
+.bdfr .fcr .bdnum{font-size:22px}
+.bdfr .fch small{font-size:12.5px;color:var(--ink-2)}
+.bdfr .btn.bdtog{width:100%;min-height:48px;font-size:15px;font-weight:800;border-radius:12px}
+.bdfr .btn.bdtog[aria-pressed="true"]{background:#16A34A;border-color:#16A34A;color:#fff}
+.bdfr .bdsel{width:100%;min-height:46px;font-size:15px}
+.bdfr .bdsel.on{border-color:#0369A1;background:color-mix(in srgb,#0369A1 9%,var(--surface));font-weight:700}
+.bdfr .bdsel.x-pending{border-color:#7C3AED;background:color-mix(in srgb,#7C3AED 10%,var(--surface))}
+.bdfr .bdno{color:var(--ink-3)}
+.bdfr .fc[data-l]::before{content:attr(data-l);flex-basis:100%;font:600 11.5px var(--f-body);color:var(--ink-3)}
+.bdfh{display:none}
+@container (min-width:900px){
+  .bdfr{grid-template-columns:140px 120px 136px 156px 176px minmax(120px,1fr);align-items:center;padding:8px 12px}
+  .bdfr .fcr,.bdfr .fch{grid-column:auto}
+  .bdfr .fc[data-l]::before{display:none}
+  .bdfr .btn.bdtog{min-height:42px}
+  .bdfr .bdsel{min-height:42px}
+  .bdfh{display:grid;border:0;background:none;padding:0 12px 0 17px;font:700 12px var(--f-body);color:var(--ink-3);text-transform:uppercase;letter-spacing:.04em}
+  .bdfh .fc{display:block}
+}
+.bdfdnone{padding:12px 2px}
+.bdpadc{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.bdpadc button{font:800 17px var(--f-body);min-height:44px;padding:0 14px;border-radius:12px;border:1px solid #16A34A;background:color-mix(in srgb,#16A34A 13%,var(--surface));color:var(--ink);cursor:pointer}
+.bdpend .bdpadc button{border-color:#7C3AED;background:color-mix(in srgb,#7C3AED 12%,var(--surface))}
+.bdpend.on{border-color:#7C3AED}
+.bdpadok{margin-top:8px;font-size:14px;color:var(--ok)}
+.bdpad h3,.bdpend h3{display:flex;align-items:center;gap:8px}
 </style>
 </head>
 <body>
@@ -5115,8 +5176,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.26.1';
+const APP_VERSION = '1.27.0';
 const CHANGES = [
+  {v: '1.27.0', d: '2026-11-19', en: ['Board: Today’s check-outs for Front desk, laid out like a notepad: a table on a computer and big cards on a phone', 'A countdown to 11:00 AM with how many check-outs are still not confirmed; after 11:00, how many are to verify', 'Tabs with counts: Not confirmed, To verify, Late check out, Extensions, Vacant still in the system, Stayovers, and a box to find a room by number', 'Your notepad: vacant rooms not yet checked out in the system; tap one when you check it out', 'Extensions not confirmed on the side, since housekeeping does not go in while one is pending', 'A late check out whose time passed shows as Late passed, in red'],
+    es: ['Board: Salidas de hoy para Front desk, como un bloc de notas: una tabla en la computadora y tarjetas grandes en el teléfono', 'Una cuenta regresiva a las 11:00 AM con cuántas salidas faltan por confirmar; después de las 11:00, cuántas hay por verificar', 'Pestañas con números: Sin confirmar, Por verificar, Late check out, Extensiones, Vacías sin sacar del sistema, Stayovers, y una caja para buscar un cuarto por número', 'Tu bloc de notas: los cuartos vacíos que todavía no sacaste del sistema; toca uno cuando lo saques', 'Las extensiones sin confirmar al lado, porque housekeeping no entra mientras una esté pendiente', 'Un late check out cuya hora pasó sale como Late vencido, en rojo']},
   {v: '1.26.1', d: '2026-11-16', en: ['KPI: each hotel band now says “Synxis report:” with the date and time of its last update'], es: ['KPI: la banda de cada hotel ahora dice “Reporte Synxis:” con la fecha y hora de su última actualización']},
   {v: '1.26.0', d: '2026-11-16', en: ['New look: lavender and white with purple, rounder cards, and on a computer a purple menu on the left', 'Dark mode is near black with purple and yellow', 'Each hotel has its own color everywhere: Maingate red, Fundamental green, Highway blue', 'KPI: every hotel card has a band in its color with the hotel name, and occupancy as a ring', 'KPI: room revenue by hotel as a donut, and each number against last year as bars', 'KPI: the Forecast as bars for the next 7 days and the rest of the month, and the next 14 days as columns with the fullest day marked', 'KPI: the 30-day trend as smooth lines; point at or tap a day to see each hotel’s number'],
     es: ['Nuevo estilo: lavanda y blanco con morado, tarjetas más redondas y, en la computadora, el menú de la izquierda en morado', 'El modo oscuro es casi negro con morado y amarillo', 'Cada hotel tiene su color en todo el app: Maingate rojo, Fundamental verde, Highway azul', 'KPI: cada tarjeta de hotel tiene una cinta de su color con el nombre del hotel, y la ocupación como anillo', 'KPI: ingreso de cuartos por hotel en una dona, y cada número contra el año pasado en barras', 'KPI: el Forecast con barras para los próximos 7 días y el resto del mes, y los próximos 14 días en columnas con el día más lleno marcado', 'KPI: la tendencia de 30 días con líneas suaves; señala o toca un día para ver el número de cada hotel']},
@@ -6470,27 +6533,79 @@ function bdStripHtml(){
     ${done.length ? `<h3 class="srh bdsub">${esc(L2('Stripped today', 'Stripeados hoy'))}</h3>` + done.map(r => `<div class="bdrow done" data-st="${r.status}"><b class="bdnum">${esc(r.room)}</b><span class="grow">${esc((r.stripped_by || '') + ' · ' + fmtTime(T(r.stripped_at)))}</span><span class="bdst" data-st="${r.status}">${esc(bdSt(r.status))}</span></div>`).join('') : ''}
   </div>`;
 }
-// Front desk: today's check-outs, verify first, then occupied by late check out time, then the vacant ones
+// 1.27.0: Salidas de hoy for Front desk, a notepad like Arian's Room Clean: filters with counts, room search, the time left to 11:00,
+// vacant rooms still in the system, extensions not confirmed. A table on a computer, cards on a phone
+let BDF = 'all', BDQ = '';
+const BD_CO = 11 * 60;
+const bdNyMin = () => { try { const p = new Intl.DateTimeFormat('en-US', {timeZone: 'America/New_York', hour: 'numeric', minute: 'numeric', hourCycle: 'h23'}).formatToParts(new Date(bdNow()));
+  const g = t => +((p.find(x => x.type === t) || {}).value || 0); return (g('hour') % 24) * 60 + g('minute'); } catch { const d = new Date(bdNow()); return d.getHours() * 60 + d.getMinutes(); } };
+const bdUnconf = r => bdOut(r) && r.ext === 'none' && !r.late_at;                 // guest in the room, nothing marked yet: goes to To verify at 11:00
+const bdTakeOut = r => r.kind === 'co' && r.occ === 'vacant' && !r.pms_out;          // vacant for the team, still in the reservation system
+const BD_FDF = [['all', 'Check-outs', 'Salidas', r => r.kind === 'co' || r.ext !== 'none'], ['unconf', 'Not confirmed', 'Sin confirmar', bdUnconf],
+  ['verify', 'To verify', 'Por verificar', r => !!r.verify], ['late', 'Late check out', 'Late check out', r => r.kind === 'co' && !!r.late_at],
+  ['ext', 'Extensions', 'Extensiones', r => r.ext !== 'none'], ['pms', 'Vacant, still in the system', 'Vacías sin sacar del sistema', bdTakeOut],
+  ['so', 'Stayovers', 'Stayovers', r => r.kind === 'so']];
+function bdFdClock(){
+  if (!BD || BD.date !== BD.today) return '';
+  const rooms = BD.rooms || [], left = BD_CO - bdNyMin(), un = rooms.filter(bdUnconf).length, v = rooms.filter(r => r.verify).length;
+  if (left > 0) return `<div class="bdclk" id="bdClk"><span>${esc(L2('At 11:00 AM the check-outs not confirmed go to To verify', 'A las 11:00 AM las salidas sin confirmar pasan a Por verificar'))}</span>
+      <b>${left >= 60 ? Math.floor(left / 60) + ' h ' : ''}${left % 60} min</b>
+      <span>${esc(un ? L2(`${un} still not confirmed. Mark Vacant, Late check out or Extension.`, `Quedan ${un} sin confirmar. Marca Vacía, Late check out o Extensión.`) : L2('Every check-out is confirmed.', 'Todas las salidas están confirmadas.'))}</span></div>`;
+  return `<div class="bdclk past${v ? ' bad' : ''}" id="bdClk"><span>${esc(L2('Check-out time (11:00 AM) has passed', 'Ya pasó la hora de salida (11:00 AM)'))}</span><b>${v}</b>
+      <span>${esc(v ? L2('to verify. Call or knock, then mark Vacant, Late check out or Extension.', 'por verificar. Llama o toca la puerta, y marca Vacía, Late check out o Extensión.') : L2('Nothing to verify.', 'Nada por verificar.'))}</span></div>`;
+}
+function bdFdBadges(r){
+  const b = [];
+  if (r.verify) b.push(`<span class="bdb bdbv">${esc(r.late_at ? L2('Late ' + bdHM(r.late_at) + ' passed', 'Late ' + bdHM(r.late_at) + ' vencido') : L2('To verify', 'Por verificar'))}</span>`);
+  if (r.ext === 'pending') b.push(`<span class="bdb bdbx">${esc(L2('Extension?', '¿Extensión?'))}</span>`);
+  else if (r.ext === 'yes') b.push(`<span class="bdb">${esc(L2('Extended', 'Extendida'))}</span>`);
+  if (r.returns && r.status !== 'returned') b.push(`<span class="bdb">${esc(L2('Sent back ', 'Devuelto ') + r.returns + '×')}</span>`);
+  return b.join('');
+}
+function bdFdRow(r){
+  const id = esc(r.id), co = r.kind === 'co', open = co && r.status === 'dirty', no = `<span class="bdno" aria-hidden="true">—</span>`;
+  const vac = co ? `<button class="btn bdtog" type="button" ${open ? '' : 'disabled'} data-bdocc="${id}" aria-pressed="${r.occ === 'vacant'}">${r.occ === 'vacant' ? '✓ ' + esc(L2('Vacant', 'Vacía')) : esc(L2('Occupied', 'Ocupada'))}</button>` : no;
+  const pms = co ? `<button class="btn bdtog" type="button" data-bdpms="${id}" aria-pressed="${!!r.pms_out}">${r.pms_out ? '✓ ' + esc(L2('Out', 'Sacada')) : esc(L2('In the system', 'En el sistema'))}</button>` : no;
+  const late = co ? `<select class="bdsel${r.late_at ? ' on' : ''}" data-bdlate="${id}" aria-label="${esc(L2('Late check out of ', 'Late check out de la ') + r.room)}" ${open && r.occ !== 'vacant' ? '' : 'disabled'}><option value="">${esc(L2('No late', 'Sin late'))}</option>${BD_LATE.map(t => `<option value="${t}" ${r.late_at === t ? 'selected' : ''}>Late ${bdHM(t)}</option>`).join('')}</select>` : no;
+  const ext = co || r.ext !== 'none' ? `<select class="bdsel${r.ext !== 'none' ? ' on x-' + r.ext : ''}" data-bdext="${id}" aria-label="${esc(L2('Extension of ', 'Extensión de la ') + r.room)}">${[['none', 'No extension', 'Sin extensión'], ['pending', 'Extension?', '¿Extensión?'], ['yes', 'Extended', 'Extendida']].map(([k, en, es]) => `<option value="${k}" ${r.ext === k ? 'selected' : ''}>${esc(L2(en, es))}</option>`).join('')}</select>` : no;
+  const who = (r.to_name || L2('No housekeeper yet', 'Sin housekeeper')) + (r.vacated_by && r.occ === 'vacant' && co ? ' · ' + L2('Vacant by ', 'Vacía por ') + r.vacated_by + ' ' + fmtTime(T(r.vacated_at)) : '');
+  return `<div class="bdfr" data-st="${r.verify ? 'verify' : r.ext === 'pending' ? 'ext' : r.status}" data-bdid="${id}">
+    <div class="fc fcr"><b class="bdnum">${esc(r.room)}</b><span class="bdkind">${co ? 'CO' : 'SO'}</span>${bdFdBadges(r)}</div>
+    <div class="fc fcv" data-l="${esc(L2('Guest', 'Huésped'))}">${vac}</div>
+    <div class="fc fcp" data-l="${esc(L2('System', 'Sistema'))}">${pms}</div>
+    <div class="fc fcl" data-l="Late check out">${late}</div>
+    <div class="fc fce" data-l="${esc(L2('Extension', 'Extensión'))}">${ext}</div>
+    <div class="fc fch"><span class="bdst" data-st="${r.status}">${esc(bdOut(r) ? L2('Waiting for check-out', 'Esperando salida') : bdSt(r.status))}</span><small>${esc(who)}</small></div></div>`;
+}
+function bdFdList(){
+  const rooms = BD.rooms || [], q = BDQ.trim(), f = BD_FDF.find(x => x[0] === BDF) || BD_FDF[0];
+  const rank = r => r.verify ? 0 : r.ext === 'pending' ? 1 : bdUnconf(r) ? 2 : bdOut(r) ? 3 : r.kind === 'co' && r.status === 'dirty' ? 4 : r.kind === 'so' ? 6 : 5;
+  const list = (q ? rooms.filter(r => r.room.startsWith(q)) : rooms.filter(f[3])).sort((a, b) => rank(a) - rank(b) || bdLateMin(a) - bdLateMin(b) || +a.room - +b.room);
+  const head = `<div class="bdfr bdfh" aria-hidden="true"><div class="fc">${esc(L2('Room', 'Cuarto'))}</div><div class="fc">${esc(L2('Guest', 'Huésped'))}</div><div class="fc">${esc(L2('System', 'Sistema'))}</div><div class="fc">Late check out</div><div class="fc">${esc(L2('Extension', 'Extensión'))}</div><div class="fc">Housekeeping</div></div>`;
+  if (list.length) return head + list.map(bdFdRow).join('');
+  if (q) return `<div class="small bdfdnone">${esc(L2(`Room ${q} is not on today’s board.`, `El cuarto ${q} no está en el board de hoy.`))}</div>`;
+  if (!rooms.some(BD_FDF[0][3])) return `<div class="small bdfdnone">${esc(L2('No check-outs on the board yet. Tap Add check-outs and pick today’s departures.', 'Todavía no hay salidas en el board. Toca Agregar salidas y elige las salidas de hoy.'))}</div>`;
+  return `<div class="small bdfdnone">${esc(L2('Nothing here right now.', 'Nada aquí por ahora.'))}</div>`;
+}
 function bdOutHtml(){
-  const rooms = BD.rooms || [], outs = rooms.filter(r => r.kind === 'co' || r.ext !== 'none');
-  const rank = r => r.verify ? 0 : r.ext === 'pending' ? 1 : bdOut(r) ? 2 : r.status === 'dirty' ? 3 : 4;
-  const list = [...outs].sort((a, b) => rank(a) - rank(b) || bdLateMin(a) - bdLateMin(b) || +a.room - +b.room);
-  const v = outs.filter(r => r.verify).length, today = BD.date === BD.today;
-  const row = r => {
-    const id = esc(r.id), open = r.kind === 'co' && r.status === 'dirty';
-    const late = `<select class="bdsel" data-bdlate="${id}" aria-label="${esc(L2('Late check out of ', 'Late check out de la ') + r.room)}" ${open && r.occ !== 'vacant' ? '' : 'disabled'}><option value="">${esc(L2('No late check out', 'Sin late check out'))}</option>${BD_LATE.map(t => `<option value="${t}" ${r.late_at === t ? 'selected' : ''}>Late ${bdHM(t)}</option>`).join('')}</select>`;
-    const ext = `<select class="bdsel" data-bdext="${id}" aria-label="${esc(L2('Extension of ', 'Extensión de la ') + r.room)}">${[['none', 'No extension', 'Sin extensión'], ['pending', 'Extension? (asking)', '¿Extensión? (preguntando)'], ['yes', 'Extended: stays', 'Extendida: se queda']].map(([k, en, es]) => `<option value="${k}" ${r.ext === k ? 'selected' : ''}>${esc(L2(en, es))}</option>`).join('')}</select>`;
-    return `<div class="bdcard bdfd" data-st="${r.verify ? 'verify' : r.status}" data-bdid="${id}">
-      <div class="bdtop"><b class="bdnum">${esc(r.room)}</b>${bdBadges(r)}<span class="bdst" data-st="${r.status}">${esc(bdSt(r.status))}</span></div>
-      <div class="bdmeta">${esc((r.to_name || L2('No housekeeper yet', 'Sin housekeeper todavía')) + (r.vacated_by && r.occ === 'vacant' ? ' · ' + L2('Vacant by ', 'Vacía por ') + r.vacated_by + ' ' + fmtTime(T(r.vacated_at)) : ''))}</div>
-      ${r.kind === 'co' ? `<div class="bdacts bdfdbtns">
-        <button class="btn bdbig bdtog" type="button" ${open ? '' : 'disabled'} data-bdocc="${id}" aria-pressed="${r.occ === 'vacant'}">${r.occ === 'vacant' ? '✓ ' : ''}${esc(L2('Vacant', 'Vacía'))}</button>
-        <button class="btn bdbig bdtog" type="button" data-bdpms="${id}" aria-pressed="${!!r.pms_out}">${r.pms_out ? '✓ ' : ''}${esc(L2('Out of system', 'Fuera del sistema'))}</button></div>` : ''}
-      <div class="bdfdsel">${r.kind === 'co' ? late : ''}${ext}</div></div>`;
-  };
-  return `<div class="card bdout"><div class="bdhead"><h3 class="srh">${esc(L2('Today’s check-outs', 'Salidas de hoy'))}</h3><span class="bdsum">${outs.length}</span>${today ? `<button class="btn pri sm" type="button" id="bdDeps">${esc(L2('Add check-outs', 'Agregar salidas'))}</button>` : ''}</div>
-    ${v ? `<div class="bdverify">${esc(L2(`${v} to verify: past 11:00 with no late check out. Call or knock, then mark Vacant, Late or Extension.`, `${v} por verificar: pasaron las 11:00 sin late check out. Llama o toca la puerta, y marca Vacía, Late o Extensión.`))}</div>` : ''}
-    ${list.length ? list.map(row).join('') : `<div class="small">${esc(L2('No check-outs on the board yet. Tap Add check-outs and pick today’s departures.', 'Todavía no hay salidas en el board. Toca Agregar salidas y elige las salidas de hoy.'))}</div>`}</div>`;
+  const rooms = BD.rooms || [], today = BD.date === BD.today, outs = rooms.filter(BD_FDF[0][3]);
+  if (!BD_FDF.some(x => x[0] === BDF)) BDF = 'all';
+  const tabs = `<div class="bdchips bdfdtabs" role="group" aria-label="${esc(L2('Show', 'Ver'))}">${BD_FDF.map(([k, en, es, f]) => { const n = rooms.filter(f).length;
+      return k !== 'all' && !n && BDF !== k ? '' : `<button type="button" data-bdff="${k}" data-k="${k}" aria-pressed="${BDF === k && !BDQ}">${esc(L2(en, es))}<i>${n}</i></button>`; }).join('')}</div>`;
+  const take = rooms.filter(bdTakeOut).sort((a, b) => +a.room - +b.room), pend = rooms.filter(r => r.ext === 'pending').sort((a, b) => +a.room - +b.room);
+  return `<div class="bdfdw">
+    <section class="card bdout bdfdm"><div class="bdhead"><h3 class="srh">${esc(L2('Today’s check-outs', 'Salidas de hoy'))}</h3><span class="bdsum">${outs.length}</span>${today ? `<button class="btn pri sm" type="button" id="bdDeps">${esc(L2('Add check-outs', 'Agregar salidas'))}</button>` : ''}</div>
+      ${bdFdClock()}
+      <div class="bdfdbar">${tabs}<label class="bdfdq"><input id="bdFdQ" aria-label="${esc(L2('Find a room', 'Buscar cuarto'))}" type="search" inputmode="numeric" autocomplete="off" placeholder="${esc(L2('Find a room', 'Buscar cuarto'))}" value="${esc(BDQ)}"></label></div>
+      <div class="bdfdl" id="bdFdList">${bdFdList()}</div></section>
+    <aside class="bdfds">
+      <div class="card bdpad"><h3 class="srh">${esc(L2('Your notepad', 'Tu bloc de notas'))} <span class="bdsum">${take.length}</span></h3>
+        <div class="small">${esc(L2('Vacant for the team, but not yet checked out in the system. Tap a room once you check it out.', 'Vacías para el equipo, pero todavía no sacadas del sistema. Toca el cuarto cuando lo saques.'))}</div>
+        ${take.length ? `<div class="bdpadc">${take.map(r => `<button type="button" data-bdpms="${esc(r.id)}" aria-pressed="false" aria-label="${esc(L2('Checked out of the system: ', 'Sacada del sistema: ') + r.room)}">${esc(r.room)} <span aria-hidden="true">✓</span></button>`).join('')}</div>` : `<div class="bdpadok">${esc(L2('Nothing pending.', 'Nada pendiente.'))}</div>`}</div>
+      <div class="card bdpend${pend.length ? ' on' : ''}"><h3 class="srh">${esc(L2('Extensions not confirmed', 'Extensiones sin confirmar'))} <span class="bdsum">${pend.length}</span></h3>
+        ${pend.length ? `<div class="bdpadc">${pend.map(r => `<button type="button" data-bdfq="${esc(r.room)}">${esc(r.room)}</button>`).join('')}</div>` : ''}
+        <div class="small">${esc(L2('Housekeeping does not go in while one is pending. Confirm it or set No extension.', 'Housekeeping no entra mientras esté pendiente. Confírmala o pon Sin extensión.'))}</div></div>
+    </aside></div>`;
 }
 function bdSellHtml(){
   const ok = (BD.rooms || []).filter(r => r.status === 'vacant');
@@ -6723,6 +6838,8 @@ $('#view-board').addEventListener('click', e => {
   const rt = e.target.closest('[data-bdret]'); if (rt) return bdReturn(rt.dataset.bdret);
   const pc = e.target.closest('[data-bdpics]'); if (pc) return bdPics(pc.dataset.bdpics);
   if (e.target.closest('#bdDeps')) return bdDeps();
+  const ff = e.target.closest('[data-bdff]'); if (ff) { BDF = ff.dataset.bdff; BDQ = ''; return bdRender(); }
+  const fq = e.target.closest('[data-bdfq]'); if (fq) { BDQ = fq.dataset.bdfq; bdRender(); const i = $('#bdFdQ'); if (i) i.scrollIntoView({block: 'center', behavior: 'smooth'}); return; }
   if (e.target.closest('#bdSnd')) { S.sound = !S.sound; ls.set('sc.sound', S.sound); try { setSoundIcon(); } catch {} if (S.sound) chime('normal'); return bdRender(); }
   const x = e.target.closest('[data-bdrm]'); if (x) return bdRemove(x.dataset.bdrm);
   if (e.target.closest('#bdAssign')) return bdAssign();
@@ -6735,6 +6852,13 @@ $('#view-board').addEventListener('change', e => {
   if (t.matches('[data-bdext]')) { const id = t.dataset.bdext, v = t.value; t.blur(); BDPend = false; return bdAct(id, 'ext', v, t); }
   if (t.id === 'bdDate' && t.value) { BDDate = t.value; t.blur(); BD = null; bdRender(); bdFetch(); }
 });
+// 1.27.0: the room search on Salidas de hoy filters as you type, without redrawing the rest of the screen
+$('#view-board').addEventListener('input', e => {
+  const t = e.target; if (t.id !== 'bdFdQ' || !BD) return;
+  const v = t.value.replace(/\D/g, '').slice(0, 4); if (v !== t.value) t.value = v; BDQ = v;
+  const l = $('#bdFdList'); if (l) l.innerHTML = bdFdList();
+  document.querySelectorAll('#bdBody [data-bdff]').forEach(b => b.setAttribute('aria-pressed', String(!BDQ && b.dataset.bdff === BDF)));
+});
 $('#view-board').addEventListener('focusout', () => setTimeout(() => { if (BDPend && S.tab === 'board') bdRender(); }, 0));
 // live: every 10 s on the Board, every minute for housekeeping elsewhere; clocks tick every second
 setInterval(() => {
@@ -6746,6 +6870,7 @@ setInterval(() => {
 setInterval(() => {
   if (S.tab !== 'board' || !BD) return;
   document.querySelectorAll('#bdBody [data-bdclock]').forEach(el => { const r = (BD.rooms || []).find(x => x.id === el.dataset.bdclock); if (r) el.textContent = bdClock(bdSecs(r)); });
+  const ck = $('#bdClk'); if (ck && new Date().getSeconds() === 0) ck.outerHTML = bdFdClock();
 }, 1000);
 $('#view-punch').addEventListener('input', e => {
   const t = e.target; if (!MP) return;
