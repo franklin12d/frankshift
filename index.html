@@ -265,7 +265,9 @@ body{margin:0}
 .roghost{position:fixed;z-index:9999;pointer-events:none;padding:8px 14px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font:700 13px var(--f-body);box-shadow:0 10px 30px rgba(0,0,0,.25);transform:translate(12px,12px);white-space:nowrap}
 .rotools{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
 .rohint{font-size:12.5px;color:var(--ink-2);margin-right:4px}
-@media (max-width:899px){.rotools{display:none}}
+/* 1.32.0: Reorder works on a phone too. One column: the arrows move a card up or down, and the card drags by its bar so the page still scrolls */
+@media (max-width:899px){.enghead:has(>.rotools){flex-wrap:wrap}.enghead:has(>.rotools)>.grow{flex-basis:100%}.rotools{width:100%}.rotools .rohint{width:100%;margin:0 0 2px}
+  .roon .roi{touch-action:pan-y;cursor:default}.roon .robar{touch-action:none;cursor:grab}}
 .dgrid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 @media (max-width:1180px){.dgrid2.dwide{grid-template-columns:minmax(0,1fr)}}
 .dcard{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:14px 16px;min-width:0}
@@ -5058,11 +5060,12 @@ const roSt = v => RO[v] || (RO[v] = {on: false, draft: null, def: [], drag: fals
 const roKey = v => 'sc.order.' + v + '.' + (S.me ? S.me.id : '');
 const roSaved = v => { const a = ls.get(roKey(v), null); return Array.isArray(a) && a.every(k => typeof k === 'string') ? a : null; };
 const roDesk = () => window.matchMedia('(min-width:900px)').matches;
+const roOne = () => !window.matchMedia('(min-width:640px)').matches;   // one column of cards: the arrows go up and down
 // a render that would rebuild the cards waits while a card is being dragged
 function roBusy(v){ const st = roSt(v); if (st.drag) { st.pending = true; return true; } return false; }
 // items: [{k, w, t, html}] in the default order. w: full, s3 (a third), h2 (a half), h2w (a half on wide screens), dn/vs (the KPI pair)
 function roGrid(v, items){
-  const st = roSt(v); if (st.on && !roDesk()) { st.on = false; st.draft = null; }
+  const st = roSt(v);
   const list0 = items.filter(i => i && i.html); st.def = list0.map(i => i.k);
   const want = st.on && st.draft ? st.draft : roSaved(v);
   let list = list0;
@@ -5070,13 +5073,13 @@ function roGrid(v, items){
   if (st.on) st.draft = list.map(i => i.k);
   const n = list.length;
   return `<div class="rogrid${st.on ? ' roon' : ''}" data-ro="${v}">${list.map((it, i) => `<div class="roi ro-${it.w || 'full'}" data-rk="${esc(it.k)}">${st.on ? `<div class="robar"><span class="rohd" aria-hidden="true">⠿</span><b>${esc(it.t || '')}</b><span class="grow"></span>
-      <button type="button" class="robtn" data-romv="-1" aria-label="${esc(L2('Move earlier: ', 'Mover antes: ') + (it.t || ''))}"${i === 0 ? ' disabled' : ''}>◀</button><button type="button" class="robtn" data-romv="1" aria-label="${esc(L2('Move later: ', 'Mover después: ') + (it.t || ''))}"${i === n - 1 ? ' disabled' : ''}>▶</button></div>` : ''}${it.html}</div>`).join('')}</div>`;
+      <button type="button" class="robtn" data-romv="-1" aria-label="${esc(L2('Move earlier: ', 'Mover antes: ') + (it.t || ''))}"${i === 0 ? ' disabled' : ''}>${roOne() ? '▲' : '◀'}</button><button type="button" class="robtn" data-romv="1" aria-label="${esc(L2('Move later: ', 'Mover después: ') + (it.t || ''))}"${i === n - 1 ? ' disabled' : ''}>${roOne() ? '▼' : '▶'}</button></div>` : ''}${it.html}</div>`).join('')}</div>`;
 }
-// the header buttons: Reorder, which turns into Save, plus Cancel and Default order while reordering. Computer only.
+// the header buttons: Reorder, which turns into Save, plus Cancel and Default order while reordering. 1.32.0: on a phone too
 function roTools(v){
-  const st = roSt(v); if (!roDesk() || !S.me) return '';
+  const st = roSt(v); if (!S.me) return '';
   if (!st.on) return `<div class="rotools"><button type="button" class="btn sm" data-ro-go="${v}" title="${esc(L2('Move the cards to where they suit you best', 'Mueve las tarjetas a donde mejor te acomoden'))}">⇅ ${L2('Reorder', 'Reordenar')}</button></div>`;
-  return `<div class="rotools"><span class="rohint">${L2('Drag the cards, or use the arrows.', 'Arrastra las tarjetas, o usa las flechas.')}</span>
+  return `<div class="rotools"><span class="rohint">${roDesk() ? L2('Drag the cards, or use the arrows.', 'Arrastra las tarjetas, o usa las flechas.') : L2('Use the arrows, or drag a card by its bar.', 'Usa las flechas, o arrastra una tarjeta por su barra.')}</span>
     <button type="button" class="btn sm" data-ro-def="${v}">${L2('Default order', 'Orden original')}</button><button type="button" class="btn sm" data-ro-x="${v}">${L2('Cancel', 'Cancelar')}</button>
     <button type="button" class="btn pri sm" data-ro-go="${v}">✓ ${L2('Save', 'Guardar')}</button></div>`;
 }
@@ -5096,7 +5099,7 @@ document.addEventListener('click', e => {
     if (!st.on) { st.on = true; const g = document.querySelector(`.rogrid[data-ro="${v}"]`); st.draft = g ? roOrder(g) : null; roRedraw(v); return; }
     const g = document.querySelector(`.rogrid[data-ro="${v}"]`); const o = g ? roOrder(g) : st.draft;
     if (o) { if (o.join() === st.def.join()) ls.del(roKey(v)); else ls.set(roKey(v), o); }
-    st.on = false; st.draft = null; roRedraw(v); toast(esc(L2('Order saved on this computer.', 'Orden guardado en esta computadora.')), 'new'); return; }
+    st.on = false; st.draft = null; roRedraw(v); toast(esc(L2('Order saved on this device.', 'Orden guardado en este dispositivo.')), 'new'); return; }
   if (t.dataset.roX) { st.on = false; st.draft = null; roRedraw(v); return; }
   if (t.dataset.roDef) { st.draft = st.def.slice(); roRedraw(v); }
 }, true);
@@ -5109,6 +5112,7 @@ document.addEventListener('click', e => {
       if (st.pending || !ok) { st.pending = false; } roRedraw(v); } };
   document.addEventListener('pointerdown', e => {
     if (e.button !== 0 || D) return; const el = e.target.closest && e.target.closest('.roon > .roi'); if (!el || e.target.closest('.robtn')) return;
+    if (!roDesk() && !e.target.closest('.robar')) return;
     const g = el.parentElement; D = {v: g.dataset.ro, el, g, x: e.clientX, y: e.clientY, last: '', ghost: null, id: e.pointerId};
   });
   document.addEventListener('pointermove', e => {
@@ -5130,7 +5134,7 @@ document.addEventListener('click', e => {
   document.addEventListener('pointerup', e => { if (D && e.pointerId === D.id) end(true); });
   document.addEventListener('pointercancel', e => { if (D && e.pointerId === D.id) end(false); });
   document.addEventListener('keydown', e => { if (e.key === 'Escape' && D) end(false); });
-  window.matchMedia('(min-width:900px)').addEventListener('change', m => { if (!m.matches) Object.keys(RO).forEach(v => { const st = RO[v]; if (st && st.on) { st.on = false; st.draft = null; roRedraw(v); } }); });
+  window.matchMedia('(min-width:640px)').addEventListener('change', () => Object.keys(RO).forEach(v => { const st = RO[v]; if (st && st.on && !st.drag) roRedraw(v); }));
 })();
 async function dashLoad(force){
   dashRender(); daysLoad(force);
@@ -5326,8 +5330,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.31.0';
+const APP_VERSION = '1.32.0';
 const CHANGES = [
+  {v: '1.32.0', d: '2026-11-20', en: ['Reorder works on a phone too: on KPI, tap Reorder, move the cards with the arrows or drag one by its bar, then Save', 'Reorder menu on a phone now moves the groups too: open a group above, then move it left or right', 'Each order is kept on that device, so your phone and your computer can be different'],
+    es: ['Reordenar ahora funciona en el teléfono: en KPI, toca Reordenar, mueve las tarjetas con las flechas o arrastra una por su barra, y Guardar', 'Ordenar menú en el teléfono ahora también mueve los grupos: abre un grupo arriba y muévelo a la izquierda o a la derecha', 'Cada orden se guarda en ese dispositivo, así que tu teléfono y tu computadora pueden ser distintos']},
   {v: '1.31.0', d: '2026-11-20', en: ['Orders is now called Orders To-do, in the Menu and at the top of its page'],
     es: ['Órdenes ahora se llama Órdenes pendientes, en el Menú y arriba en su página']},
   {v: '1.30.0', d: '2026-11-20', en: ['Pass-on: each Shift Report shows its shift by color, on the bar at its left and on its tag: Morning sky blue, Afternoon green, Night Audit amber'],
@@ -8857,6 +8863,11 @@ function catPaint(){
 /* 1.29.0: the Menu's order and folded groups, kept on this device for the signed-in user. Reorder menu: drag a group or a section, or use the arrows, then Save */
 const MN = {on: false, draft: null, d: null, just: false};
 const mnKey = () => 'sc.menu.' + (S.me ? S.me.id : ''), mnCKey = () => 'sc.menuc.' + (S.me ? S.me.id : '');
+/* phone: the group mover in the edit bar */
+const mnGrpCss = document.createElement('style'); mnGrpCss.textContent = `.mned .mngrp{display:flex;align-items:center;gap:6px;margin:6px 0 2px}.mned .mngrp[hidden]{display:none}
+  .mned .mngl{flex:1;font:600 13.5px var(--f-body);color:var(--ink)}
+  .app .tabs .mned .mngrp button{flex:none;width:44px;min-height:38px;border:1px solid var(--line);border-radius:10px;background:var(--surface);color:var(--ink);font:700 15px var(--f-body);cursor:pointer;padding:0}
+  .app .tabs .mned .mngrp button:disabled{opacity:.35;cursor:default}`; document.head.appendChild(mnGrpCss);
 const mnTabEl = t => document.querySelector(`#tabs button[data-tab="${t}"]`), mnHdEl = g => document.querySelector(`#tabs .railhd[data-cg="${g}"]`);
 const mnVis = el => !!el && !el.hidden && !el.classList.contains('menuoff') && getComputedStyle(el).display !== 'none';
 function mnDef(){ const tabs = {}; MCATS.forEach(([g]) => { tabs[g] = []; }); document.querySelectorAll('#tabs button[data-tab]').forEach(b => { const g = catOf(b.dataset.tab); (tabs[g] = tabs[g] || []).push(b.dataset.tab); }); return {groups: MCATS.map(m => m[0]), tabs}; }
@@ -8890,6 +8901,13 @@ function mnApply(){
   }
   const ed = $('#mnEd'); if (ed) { ed.hidden = !MN.on; const h = ed.querySelector('.mnhint'), txt = DESK_MQ.matches ? L2('Drag the groups and sections, or use the arrows.', 'Arrastra los grupos y las secciones, o usa las flechas.') : L2('Drag the sections, or use the arrows. Pick a group above to order its sections.', 'Arrastra las secciones, o usa las flechas. Elige un grupo arriba para ordenar sus secciones.'); if (h && h.textContent !== txt) h.textContent = txt; }
   const eb = $('#mnEdBtn'); if (eb) eb.hidden = MN.on;
+  // 1.32.0: on a phone, the open group moves left or right among the group tabs
+  const gr = ed && ed.querySelector('.mngrp');
+  if (gr) { const vg = o.groups.filter(g => { const b = document.querySelector(`#mCats [data-cat="${g}"]`); return b && !b.hidden; }), i = vg.indexOf(S.cat), m = MCATS.find(x => x[0] === S.cat);
+    gr.hidden = !MN.on || DESK_MQ.matches || vg.length < 2 || i < 0;
+    gr.querySelector('.mngl').textContent = L2('Move the group ', 'Mover el grupo ') + (m ? L2(m[1], m[2]) : '');
+    const [l, r] = gr.querySelectorAll('[data-mngmv]'); l.disabled = i <= 0; r.disabled = i < 0 || i === vg.length - 1;
+    l.setAttribute('aria-label', L2('Move the group left', 'Mover el grupo a la izquierda')); r.setAttribute('aria-label', L2('Move the group right', 'Mover el grupo a la derecha')); }
 }
 // move one group, or one section inside its group, past the next one that shows
 function mnMove(list, k, dir, vis){ const v = list.filter(vis), i = v.indexOf(k), j = i + dir; if (i < 0 || j < 0 || j >= v.length) return false;
@@ -8907,6 +8925,7 @@ function mnStop(save){
   const tabs = $('#tabs'); if (!tabs) return;
   const ed = document.createElement('div'); ed.className = 'mned'; ed.id = 'mnEd'; ed.hidden = true; ed.setAttribute('data-noi18n', ''); ed.style.order = 1;
   ed.innerHTML = `<div class="mnhint"></div>
+    <div class="mngrp"><span class="mngl"></span><button type="button" data-mngmv="-1">◀</button><button type="button" data-mngmv="1">▶</button></div>
     <div class="mnbtns"><button type="button" data-mned="def">${L2('Default order', 'Orden original')}</button><button type="button" data-mned="x">${L2('Cancel', 'Cancelar')}</button><button type="button" class="pri" data-mned="save">✓ ${L2('Save', 'Guardar')}</button></div>`;
   const ref = tabs.querySelector('#mCats'); tabs.insertBefore(ed, ref ? ref.nextSibling : tabs.firstChild);
   const box = tabs.querySelector('.mtools');
@@ -8918,6 +8937,8 @@ document.addEventListener('click', e => {
   const tabs = $('#tabs'); if (!tabs || !e.target.closest) return;
   if (e.target.closest('#mnEdBtn')) { e.stopPropagation(); mnStart(); return; }
   const ed = e.target.closest('[data-mned]');
+  const gm = e.target.closest('[data-mngmv]');
+  if (gm && MN.on) { e.stopPropagation(); if (mnMove(MN.draft.groups, S.cat, +gm.dataset.mngmv, g => { const b = document.querySelector(`#mCats [data-cat="${g}"]`); return !!b && !b.hidden; })) mnApply(); return; }
   if (ed) { e.stopPropagation(); const a = ed.dataset.mned; if (a === 'save') mnStop(true); else if (a === 'x') mnStop(false); else { MN.draft = mnDef(); mnApply(); } return; }
   const hd = e.target.closest('#tabs .railhd'), tb = e.target.closest('#tabs button[data-tab]');
   if (MN.on && (hd || tb)) { e.preventDefault(); e.stopPropagation(); if (MN.just) return;
