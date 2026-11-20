@@ -796,6 +796,13 @@ body{letter-spacing:0;font-feature-settings:normal}
 .poday{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-top:6px}
 .poday h3{margin:0;font-size:13px;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .po{border-left:4px solid #7C4DFF}
+/* 1.30.0: a Shift Report shows its shift in the bar's color: Morning sky blue, Afternoon green, Night Audit amber */
+.po.sh-morning{--shc:#38BDF8;--shk:#0369A1;--shd:#7DD3FC}
+.po.sh-afternoon{--shc:#22C55E;--shk:#15803D;--shd:#86EFAC}
+.po.sh-night{--shc:#F59E0B;--shk:#B45309;--shd:#FCD34D}
+.po[class*="sh-"]{border-left:6px solid var(--shc)}
+.po[class*="sh-"] .pbtag{background:color-mix(in srgb,var(--shc) 16%,var(--surface));color:var(--shk);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--shc) 45%,transparent)}
+[data-theme="dark"] .po[class*="sh-"] .pbtag{color:var(--shd)}
 .pohead{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:8px}
 .pohead .who{font-weight:700}
 .pohead .grow{flex:1}
@@ -4667,7 +4674,8 @@ function poCard(x){
         + (isOpenAl(a) ? `<button type="button" data-al="done" data-aid="${a.id}">Done</button>${mine ? `<button type="button" data-al="cancel" data-aid="${a.id}">Cancel</button>` : ''}`
           : ` · <span>${a.status === 'done' ? 'Done' : 'Cancelled'}</span> <span>${esc(a.closed_by || '')}</span>`) + `</div>`; }).join('');
   const gen = extra(null), open = poIsOpen(x);
-  return `<div class="card po${open ? ' open' : ''}${poRinging(x) ? ' alarm' : ''}" data-pid="${x.id}">${poBar(x, open)}${open ? `<div class="pobody">
+  const shk = poShiftKey(x);
+  return `<div class="card po${open ? ' open' : ''}${poRinging(x) ? ' alarm' : ''}${shk ? ' sh-' + shk : ''}" data-pid="${x.id}">${poBar(x, open)}${open ? `<div class="pobody">
     <div class="pohead">
       ${edTag(x)}${canEditMsg(x) ? `<button type="button" class="btn sm" data-po="edit" data-id="${x.id}">Edit</button>` : ''}<button type="button" class="btn sm" data-po="copy" data-id="${x.id}">Copy</button>${acts(null)}</div>
     ${srIsReport(x.body) ? srPoBody(x, acts, extra) : `<ol class="popts">${pts.map((t, i) => `<li><div class="poline"><div class="ptxt">${roomLinks(t)}</div>${acts(i)}</div>${extra(i)}</li>`).join('')}</ol>`}
@@ -4699,6 +4707,9 @@ function poLines(x){
     if (sec) out.push(l.replace(/^•\s*/, '')); });
   return out;
 }
+const poShiftKey = x => { if (!srIsReport(x.body)) return '';
+  const shift = ((String(x.body).match(/\nShift: ([^|\n]+)/) || [])[1] || '').trim();
+  return shift ? (Object.keys(SR_SHIFTS).find(k => SR_SHIFTS[k].full.startsWith(shift)) || '') : ''; };
 function poBar(x, open){
   const rep = srIsReport(x.body), lines = poLines(x), w = poWords();
   let shown = lines;
@@ -5314,8 +5325,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.29.0';
+const APP_VERSION = '1.30.0';
 const CHANGES = [
+  {v: '1.30.0', d: '2026-11-20', en: ['Pass-on: each Shift Report shows its shift by color, on the bar at its left and on its tag: Morning sky blue, Afternoon green, Night Audit amber'],
+    es: ['Pass-on: cada Shift Report muestra su turno por color, en la barra de la izquierda y en su etiqueta: Morning azul celeste, Afternoon verde, Night Audit ámbar']},
   {v: '1.29.0', d: '2026-11-20', en: ['Menu: a new Me group holds Missing Punch and Day off request', 'Each group in the Menu has an arrow to show or hide its sections', 'Reorder menu, at the bottom of the Menu: drag the groups and sections (or use the arrows) and press Save. The order is kept on that device for your user only'],
     es: ['Menú: el grupo nuevo Me tiene Missing Punch y Day off request', 'Cada grupo del menú tiene una flecha para mostrar u ocultar sus secciones', 'Ordenar menú, abajo en el menú: arrastra los grupos y las secciones (o usa las flechas) y pulsa Guardar. El orden se guarda en ese dispositivo y solo para tu usuario']},
   {v: '1.28.0', d: '2026-11-20', en: ['KPI and Orders on a computer: a Reorder button lets you move the cards to where they suit you best. Drag them, or use the arrows, then press Save', 'The order is saved on that computer for your user only; Default order puts them back as they came'],
