@@ -1013,11 +1013,41 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .tabs .mcats .ccnt[hidden]{display:none}
 /* three categories on a phone: icon over a smaller label so all three fit */
 @media (max-width:899px){
-  .tabs .mcats[data-n="3"]{gap:2px;padding:3px}
+  .tabs .mcats[data-n="3"],.tabs .mcats[data-n="4"]{gap:2px;padding:3px}
+  .app .tabs .mcats[data-n="4"] .mcat{flex-direction:column!important;gap:3px!important;padding:6px 1px!important;min-height:52px!important;min-width:0!important}
+  .app .tabs .mcats[data-n="4"] .mcat .tl{font-size:11.5px!important;letter-spacing:-.2px!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
   .app .tabs .mcats[data-n="3"] .mcat{flex-direction:column!important;gap:3px!important;padding:6px 1px!important;min-height:52px!important;min-width:0!important}
   .app .tabs .mcats[data-n="3"] .mcat .tl{font-size:12px!important;letter-spacing:-.15px!important;overflow:hidden!important;text-overflow:ellipsis!important;max-width:100%!important}
 }
 .tabs .railhd{display:none}
+/* 1.29.0: the Menu: groups fold with their arrow, and each person can put the groups and sections in the order that suits them */
+@media (min-width:900px){
+  .app .tabs .railhd.railhd{display:flex;align-items:center;gap:4px;cursor:pointer;user-select:none;-webkit-user-select:none}
+  .app .tabs .railhd .rhl{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  .app .tabs .railhd .rhtog{flex:none;width:26px;height:22px;margin:-3px -2px -3px 0;border:0;border-radius:7px;background:none;color:inherit;display:grid;place-items:center;cursor:pointer;padding:0}
+  .app .tabs .railhd .rhtog svg{width:15px;height:15px;transition:transform .15s}
+  .app .tabs .railhd.rhc .rhtog svg{transform:rotate(-90deg)}
+  .app .tabs .railhd .rhcnt{min-width:18px;height:18px;padding:0 5px;border-radius:9px;background:var(--danger,#dc2626);color:#fff;font:700 10.5px/18px var(--f-body);letter-spacing:0;text-align:center}
+  .app .tabs .railhd .rhcnt[hidden]{display:none}
+  .app:not(.railmin) .tabs button[data-tab].cgoff.cgoff.cgoff{display:none!important}
+  .tabs.mnon .railhd{cursor:grab}
+}
+.tabs .mtools{order:900}
+.tabs .mned{display:flex;flex-direction:column;gap:6px;margin:2px 4px 8px;padding:8px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);flex:none}
+.tabs .mned[hidden]{display:none!important}
+.tabs .mned .mnhint{font:500 12px/1.35 var(--f-body);color:var(--ink-3)}
+.tabs .mned .mnbtns{display:flex;gap:4px;flex-wrap:wrap}
+.app .tabs .mned .mnbtns button{flex:1 1 auto!important;width:auto!important;height:30px!important;min-height:0!important;padding:0 8px!important;border:0;border-radius:8px!important;font:600 12.5px var(--f-body)!important;background:var(--surface)!important;color:var(--ink)!important;cursor:pointer;justify-content:center!important;display:flex!important;align-items:center!important}
+.app .tabs .mned .mnbtns button.pri{background:var(--accent)!important;color:#fff!important}
+.tabs .mnmv{display:none}
+.tabs.mnon .mnmv{display:flex;gap:2px;margin-left:auto;flex:none}
+.tabs .mnmv [data-mnmv]{width:24px;height:24px;border-radius:7px;display:grid;place-items:center;font:700 11px var(--f-body);background:color-mix(in srgb,currentColor 14%,transparent);cursor:pointer}
+.tabs .mnmv [data-mnmv]:hover{background:color-mix(in srgb,currentColor 26%,transparent)}
+.tabs .mnmv [data-mnmv][aria-disabled="true"]{opacity:.3;pointer-events:none}
+.tabs.mnon button[data-tab]{outline:1.5px dashed color-mix(in srgb,currentColor 45%,transparent);outline-offset:-2px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none}
+.app .tabs.mnon button[data-tab] .tl{padding-right:0!important}
+.tabs.mnon .cnt,.tabs.mnon .rhcnt,.tabs.mnon .rhtog{display:none!important}
+.tabs.mnon .mndrag{opacity:.45}
 .btn.danger{background:var(--urgent);color:#fff;border-color:transparent}
 .rvcode{display:inline-block;margin-left:6px;padding:1px 8px;border-radius:999px;background:var(--hotel-soft,var(--accent-soft));color:var(--hotel,var(--accent));font:700 12px var(--f-body);letter-spacing:.04em;vertical-align:middle}
 .rvimp{display:flex;align-items:center;gap:12px;flex-wrap:wrap}
@@ -1554,7 +1584,7 @@ body{background:var(--bg)}
   .app .tabs .railhd[data-cg="ops"]{order:1}.app .tabs button[data-cg="ops"]{order:2}
   .app .tabs .railhd[data-cg="res"]{order:3}.app .tabs button[data-cg="res"]{order:4}
   .app .tabs .railhd[data-cg="hk"]{order:5}.app .tabs button[data-cg="hk"]{order:6}
-  .app .tabs .mtools{order:9}
+  .app .tabs .mtools{order:900}
   /* 1.23.0: the sidebar can shrink to icons only, to leave more room for the chat or the open section */
   .app .tabs .raillogo .railtog{flex:none!important;width:32px!important;height:32px!important;min-height:0!important;padding:0!important;margin:0 0 0 auto!important;border-radius:8px!important;display:grid!important;place-items:center!important;color:var(--ink-3)!important;order:9}
   .app .tabs .raillogo .railtog:hover{background:var(--surface-2)!important;color:var(--ink)!important}
@@ -1569,7 +1599,9 @@ body{background:var(--bg)}
   .app.railmin .tabs .tl,.app.railmin.menu-open .tabs .tl{display:none!important}
   .app.railmin .tabs .tic .cnt{top:2px!important;right:0!important;transform:none!important;min-width:18px;height:18px;line-height:18px!important;padding:0 5px!important;font-size:10.5px!important;box-shadow:0 0 0 2px var(--surface)}
   .app.railmin .tabs .railhd{width:36px;height:1px;padding:0;margin:6px 0;font-size:0;background:var(--line)}
-  .app.railmin .tabs .railhd[data-cg="ops"]{display:none!important}
+  .app.railmin .tabs .railhd.rhfirst{display:none!important}
+  .app.railmin .tabs .railhd > *{display:none!important}
+  .app.railmin #mnEdBtn,.app.railmin .tabs .mned{display:none!important}
   .app.railmin .tabs .mtools{align-items:center}
   .app.railmin > .railme{width:74px;padding:0;justify-content:center}
   .app.railmin > .railme .rmn{display:none}
@@ -1663,6 +1695,11 @@ html[data-theme="dark"] body[data-hotel][data-hotel]{--hotel-soft:color-mix(in s
   .app .tabs button[aria-selected="true"]{background:var(--rail-on)!important;color:var(--rail-on-ink)!important;box-shadow:0 6px 18px rgba(20,8,80,.22)!important}
   .app .tabs .railhd{color:var(--rail-ink-3)}
   .app.railmin .tabs .railhd{background:var(--rail-line)}
+  .app .tabs .railhd .rhtog:hover{background:var(--rail-hover);color:var(--rail-ink)}
+  .tabs .mned{border-color:var(--rail-line)!important;background:color-mix(in srgb,#fff 10%,transparent)!important;color:var(--rail-ink)}
+  .tabs .mned .mnhint{color:var(--rail-ink-3)!important}
+  .app .tabs .mned .mnbtns button{color:var(--rail-ink)!important;background:color-mix(in srgb,#fff 14%,transparent)!important}
+  .app .tabs .mned .mnbtns button.pri{background:#fff!important;color:#4c2fd6!important}
   .app .tabs .raillogo .railtog{color:var(--rail-ink-3)!important}
   .app .tabs .raillogo .railtog:hover{background:var(--rail-hover)!important;color:var(--rail-ink)!important}
   .tabs .mtools{border-top-color:var(--rail-line)!important}
@@ -4831,6 +4868,7 @@ function setTab(t){
   if ((S.menuHid || []).includes(t === 'lost' ? 'passon' : t)) t = 'chat';
   S.tab = t; try { const c = catOf(t); if (c !== S.cat) { S.cat = c; ls.set('sc.cat', c); catPaint(); } } catch {}
   document.querySelectorAll('#tabs button[data-tab]').forEach(b => b.setAttribute('aria-selected', b.dataset.tab === t || (t === 'lost' && b.dataset.tab === 'passon')));
+  try { mnApply(); } catch {}
   const desktop = window.matchMedia('(min-width:900px)').matches;
   const inMain = t === 'chat' || t === 'orders', dash = desktop && t === 'orders';
   $('#main').hidden = !inMain || dash; $('#main').dataset.tab = t; $('#view-dash').hidden = !dash;
@@ -5276,8 +5314,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.28.0';
+const APP_VERSION = '1.29.0';
 const CHANGES = [
+  {v: '1.29.0', d: '2026-11-20', en: ['Menu: a new Me group holds Missing Punch and Day off request', 'Each group in the Menu has an arrow to show or hide its sections', 'Reorder menu, at the bottom of the Menu: drag the groups and sections (or use the arrows) and press Save. The order is kept on that device for your user only'],
+    es: ['Menú: el grupo nuevo Me tiene Missing Punch y Day off request', 'Cada grupo del menú tiene una flecha para mostrar u ocultar sus secciones', 'Ordenar menú, abajo en el menú: arrastra los grupos y las secciones (o usa las flechas) y pulsa Guardar. El orden se guarda en ese dispositivo y solo para tu usuario']},
   {v: '1.28.0', d: '2026-11-20', en: ['KPI and Orders on a computer: a Reorder button lets you move the cards to where they suit you best. Drag them, or use the arrows, then press Save', 'The order is saved on that computer for your user only; Default order puts them back as they came'],
     es: ['KPI y Órdenes en la computadora: un botón Reordenar te deja mover las tarjetas a donde mejor te acomoden. Arrástralas, o usa las flechas, y pulsa Guardar', 'El orden se guarda en esa computadora y solo para tu usuario; Orden original las deja como venían']},
   {v: '1.27.0', d: '2026-11-19', en: ['Board: Today’s check-outs for Front desk, laid out like a notepad: a table on a computer and big cards on a phone', 'A countdown to 11:00 AM with how many check-outs are still not confirmed; after 11:00, how many are to verify', 'Tabs with counts: Not confirmed, To verify, Late check out, Extensions, Vacant still in the system, Stayovers, and a box to find a room by number', 'Your notepad: vacant rooms not yet checked out in the system; tap one when you check it out', 'Extensions not confirmed on the side, since housekeeping does not go in while one is pending', 'A late check out whose time passed shows as Late passed, in red'],
@@ -8749,10 +8789,11 @@ setInterval(() => { if (S.me && S.tab === 'kpi' && !document.hidden) kpiLoad(tru
 window.addEventListener('resize', () => { if (S.tab === 'kpi' && KPI.data) { clearTimeout(KPI.rz); KPI.rz = setTimeout(kpiRender, 200); } });
 window.__fsKpi = {kpiParse, fcParse, kpiCalc, kpiLoad, KPI};
 /* ---- the Menu's categories: Operations, Front Office and Housekeeping (1.19.0). 'res' stays the Front Office key so saved choices keep working ---- */
-const MCATS = [['ops', 'Operations', 'Operations'], ['res', 'Front Office', 'Front Office'], ['hk', 'Housekeeping', 'Housekeeping']];
-const CAT_TABS = {res: ['passon', 'srep', 'orders', 'resv', 'guests', 'pkgs'], hk: ['laundry', 'hkplan', 'board']};
+// 1.29.0: a 'Me' group with what each person asks for themselves
+const MCATS = [['ops', 'Operations', 'Operations'], ['res', 'Front Office', 'Front Office'], ['hk', 'Housekeeping', 'Housekeeping'], ['me', 'Me', 'Me']];
+const CAT_TABS = {res: ['passon', 'srep', 'orders', 'resv', 'guests', 'pkgs'], hk: ['laundry', 'hkplan', 'board'], me: ['punch', 'dayoff']};
 const RES_TABS = CAT_TABS.res;
-const catOf = t => CAT_TABS.res.includes(t) ? 'res' : CAT_TABS.hk.includes(t) ? 'hk' : 'ops';
+const catOf = t => CAT_TABS.res.includes(t) ? 'res' : CAT_TABS.hk.includes(t) ? 'hk' : CAT_TABS.me.includes(t) ? 'me' : 'ops';
 const catOk = c => MCATS.some(m => m[0] === c) ? c : 'ops';
 S.cat = catOk(ls.get('sc.cat', 'ops'));
 (function catBuild(){
@@ -8760,12 +8801,18 @@ S.cat = catOk(ls.get('sc.cat', 'ops'));
   const g = document.createElement('div'); g.className = 'mcats'; g.id = 'mCats'; g.setAttribute('role', 'group'); g.setAttribute('data-noi18n', ''); g.setAttribute('aria-label', L2('Category', 'Categoría'));
   const ico = {ops: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 21h18M5 21V7l7-4 7 4v14M9 21v-6h6v6"/></svg>',
     res: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M8 2v4M16 2v4M3 10h18M8 15l2 2 4-4"/></svg>',
-    hk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 19v-7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v7M2 15h20M2 19v2M22 19v2M6 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>'};
+    hk: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M2 19v-7a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v7M2 15h20M2 19v2M22 19v2M6 10V7a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v3"/></svg>',
+    me: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/></svg>'};
   g.innerHTML = MCATS.map(([k, en, es]) => `<button type="button" class="mcat" data-cat="${k}" aria-pressed="${S.cat === k}" title="${esc(L2(en, es))}"><span class="tic">${ico[k]}<span class="ccnt" hidden></span></span><span class="tl">${esc(L2(en, es))}</span></button>`).join('');
   tabs.insertBefore(g, first);
   // 1.22.0: on a computer every section shows, under its category's heading
   tabs.querySelectorAll('button[data-tab]').forEach(b => { b.dataset.cg = catOf(b.dataset.tab); });
-  MCATS.forEach(([k, en, es]) => { const hd = document.createElement('div'); hd.className = 'railhd'; hd.dataset.cg = k; hd.setAttribute('aria-hidden', 'true'); hd.setAttribute('data-noi18n', ''); hd.textContent = L2(en, es); tabs.appendChild(hd); });
+  MCATS.forEach(([k, en, es]) => { const hd = document.createElement('div'); hd.className = 'railhd'; hd.dataset.cg = k; hd.setAttribute('data-noi18n', '');
+    hd.innerHTML = `<span class="rhl">${esc(L2(en, es))}</span><span class="rhcnt" hidden></span><span class="mnmv"><span role="button" tabindex="0" data-mnmv="-1" aria-label="${esc(L2('Move up: ', 'Subir: ') + en)}">▲</span><span role="button" tabindex="0" data-mnmv="1" aria-label="${esc(L2('Move down: ', 'Bajar: ') + en)}">▼</span></span>`
+      + `<span role="button" tabindex="0" class="rhtog" aria-expanded="true" aria-label="${esc(L2('Show or hide ', 'Mostrar u ocultar ') + en)}"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m6 9 6 6 6-6"/></svg></span>`;
+    tabs.appendChild(hd); });
+  tabs.querySelectorAll('button[data-tab]').forEach(b => { const t = (b.querySelector('.tl') || b).textContent.trim(), m = document.createElement('span'); m.className = 'mnmv'; m.setAttribute('data-noi18n', '');
+    m.innerHTML = `<span role="button" tabindex="-1" data-mnmv="-1" aria-label="${esc(L2('Move up: ', 'Subir: ') + t)}">▲</span><span role="button" tabindex="-1" data-mnmv="1" aria-label="${esc(L2('Move down: ', 'Bajar: ') + t)}">▼</span>`; b.appendChild(m); });
   g.addEventListener('click', e => { const b = e.target.closest('[data-cat]'); if (!b) return; e.stopPropagation(); catSet(b.dataset.cat, true); });
   // a category shows the sum of the red numbers waiting inside it
   try { new MutationObserver(ms => { if (ms.some(m => !(m.target.closest && m.target.closest('#mCats')) && !(m.target.parentNode && m.target.parentNode.closest && m.target.parentNode.closest('#mCats')))) catCounts(); })
@@ -8789,8 +8836,110 @@ function catPaint(){
   if (g) { g.hidden = shown.length < 2; g.querySelectorAll('[data-cat]').forEach(b => { b.hidden = !shown.includes(b.dataset.cat); b.setAttribute('aria-pressed', b.dataset.cat === S.cat); }); g.dataset.n = shown.length; }
   document.querySelectorAll('#tabs button[data-tab]').forEach(b => b.classList.toggle('catoff', catOf(b.dataset.tab) !== S.cat));
   document.querySelectorAll('#tabs .railhd').forEach(x => { const off = shown.length < 2 || !shown.includes(x.dataset.cg); if (x.hidden !== off) x.hidden = off; });
-  catCounts();
+  catCounts(); try { mnApply(); } catch {}
 }
+/* 1.29.0: the Menu's order and folded groups, kept on this device for the signed-in user. Reorder menu: drag a group or a section, or use the arrows, then Save */
+const MN = {on: false, draft: null, d: null, just: false};
+const mnKey = () => 'sc.menu.' + (S.me ? S.me.id : ''), mnCKey = () => 'sc.menuc.' + (S.me ? S.me.id : '');
+const mnTabEl = t => document.querySelector(`#tabs button[data-tab="${t}"]`), mnHdEl = g => document.querySelector(`#tabs .railhd[data-cg="${g}"]`);
+const mnVis = el => !!el && !el.hidden && !el.classList.contains('menuoff') && getComputedStyle(el).display !== 'none';
+function mnDef(){ const tabs = {}; MCATS.forEach(([g]) => { tabs[g] = []; }); document.querySelectorAll('#tabs button[data-tab]').forEach(b => { const g = catOf(b.dataset.tab); (tabs[g] = tabs[g] || []).push(b.dataset.tab); }); return {groups: MCATS.map(m => m[0]), tabs}; }
+function mnMerge(sv){
+  const d = mnDef(); if (!sv || typeof sv !== 'object') return d;
+  const keep = (want, all) => Array.isArray(want) ? want.filter((k, i) => all.includes(k) && want.indexOf(k) === i).concat(all.filter(k => !want.includes(k))) : all;
+  const out = {groups: keep(sv.groups, d.groups), tabs: {}}; d.groups.forEach(g => { out.tabs[g] = keep(sv.tabs && sv.tabs[g], d.tabs[g]); }); return out;
+}
+const mnCur = () => MN.on && MN.draft ? MN.draft : mnMerge(ls.get(mnKey(), null));
+const mnColl = () => { const a = ls.get(mnCKey(), []); return new Set(Array.isArray(a) ? a : []); };
+function mnApply(){
+  const tabs = $('#tabs'); if (!tabs || !S.me) return;
+  const o = mnCur(), coll = MN.on ? new Set() : mnColl(); let n = 10, first = true;
+  tabs.classList.toggle('mnon', MN.on);
+  o.groups.forEach((g, gi) => {
+    const hd = mnHdEl(g), mc = document.querySelector(`#mCats [data-cat="${g}"]`), folded = coll.has(g); if (mc) mc.style.order = gi;
+    if (hd) { hd.style.order = n++; hd.classList.toggle('rhc', folded); hd.classList.toggle('rhfirst', first && !hd.hidden); if (!hd.hidden) first = false;
+      const tg = hd.querySelector('.rhtog'); if (tg) tg.setAttribute('aria-expanded', String(!folded)); }
+    let cnt = 0;
+    o.tabs[g].forEach(t => { const b = mnTabEl(t); if (!b) return; b.style.order = n++;
+      const off = folded && b.getAttribute('aria-selected') !== 'true'; b.classList.toggle('cgoff', off);
+      if (folded && !b.hidden && !b.classList.contains('menuoff')) { const c = b.querySelector('.cnt'); if (c && !c.hidden) cnt += parseInt(c.textContent, 10) || 0; } });
+    const rc = hd && hd.querySelector('.rhcnt'); if (rc) { const txt = cnt > 99 ? '99+' : cnt ? String(cnt) : ''; if (rc.textContent !== txt) rc.textContent = txt; if (rc.hidden !== !cnt) rc.hidden = !cnt; }
+  });
+  // the arrows at the ends of a list can't move further
+  if (MN.on) {
+    const vg = o.groups.filter(g => mnVis(mnHdEl(g)));
+    o.groups.forEach(g => { const hd = mnHdEl(g); if (!hd) return; const i = vg.indexOf(g); hd.querySelector('[data-mnmv="-1"]').setAttribute('aria-disabled', String(i <= 0)); hd.querySelector('[data-mnmv="1"]').setAttribute('aria-disabled', String(i < 0 || i === vg.length - 1)); });
+    o.groups.forEach(g => { const vt = o.tabs[g].filter(t => mnVis(mnTabEl(t)));
+      o.tabs[g].forEach(t => { const b = mnTabEl(t); if (!b) return; const i = vt.indexOf(t); b.querySelector('[data-mnmv="-1"]').setAttribute('aria-disabled', String(i <= 0)); b.querySelector('[data-mnmv="1"]').setAttribute('aria-disabled', String(i < 0 || i === vt.length - 1)); }); });
+  }
+  const ed = $('#mnEd'); if (ed) { ed.hidden = !MN.on; const h = ed.querySelector('.mnhint'), txt = DESK_MQ.matches ? L2('Drag the groups and sections, or use the arrows.', 'Arrastra los grupos y las secciones, o usa las flechas.') : L2('Drag the sections, or use the arrows. Pick a group above to order its sections.', 'Arrastra las secciones, o usa las flechas. Elige un grupo arriba para ordenar sus secciones.'); if (h && h.textContent !== txt) h.textContent = txt; }
+  const eb = $('#mnEdBtn'); if (eb) eb.hidden = MN.on;
+}
+// move one group, or one section inside its group, past the next one that shows
+function mnMove(list, k, dir, vis){ const v = list.filter(vis), i = v.indexOf(k), j = i + dir; if (i < 0 || j < 0 || j >= v.length) return false;
+  const nb = v[j]; list.splice(list.indexOf(k), 1); list.splice(list.indexOf(nb) + (dir > 0 ? 1 : 0), 0, k); return true; }
+function mnPlace(list, k, ref, after){ if (k === ref) return false; const was = list.join(); list.splice(list.indexOf(k), 1); list.splice(list.indexOf(ref) + (after ? 1 : 0), 0, k); return list.join() !== was; }
+const mnCopy = o => ({groups: o.groups.slice(), tabs: Object.fromEntries(Object.entries(o.tabs).map(([g, a]) => [g, a.slice()]))});
+function mnStart(){ MN.on = true; MN.draft = mnCopy(mnMerge(ls.get(mnKey(), null))); mnApply(); }
+function mnStop(save){
+  if (save && MN.draft) { const d = mnDef(), same = MN.draft.groups.join() === d.groups.join() && d.groups.every(g => MN.draft.tabs[g].join() === d.tabs[g].join());
+    if (same) ls.del(mnKey()); else ls.set(mnKey(), MN.draft); }
+  MN.on = false; MN.draft = null; mnApply();
+  if (save) toast(esc(L2('Menu order saved on this device.', 'Orden del menú guardado en este dispositivo.')), 'new');
+}
+(function mnBuild(){
+  const tabs = $('#tabs'); if (!tabs) return;
+  const ed = document.createElement('div'); ed.className = 'mned'; ed.id = 'mnEd'; ed.hidden = true; ed.setAttribute('data-noi18n', ''); ed.style.order = 1;
+  ed.innerHTML = `<div class="mnhint"></div>
+    <div class="mnbtns"><button type="button" data-mned="def">${L2('Default order', 'Orden original')}</button><button type="button" data-mned="x">${L2('Cancel', 'Cancelar')}</button><button type="button" class="pri" data-mned="save">✓ ${L2('Save', 'Guardar')}</button></div>`;
+  const ref = tabs.querySelector('#mCats'); tabs.insertBefore(ed, ref ? ref.nextSibling : tabs.firstChild);
+  const box = tabs.querySelector('.mtools');
+  if (box) { const b = document.createElement('button'); b.type = 'button'; b.className = 'iconbtn'; b.id = 'mnEdBtn';
+    b.innerHTML = `<span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m7 15 5 5 5-5M7 9l5-5 5 5"/></svg></span><span class="tl" data-noi18n>${L2('Reorder menu', 'Ordenar menú')}</span>`;
+    box.appendChild(b); }
+})();
+document.addEventListener('click', e => {
+  const tabs = $('#tabs'); if (!tabs || !e.target.closest) return;
+  if (e.target.closest('#mnEdBtn')) { e.stopPropagation(); mnStart(); return; }
+  const ed = e.target.closest('[data-mned]');
+  if (ed) { e.stopPropagation(); const a = ed.dataset.mned; if (a === 'save') mnStop(true); else if (a === 'x') mnStop(false); else { MN.draft = mnDef(); mnApply(); } return; }
+  const hd = e.target.closest('#tabs .railhd'), tb = e.target.closest('#tabs button[data-tab]');
+  if (MN.on && (hd || tb)) { e.preventDefault(); e.stopPropagation(); if (MN.just) return;
+    const mv = e.target.closest('[data-mnmv]'); if (!mv) return; const dir = +mv.dataset.mnmv, o = MN.draft;
+    if (tb) { const g = catOf(tb.dataset.tab); if (mnMove(o.tabs[g], tb.dataset.tab, dir, t => mnVis(mnTabEl(t)))) mnApply(); }
+    else if (mnMove(o.groups, hd.dataset.cg, dir, g => mnVis(mnHdEl(g)))) mnApply();
+    return; }
+  if (hd && !MN.on) { e.stopPropagation(); const g = hd.dataset.cg, c = mnColl(); c.has(g) ? c.delete(g) : c.add(g); if (c.size) ls.set(mnCKey(), [...c]); else ls.del(mnCKey()); mnApply(); }
+}, true);
+document.addEventListener('keydown', e => { if ((e.key === 'Enter' || e.key === ' ') && e.target.matches && e.target.matches('#tabs [data-mnmv], #tabs .rhtog')) { e.preventDefault(); e.target.click(); } });
+// drag a section inside its group, or a whole group, with the mouse or a finger
+(function mnDragWire(){
+  const at = (x, y) => { const el = document.elementFromPoint(x, y); return el && el.closest ? el.closest('#tabs button[data-tab], #tabs .railhd') : null; };
+  const end = () => { const d = MN.d; if (!d) return; MN.d = null; d.el.classList.remove('mndrag'); if (d.moved) { MN.just = true; setTimeout(() => { MN.just = false; }, 250); } };
+  document.addEventListener('pointerdown', e => {
+    if (!MN.on || e.button !== 0 || !e.target.closest || e.target.closest('[data-mnmv]')) return;
+    const el = e.target.closest('#tabs button[data-tab], #tabs .railhd'); if (!el) return;
+    MN.d = {el, id: e.pointerId, x: e.clientX, y: e.clientY, moved: false, last: ''};
+  });
+  document.addEventListener('pointermove', e => {
+    const d = MN.d; if (!d || e.pointerId !== d.id) return;
+    if (!d.moved) { if (Math.hypot(e.clientX - d.x, e.clientY - d.y) < 6) return; d.moved = true; d.el.classList.add('mndrag'); }
+    e.preventDefault();
+    const tg = at(e.clientX, e.clientY); if (!tg || tg === d.el) return;
+    const r = tg.getBoundingClientRect(), after = e.clientY > r.top + r.height / 2, o = MN.draft;
+    if (d.el.dataset.tab) { // a section stays in its own group
+      const g = catOf(d.el.dataset.tab); if (!tg.dataset.tab || catOf(tg.dataset.tab) !== g) return;
+      const key = tg.dataset.tab + after; if (key === d.last) return; d.last = key;
+      if (mnPlace(o.tabs[g], d.el.dataset.tab, tg.dataset.tab, after)) mnApply();
+    } else { // a group goes before or after the group under the pointer
+      const g = d.el.dataset.cg, h = tg.dataset.cg || catOf(tg.dataset.tab); if (!h || h === g) return;
+      const below = o.groups.indexOf(g) < o.groups.indexOf(h), key = h + below; if (key === d.last) return; d.last = key;
+      if (mnPlace(o.groups, g, h, below)) mnApply();
+    }
+  }, {passive: false});
+  document.addEventListener('pointerup', e => { if (MN.d && e.pointerId === MN.d.id) end(); });
+  document.addEventListener('pointercancel', e => { if (MN.d && e.pointerId === MN.d.id) end(); });
+})();
 function catSet(c, go){
   S.cat = catOk(c); ls.set('sc.cat', S.cat); catPaint();
   const firstIn = k => catTabsOf(k).find(t => catTabOk(t)) || 'chat';
