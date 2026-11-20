@@ -244,6 +244,28 @@ body{margin:0}
 .dkl{font-size:12.5px;font-weight:700;color:var(--ink-2);margin-top:2px}.dks{font-size:12px;color:var(--ink-3);margin-top:2px}
 .dops .dkpis .dk{box-shadow:none;background:var(--surface-2)}
 .dgrid2{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px}
+/* 1.28.0: Reorder. KPI and the Orders dashboard lay their cards on one 12-column grid so each user can move them */
+.rogrid{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:14px;container-type:inline-size}
+#kpBody .rogrid{column-gap:12px}
+.roi{grid-column:span 12;min-width:0;display:flex;flex-direction:column;position:relative}
+.roi>:not(.robar){flex:1 1 auto;margin:0}
+@container (min-width:640px){.roi.ro-s3,.roi.ro-h2{grid-column:span 6}}
+@container (min-width:860px){.roi.ro-dn{grid-column:span 5}.roi.ro-vs{grid-column:span 7}}
+@container (min-width:920px){.roi.ro-s3{grid-column:span 4}}
+@container (min-width:900px){.roi.ro-h2w{grid-column:span 6}}
+.robar{display:none}
+.roon .roi{outline:2px dashed var(--accent);outline-offset:3px;border-radius:18px;cursor:grab;touch-action:none;user-select:none;-webkit-user-select:none;padding-top:46px}
+.roon .roi>:not(.robar){pointer-events:none;opacity:.88}
+.roon .robar{display:flex;align-items:center;gap:8px;position:absolute;z-index:3;top:0;left:0;right:0;padding:6px 8px 6px 10px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font-size:13px;box-shadow:var(--shadow)}
+.robar b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;min-width:0}.robar .grow{flex:1}
+.rohd{font-size:16px;line-height:1;letter-spacing:-2px}
+.robtn{border:0;border-radius:8px;width:30px;height:28px;background:rgba(255,255,255,.22);color:inherit;font:700 13px var(--f-body);cursor:pointer}
+.robtn:hover{background:rgba(255,255,255,.36)}.robtn:disabled{opacity:.35;cursor:default}
+.roi.rodrag{opacity:.45;outline-style:solid}
+.roghost{position:fixed;z-index:9999;pointer-events:none;padding:8px 14px;border-radius:12px;background:var(--accent);color:var(--accent-ink);font:700 13px var(--f-body);box-shadow:0 10px 30px rgba(0,0,0,.25);transform:translate(12px,12px);white-space:nowrap}
+.rotools{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+.rohint{font-size:12.5px;color:var(--ink-2);margin-right:4px}
+@media (max-width:899px){.rotools{display:none}}
 .dgrid3{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
 @media (max-width:1180px){.dgrid2.dwide{grid-template-columns:minmax(0,1fr)}}
 .dcard{background:var(--surface);border-radius:16px;box-shadow:var(--shadow);padding:14px 16px;min-width:0}
@@ -4979,6 +5001,87 @@ function repParse(pages){
 const DASH = { days: 7, data: [], at: 0, loading: false, seq: 0, partial: false };
 const isDesk = () => window.matchMedia('(min-width:900px)').matches;
 const L2 = (en, es) => LANG === 'es' ? es : en;
+/* 1.28.0: Reorder. On a computer, KPI and the Orders dashboard have a Reorder button: drag the cards (or use the arrows), then Save.
+   The order is kept in this browser for the signed-in user (localStorage), so nothing changes for anyone else. */
+const RO = {}, RO_VIEWS = {kpi: () => kpiRender(), dash: () => dashRender()};
+const roSt = v => RO[v] || (RO[v] = {on: false, draft: null, def: [], drag: false, pending: false});
+const roKey = v => 'sc.order.' + v + '.' + (S.me ? S.me.id : '');
+const roSaved = v => { const a = ls.get(roKey(v), null); return Array.isArray(a) && a.every(k => typeof k === 'string') ? a : null; };
+const roDesk = () => window.matchMedia('(min-width:900px)').matches;
+// a render that would rebuild the cards waits while a card is being dragged
+function roBusy(v){ const st = roSt(v); if (st.drag) { st.pending = true; return true; } return false; }
+// items: [{k, w, t, html}] in the default order. w: full, s3 (a third), h2 (a half), h2w (a half on wide screens), dn/vs (the KPI pair)
+function roGrid(v, items){
+  const st = roSt(v); if (st.on && !roDesk()) { st.on = false; st.draft = null; }
+  const list0 = items.filter(i => i && i.html); st.def = list0.map(i => i.k);
+  const want = st.on && st.draft ? st.draft : roSaved(v);
+  let list = list0;
+  if (want) { const pos = new Map(want.map((k, i) => [k, i])); list = list0.map((it, i) => ({it, r: pos.has(it.k) ? pos.get(it.k) : 1000 + i})).sort((a, b) => a.r - b.r).map(x => x.it); }
+  if (st.on) st.draft = list.map(i => i.k);
+  const n = list.length;
+  return `<div class="rogrid${st.on ? ' roon' : ''}" data-ro="${v}">${list.map((it, i) => `<div class="roi ro-${it.w || 'full'}" data-rk="${esc(it.k)}">${st.on ? `<div class="robar"><span class="rohd" aria-hidden="true">⠿</span><b>${esc(it.t || '')}</b><span class="grow"></span>
+      <button type="button" class="robtn" data-romv="-1" aria-label="${esc(L2('Move earlier: ', 'Mover antes: ') + (it.t || ''))}"${i === 0 ? ' disabled' : ''}>◀</button><button type="button" class="robtn" data-romv="1" aria-label="${esc(L2('Move later: ', 'Mover después: ') + (it.t || ''))}"${i === n - 1 ? ' disabled' : ''}>▶</button></div>` : ''}${it.html}</div>`).join('')}</div>`;
+}
+// the header buttons: Reorder, which turns into Save, plus Cancel and Default order while reordering. Computer only.
+function roTools(v){
+  const st = roSt(v); if (!roDesk() || !S.me) return '';
+  if (!st.on) return `<div class="rotools"><button type="button" class="btn sm" data-ro-go="${v}" title="${esc(L2('Move the cards to where they suit you best', 'Mueve las tarjetas a donde mejor te acomoden'))}">⇅ ${L2('Reorder', 'Reordenar')}</button></div>`;
+  return `<div class="rotools"><span class="rohint">${L2('Drag the cards, or use the arrows.', 'Arrastra las tarjetas, o usa las flechas.')}</span>
+    <button type="button" class="btn sm" data-ro-def="${v}">${L2('Default order', 'Orden original')}</button><button type="button" class="btn sm" data-ro-x="${v}">${L2('Cancel', 'Cancelar')}</button>
+    <button type="button" class="btn pri sm" data-ro-go="${v}">✓ ${L2('Save', 'Guardar')}</button></div>`;
+}
+const roOrder = g => [...g.querySelectorAll(':scope > .roi')].map(e => e.dataset.rk);
+function roRedraw(v){ const f = RO_VIEWS[v]; if (f) f(); }
+document.addEventListener('click', e => {
+  if (RO.justDragged) { RO.justDragged = false; if (e.target.closest && e.target.closest('.roon')) { e.preventDefault(); e.stopPropagation(); return; } }
+  const t = e.target.closest && e.target.closest('[data-ro-go],[data-ro-x],[data-ro-def],[data-romv]'); if (!t) return;
+  e.stopPropagation();
+  if (t.dataset.romv) { const g = t.closest('.rogrid'), it = t.closest('.roi'); if (!g || !it) return; const v = g.dataset.ro, st = roSt(v);
+    const o = roOrder(g), i = o.indexOf(it.dataset.rk), j = i + +t.dataset.romv; if (i < 0 || j < 0 || j >= o.length) return;
+    [o[i], o[j]] = [o[j], o[i]]; st.draft = o; roRedraw(v);
+    const nb = document.querySelector(`.rogrid[data-ro="${v}"] .roi[data-rk="${CSS.escape(it.dataset.rk)}"] [data-romv="${t.dataset.romv}"]`);
+    if (nb) { (nb.disabled ? nb.parentElement.querySelector('[data-romv]:not([disabled])') || nb : nb).focus(); nb.closest('.roi').scrollIntoView({block: 'nearest'}); } return; }
+  const v = t.dataset.roGo || t.dataset.roX || t.dataset.roDef, st = roSt(v);
+  if (t.dataset.roGo) {
+    if (!st.on) { st.on = true; const g = document.querySelector(`.rogrid[data-ro="${v}"]`); st.draft = g ? roOrder(g) : null; roRedraw(v); return; }
+    const g = document.querySelector(`.rogrid[data-ro="${v}"]`); const o = g ? roOrder(g) : st.draft;
+    if (o) { if (o.join() === st.def.join()) ls.del(roKey(v)); else ls.set(roKey(v), o); }
+    st.on = false; st.draft = null; roRedraw(v); toast(esc(L2('Order saved on this computer.', 'Orden guardado en esta computadora.')), 'new'); return; }
+  if (t.dataset.roX) { st.on = false; st.draft = null; roRedraw(v); return; }
+  if (t.dataset.roDef) { st.draft = st.def.slice(); roRedraw(v); }
+}, true);
+// drag with the mouse (or a finger on a touch screen): the card moves in the grid as the pointer passes over the others
+(function roDragWire(){
+  let D = null;
+  const end = ok => { if (!D) return; const {v, el, ghost, g} = D, st = roSt(v); D = null;
+    ghost && ghost.remove(); el.classList.remove('rodrag'); document.body.style.cursor = '';
+    if (st.drag) { st.drag = false; if (ok) st.draft = roOrder(g); RO.justDragged = true; setTimeout(() => { RO.justDragged = false; }, 300);
+      if (st.pending || !ok) { st.pending = false; } roRedraw(v); } };
+  document.addEventListener('pointerdown', e => {
+    if (e.button !== 0 || D) return; const el = e.target.closest && e.target.closest('.roon > .roi'); if (!el || e.target.closest('.robtn')) return;
+    const g = el.parentElement; D = {v: g.dataset.ro, el, g, x: e.clientX, y: e.clientY, last: '', ghost: null, id: e.pointerId};
+  });
+  document.addEventListener('pointermove', e => {
+    if (!D || e.pointerId !== D.id) return; const st = roSt(D.v);
+    if (!st.drag) { if (Math.hypot(e.clientX - D.x, e.clientY - D.y) < 6) return;
+      st.drag = true; D.el.classList.add('rodrag'); document.body.style.cursor = 'grabbing';
+      D.ghost = document.createElement('div'); D.ghost.className = 'roghost'; D.ghost.textContent = (D.el.querySelector('.robar b') || {}).textContent || ''; document.body.appendChild(D.ghost); }
+    e.preventDefault();
+    D.ghost.style.left = e.clientX + 'px'; D.ghost.style.top = e.clientY + 'px';
+    const sc = D.g.closest('.view'); if (sc) { if (e.clientY < 70) sc.scrollBy(0, -18); else if (e.clientY > window.innerHeight - 70) sc.scrollBy(0, 18); }
+    const over = document.elementFromPoint(e.clientX, e.clientY), tg = over && over.closest && over.closest('.roi');
+    if (!tg || tg === D.el || tg.parentElement !== D.g) return;
+    const r = tg.getBoundingClientRect(), wide = r.width > D.g.getBoundingClientRect().width * .8;
+    const before = wide ? e.clientY < r.top + r.height / 2 : e.clientX < r.left + r.width / 2, key = tg.dataset.rk + (before ? '<' : '>');
+    if (key === D.last) return; D.last = key;
+    const ref = before ? tg : tg.nextElementSibling; if (ref === D.el || (ref && ref.previousElementSibling === D.el && before)) return;
+    D.g.insertBefore(D.el, ref);
+  }, {passive: false});
+  document.addEventListener('pointerup', e => { if (D && e.pointerId === D.id) end(true); });
+  document.addEventListener('pointercancel', e => { if (D && e.pointerId === D.id) end(false); });
+  document.addEventListener('keydown', e => { if (e.key === 'Escape' && D) end(false); });
+  window.matchMedia('(min-width:900px)').addEventListener('change', m => { if (!m.matches) Object.keys(RO).forEach(v => { const st = RO[v]; if (st && st.on) { st.on = false; st.draft = null; roRedraw(v); } }); });
+})();
 async function dashLoad(force){
   dashRender(); daysLoad(force);
   if (DASH.loading || (!force && Date.now() - DASH.at < 60e3)) return;
@@ -5007,7 +5110,7 @@ function dashBars(series, keys, labels, opts){
   return `<svg class="dchart" viewBox="0 0 ${W} ${H}" role="img" aria-label="${esc(opts && opts.aria || '')}"><g class="grid">${grid}</g>${bars}<g class="lab">${lab}</g></svg>`;
 }
 function dashRender(){
-  const el = $('#dashBody'); if (!el || $('#view-dash').hidden || !S.me) return;
+  const el = $('#dashBody'); if (!el || $('#view-dash').hidden || !S.me || roBusy('dash')) return;
   const byId = new Map(DASH.data.map(o => [o.id, o])); S.orders.forEach(o => byId.set(o.id, o));
   const all = [...byId.values()], now = Date.now(), today = dayNY(now), since = now - DASH.days * 864e5;
   const isOpen = o => (o.status === 'open' || o.status === 'in_progress') && !isLater(o);
@@ -5030,7 +5133,7 @@ function dashRender(){
     + tile(oldest ? durTxt(now - oldest) : '—', L2('Oldest open', 'Abierta más vieja'), oldest && now - oldest > 2 * 3600e3 ? 'bad' : '');
   const ICON = { housekeeping: '🛏️', maintenance: '🔧', frontdesk: '🛎️' };
   const CATL = { housekeeping: L2('Housekeeping', 'Housekeeping'), maintenance: L2('Maintenance', 'Mantenimiento'), frontdesk: L2('Front desk', 'Recepción') };
-  const depts = Object.keys(CATS).map(c => {
+  const depts = Object.keys(CATS).map(c => ({k: 'dept-' + c, w: 's3', t: CATL[c], html: (() => {
     const o = open.filter(x => x.o.category === c), pr = o.filter(x => x.o.status === 'in_progress').length;
     const dt = doneToday.filter(x => x.category === c), dr = doneR.filter(x => x.category === c), mr = made.filter(x => x.category === c).length;
     return `<div class="dcard ddept"><div class="dh"><span class="dico">${ICON[c]}</span><b>${esc(CATL[c])}</b></div>
@@ -5039,7 +5142,7 @@ function dashRender(){
       <div class="drow"><span>${L2('Completed today', 'Completadas hoy')}</span><b>${dt.length}</b></div>
       <div class="drow"><span>${L2('Avg. time', 'Tiempo prom.')} · ${DASH.days} ${L2('days', 'días')}</span><b>${dashDur(avg(dr))}</b></div>
       <div class="drow"><span>${L2('New', 'Nuevas')} · ${DASH.days} ${L2('days', 'días')}</span><b>${mr}</b></div></div>`;
-  }).join('');
+  })()}));
   // per day
   const keys = [], labels = [];
   for (let i = DASH.days - 1; i >= 0; i--) { const ms = now - i * 864e5; keys.push(dayNY(ms)); labels.push(fmtDate(ms)); }
@@ -5072,21 +5175,17 @@ function dashRender(){
     : `<div class="dnone">${L2('No open orders right now.', 'No hay órdenes abiertas ahora.')}</div>`;
   const seg = [7, 30].map(d => `<button type="button" data-ddays="${d}" aria-pressed="${DASH.days === d}">${d} ${L2('days', 'días')}</button>`).join('');
   el.innerHTML = `<div class="dtop"><div><h2>${L2('Operations dashboard', 'Tablero operativo')}</h2><div class="small">${esc(S.hotel ? S.hotel.name : '')} · ${esc(fmtDate(now))}${DASH.at ? ' · ' + L2('Updated', 'Actualizado') + ' ' + esc(fmtTime(DASH.at)) : ''}${DASH.loading ? ' · ' + L2('Loading…', 'Cargando…') : ''}</div></div>
-      <div class="grow"></div><div class="seg" role="group" aria-label="${L2('Range', 'Rango')}">${seg}</div><button type="button" class="btn sm" data-dref>${L2('Refresh', 'Actualizar')}</button><button type="button" class="btn sm" data-dcal>🗓️ ${L2('Calendar', 'Calendario')}</button><button type="button" class="btn pri sm" data-dnew>+ ${L2('New order', 'Nueva orden')}</button></div>
-    ${dashOps()}
-    <h3 class="dsec">${L2('Orders', 'Órdenes')}</h3>
-    ${DASH.partial ? `<div class="dnote">${L2('Showing open and recent orders only.', 'Mostrando solo órdenes abiertas y recientes.')}</div>` : ''}
-    <div class="dkpis">${kpis}</div>
-    <div class="dgrid3">${depts}</div>
-    <div class="dgrid2">
-      <div class="dcard"><div class="dh"><b>${L2('Orders per day', 'Órdenes por día')}</b><span class="grow"></span><span class="dleg"><i class="b1"></i>${L2('New', 'Nuevas')} <i class="b2"></i>${L2('Completed', 'Completadas')}</span></div>${perDay}</div>
-      <div class="dcard"><div class="dh"><b>${L2('Busiest hours', 'Horas con más órdenes')}</b><span class="grow"></span><span class="small">${DASH.days} ${L2('days', 'días')}</span></div>${byHour}</div>
-    </div>
-    <div class="dcard"><div class="dh"><b>${L2('Open orders', 'Órdenes abiertas')}</b><span class="grow"></span><span class="small">${L2('Tap a row for its detail', 'Toca una fila para ver el detalle')}</span></div>${table}</div>
-    <div class="dgrid2">
-      <div class="dcard"><div class="dh"><b>${L2('Rooms and areas with the most orders', 'Habitaciones y áreas con más órdenes')}</b><span class="grow"></span><span class="small">${DASH.days} ${L2('days', 'días')}</span></div>${roomsHtml}</div>
-      <div class="dcard"><div class="dh"><b>${L2('Completed by', 'Completadas por')}</b><span class="grow"></span><span class="small">${DASH.days} ${L2('days', 'días')}</span></div>${teamHtml}</div>
-    </div>`;
+      <div class="grow"></div>${roTools('dash')}${roSt('dash').on ? '' : `<div class="seg" role="group" aria-label="${L2('Range', 'Rango')}">${seg}</div><button type="button" class="btn sm" data-dref>${L2('Refresh', 'Actualizar')}</button><button type="button" class="btn sm" data-dcal>🗓️ ${L2('Calendar', 'Calendario')}</button><button type="button" class="btn pri sm" data-dnew>+ ${L2('New order', 'Nueva orden')}</button>`}</div>
+    ${roGrid('dash', [...dashOps(),
+      {k: 'otiles', t: L2('Orders', 'Órdenes'), html: `<div class="dsecw"><h3 class="dsec">${L2('Orders', 'Órdenes')}</h3>
+        ${DASH.partial ? `<div class="dnote">${L2('Showing open and recent orders only.', 'Mostrando solo órdenes abiertas y recientes.')}</div>` : ''}
+        <div class="dkpis">${kpis}</div></div>`},
+      ...depts,
+      {k: 'perday', w: 'h2', t: L2('Orders per day', 'Órdenes por día'), html: `<div class="dcard"><div class="dh"><b>${L2('Orders per day', 'Órdenes por día')}</b><span class="grow"></span><span class="dleg"><i class="b1"></i>${L2('New', 'Nuevas')} <i class="b2"></i>${L2('Completed', 'Completadas')}</span></div>${perDay}</div>`},
+      {k: 'byhour', w: 'h2', t: L2('Busiest hours', 'Horas con más órdenes'), html: `<div class="dcard"><div class="dh"><b>${L2('Busiest hours', 'Horas con más órdenes')}</b><span class="grow"></span><span class="small">${DASH.days} ${L2('days', 'días')}</span></div>${byHour}</div>`},
+      {k: 'open', t: L2('Open orders', 'Órdenes abiertas'), html: `<div class="dcard"><div class="dh"><b>${L2('Open orders', 'Órdenes abiertas')}</b><span class="grow"></span><span class="small">${L2('Tap a row for its detail', 'Toca una fila para ver el detalle')}</span></div>${table}</div>`},
+      {k: 'rooms', w: 'h2', t: L2('Rooms and areas', 'Habitaciones y áreas'), html: `<div class="dcard"><div class="dh"><b>${L2('Rooms and areas with the most orders', 'Habitaciones y áreas con más órdenes')}</b><span class="grow"></span><span class="small">${DASH.days} ${L2('days', 'días')}</span></div>${roomsHtml}</div>`},
+      {k: 'team', w: 'h2', t: L2('Completed by', 'Completadas por'), html: `<div class="dcard"><div class="dh"><b>${L2('Completed by', 'Completadas por')}</b><span class="grow"></span><span class="small">${DASH.days} ${L2('days', 'días')}</span></div>${teamHtml}</div>`}])}`;
 }
 /* hotel numbers from the PMS reports: check-ins, check-outs, stayovers, left to sell, occupancy, ADR */
 const DAYS = { data: null, at: 0, loading: false, missing: false, busy: false, hotel: '' };
@@ -5104,7 +5203,7 @@ const nfmt = (v, dec) => v == null ? '—' : Number(v).toLocaleString(LOC(), {mi
 const money = v => v == null ? '—' : '$' + nfmt(v, 2);
 const pct = v => v == null ? '—' : nfmt(v, 1) + '%';
 function dashOps(){
-  if (DAYS.missing || !DAYS.data) return '';
+  if (DAYS.missing || !DAYS.data) return [];
   const D = DAYS.data, today = D.today, fc = new Map(), act = new Map();
   D.days.forEach(d => (d.kind === 'forecast' ? fc : act).set(d.day, d));
   const addDay = (d, n) => new Date(dayMs(d) + n * 864e5).toISOString().slice(0, 10);
@@ -5117,8 +5216,8 @@ function dashOps(){
       return `${k === 'forecast' ? 'Forecast' : L2('Statistics', 'Estadísticas')} ${esc(fmtFull(T(x.at)))} ${who}`; }).filter(Boolean).join(' · ');
   const drop = D.can_upload ? `<label class="dfdrop" data-dpdf><input type="file" hidden data-dpdfin accept="application/pdf,.pdf" multiple>
       <span>${DAYS.busy ? L2('Reading the report…', 'Leyendo el reporte…') : L2('Drop the Forecast or Statistics PDF here, or click to choose it.', 'Suelta aquí el PDF del Forecast o de Statistics, o haz clic para elegirlo.')}</span></label>` : '';
-  if (!t && !yd) return `<div class="dcard"><div class="dh"><b>${L2('Hotel numbers', 'Números del hotel')}</b></div>
-      <div class="dnone">${L2('No numbers yet. They come in each morning from the report email.', 'Aún no hay números. Llegan cada mañana del correo con los reportes.')}</div>${drop}</div>`;
+  if (!t && !yd) return [{k: 'ops', t: L2('Hotel numbers', 'Números del hotel'), html: `<div class="dcard"><div class="dh"><b>${L2('Hotel numbers', 'Números del hotel')}</b></div>
+      <div class="dnone">${L2('No numbers yet. They come in each morning from the report email.', 'Aún no hay números. Llegan cada mañana del correo con los reportes.')}</div>${drop}</div>`}];
   const kpis = t ? tile(nfmt(t.arrivals), L2('Check-ins today', 'Check-ins hoy'), 'acc', sub('arrivals'))
       + tile(nfmt(t.departures), L2('Check-outs today', 'Check-outs hoy'), '', sub('departures'))
       + tile(nfmt(t.stayovers), L2('Stayovers', 'Stayovers'), '', sub('stayovers'))
@@ -5134,10 +5233,11 @@ function dashOps(){
   const ahead = [...fc.values()].filter(d => d.day >= today).slice(0, 92);
   const chart = ahead.length > 1 ? dashBars([{cls: 'b1', vals: ahead.map(d => Math.max(0, Math.round(+d.occ || 0)))}], ahead.map(d => d.day), ahead.map(d => dayLbl(d.day) + ' · ' + pct(d.occ)),
       {every: 7, short: k => dayLbl(k, {month: 'short', day: 'numeric'}), aria: L2('Occupancy forecast', 'Ocupación pronosticada')}) : '';
-  return `<div class="dcard dops"><div class="dh"><b>${L2('Hotel numbers', 'Números del hotel')}</b><span class="grow"></span><span class="small">${loaded}</span></div>
-      <div class="dkpis">${kpis}</div>${yline}</div>
-    ${next.length ? `<div class="dgrid2 dwide"><div class="dcard"><div class="dh"><b>${L2('Next 14 days', 'Próximos 14 días')}</b></div>${table}</div>
-      <div class="dcard"><div class="dh"><b>${L2('Occupancy forecast', 'Ocupación pronosticada')}</b><span class="grow"></span><span class="small">${ahead.length} ${L2('days', 'días')} · %</span></div>${chart}${drop}</div></div>` : drop ? `<div class="dcard">${drop}</div>` : ''}`;
+  return [{k: 'ops', t: L2('Hotel numbers', 'Números del hotel'), html: `<div class="dcard dops"><div class="dh"><b>${L2('Hotel numbers', 'Números del hotel')}</b><span class="grow"></span><span class="small">${loaded}</span></div>
+      <div class="dkpis">${kpis}</div>${yline}</div>`},
+    ...(next.length ? [{k: 'next14', w: 'h2w', t: L2('Next 14 days', 'Próximos 14 días'), html: `<div class="dcard"><div class="dh"><b>${L2('Next 14 days', 'Próximos 14 días')}</b></div>${table}</div>`},
+      {k: 'occfc', w: 'h2w', t: L2('Occupancy forecast', 'Ocupación pronosticada'), html: `<div class="dcard"><div class="dh"><b>${L2('Occupancy forecast', 'Ocupación pronosticada')}</b><span class="grow"></span><span class="small">${ahead.length} ${L2('days', 'días')} · %</span></div>${chart}${drop}</div>`}]
+      : drop ? [{k: 'opsdrop', t: L2('Upload a report', 'Subir un reporte'), html: `<div class="dcard">${drop}</div>`}] : [])];
 }
 const PDFERR = { WRONG_HOTEL: ['That report is from another hotel.', 'Ese reporte es de otro hotel.'], NOT_ALLOWED: ['Only managers and front desk can upload reports.', 'Solo gerentes y recepción pueden subir reportes.'],
   BAD_ROW: ["Some numbers in the report don't look right.", 'Algunos números del reporte no se ven bien.'] };
@@ -5176,8 +5276,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.27.0';
+const APP_VERSION = '1.28.0';
 const CHANGES = [
+  {v: '1.28.0', d: '2026-11-20', en: ['KPI and Orders on a computer: a Reorder button lets you move the cards to where they suit you best. Drag them, or use the arrows, then press Save', 'The order is saved on that computer for your user only; Default order puts them back as they came'],
+    es: ['KPI y Órdenes en la computadora: un botón Reordenar te deja mover las tarjetas a donde mejor te acomoden. Arrástralas, o usa las flechas, y pulsa Guardar', 'El orden se guarda en esa computadora y solo para tu usuario; Orden original las deja como venían']},
   {v: '1.27.0', d: '2026-11-19', en: ['Board: Today’s check-outs for Front desk, laid out like a notepad: a table on a computer and big cards on a phone', 'A countdown to 11:00 AM with how many check-outs are still not confirmed; after 11:00, how many are to verify', 'Tabs with counts: Not confirmed, To verify, Late check out, Extensions, Vacant still in the system, Stayovers, and a box to find a room by number', 'Your notepad: vacant rooms not yet checked out in the system; tap one when you check it out', 'Extensions not confirmed on the side, since housekeeping does not go in while one is pending', 'A late check out whose time passed shows as Late passed, in red'],
     es: ['Board: Salidas de hoy para Front desk, como un bloc de notas: una tabla en la computadora y tarjetas grandes en el teléfono', 'Una cuenta regresiva a las 11:00 AM con cuántas salidas faltan por confirmar; después de las 11:00, cuántas hay por verificar', 'Pestañas con números: Sin confirmar, Por verificar, Late check out, Extensiones, Vacías sin sacar del sistema, Stayovers, y una caja para buscar un cuarto por número', 'Tu bloc de notas: los cuartos vacíos que todavía no sacaste del sistema; toca uno cuando lo saques', 'Las extensiones sin confirmar al lado, porque housekeeping no entra mientras una esté pendiente', 'Un late check out cuya hora pasó sale como Late vencido, en rojo']},
   {v: '1.26.1', d: '2026-11-16', en: ['KPI: each hotel band now says “Synxis report:” with the date and time of its last update'], es: ['KPI: la banda de cada hotel ahora dice “Reporte Synxis:” con la fecha y hora de su última actualización']},
@@ -8567,8 +8669,8 @@ function kpiFc(D, hotels){
     ${rows ? `<details class="kpmore"><summary>${L2('See each hotel day by day', 'Ver cada hotel día por día')}</summary><div class="dtwrap"><table class="dtable dnum kptable"><thead><tr><th>${L2('Day', 'Día')}</th>${hs.map(h => `<th>${esc(hotelShort(h.id))}</th>`).join('')}${hs.length > 1 ? '<th>Total</th>' : ''}</tr></thead><tbody>${rows}</tbody></table></div></details>` : ''}</div>`;
 }
 function kpiRender(){
-  const box = $('#kpBody'); if (!box) return;
-  const D = KPI.data, head = `<div class="enghead"><div class="grow"><h2>KPI</h2><div class="sub">${L2('From each hotel’s SynXis Statistics and Forecast reports. Only managers see this.', 'De los reportes Statistics y Forecast de SynXis de cada hotel. Solo lo ven los gerentes.')}</div></div></div>`;
+  const box = $('#kpBody'); if (!box || roBusy('kpi')) return;
+  const D = KPI.data, head = `<div class="enghead"><div class="grow"><h2>KPI</h2><div class="sub">${L2('From each hotel’s SynXis Statistics and Forecast reports. Only managers see this.', 'De los reportes Statistics y Forecast de SynXis de cada hotel. Solo lo ven los gerentes.')}</div></div>${KPI.data && (KPI.data.days || []).length ? roTools('kpi') : ''}</div>`;
   const drop = `<label class="dfdrop kpdrop" data-kpdrop><input type="file" hidden data-kpin accept="application/pdf,.pdf" multiple>
     <span>${KPI.busy ? L2('Reading the report…', 'Leyendo el reporte…') : L2('Drop Statistics or Forecast PDFs here, or click to choose them.', 'Suelta aquí PDF de Statistics o Forecast, o haz clic para elegirlos.')}</span></label>`;
   if (KPI.missing) { box.innerHTML = head + `<div class="card"><div class="dnone">${L2('KPI isn’t ready on the server yet.', 'KPI todavía no está listo en el servidor.')}</div></div>`; return; }
@@ -8587,17 +8689,18 @@ function kpiRender(){
   // total of the hotels whose report is for the newest day
   const fresh = hotels.map(h => by.get(h.id)).filter(r => r && r.day === newest);
   const lacking = hotels.filter(h => !by.get(h.id) || by.get(h.id).day < newest).map(h => hotelShort(h.id));
-  const cards = (fresh.length > 1 ? kpiCard(L2(`All ${fresh.length} hotels`, `Los ${fresh.length} hoteles`), fresh.map(r => r.v), '', p, {total: true}) : '')
-    + hotels.map(h => { const r = by.get(h.id); return r ? kpiCard(hotelShort(h.id), [r.v], rep(r), p, {hotel: h.id})
-        : `<div class="kpcard kpnone"><div class="kph kpband" data-h="${esc(h.id)}"><b>${esc(hotelShort(h.id))}</b><span class="kpcode">${esc(h.id)}</span></div><div class="dnone">${L2('No report yet.', 'Aún no hay reporte.')}</div></div>`; }).join('');
+  const cards = [{k: 'tot', w: 's3', t: L2('All hotels', 'Todos los hoteles'), html: fresh.length > 1 ? kpiCard(L2(`All ${fresh.length} hotels`, `Los ${fresh.length} hoteles`), fresh.map(r => r.v), '', p, {total: true}) : ''}]
+    .concat(hotels.map(h => { const r = by.get(h.id); return {k: 'h-' + h.id, w: 's3', t: hotelShort(h.id), html: r ? kpiCard(hotelShort(h.id), [r.v], rep(r), p, {hotel: h.id})
+        : `<div class="kpcard kpnone"><div class="kph kpband" data-h="${esc(h.id)}"><b>${esc(hotelShort(h.id))}</b><span class="kpcode">${esc(h.id)}</span></div><div class="dnone">${L2('No report yet.', 'Aún no hay reporte.')}</div></div>`}; }));
   const donut = kpiDonut(fresh, hotels, p), vs = kpiVs(fresh, hotels, p, KPI.metric);
   box.innerHTML = head + `<div class="kptop">${seg}<span class="kpwhen">${esc(when)}</span></div>
     ${lacking.length && fresh.length ? `<div class="kpwarn">${esc(L2('Missing the ' + kpiDayLbl(newest, {month: 'short', day: 'numeric'}) + ' report for: ', 'Falta el reporte del ' + kpiDayLbl(newest, {day: 'numeric', month: 'short'}) + ' de: ') + lacking.join(', '))}</div>` : ''}
-    <div class="kpgrid">${cards}</div>
-    ${donut || vs ? `<div class="${donut && vs ? 'kprow2' : ''}">${donut}${vs}</div>` : ''}
-    ${kpiFc(D, hotels)}
-    <div class="card kptrend"><div class="kptrh"><h3 class="srh">${L2('Last 30 days', 'Últimos 30 días')}</h3><span class="kpwhen">${esc(L2(KPI_M[KPI.metric][1], KPI_M[KPI.metric][2]))}</span></div>${kpiChart(D, hotels, KPI.metric)}${kpiTable(D, hotels, KPI.metric)}</div>
-    <div class="card">${drop}</div>`;
+    ${roGrid('kpi', [...cards,
+      {k: 'donut', w: vs ? 'dn' : 'full', t: L2('Room revenue by hotel', 'Ingreso de cuartos por hotel'), html: donut},
+      {k: 'vs', w: donut ? 'vs' : 'full', t: L2('Against last year', 'Contra el año pasado'), html: vs},
+      {k: 'fc', t: L2('On the books (Forecast)', 'En libros (Forecast)'), html: kpiFc(D, hotels)},
+      {k: 'trend', t: L2('Last 30 days', 'Últimos 30 días'), html: `<div class="card kptrend"><div class="kptrh"><h3 class="srh">${L2('Last 30 days', 'Últimos 30 días')}</h3><span class="kpwhen">${esc(L2(KPI_M[KPI.metric][1], KPI_M[KPI.metric][2]))}</span></div>${kpiChart(D, hotels, KPI.metric)}${kpiTable(D, hotels, KPI.metric)}</div>`},
+      {k: 'drop', t: L2('Upload reports', 'Subir reportes'), html: `<div class="card">${drop}</div>`}])}`;
 }
 const KPI_ERR = {UNKNOWN_HOTEL: ["That report isn't from one of our hotels.", 'Ese reporte no es de uno de nuestros hoteles.'], WRONG_HOTEL: ["That report is from a hotel you don't use.", 'Ese reporte es de un hotel que tú no usas.'],
   BAD_DAY: ["The report's date doesn't look right.", 'La fecha del reporte no se ve bien.'], BAD_ROW: ["Some numbers in the report don't look right.", 'Algunos números del reporte no se ven bien.'],
