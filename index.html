@@ -1275,6 +1275,12 @@ button.bdstep{cursor:pointer}
 .bdnote .btn{align-self:flex-start}
 .bdrnote{flex-basis:100%;font-size:13px;color:#C2410C}
 .bdquick{display:flex;gap:6px;flex-wrap:wrap}
+/* 1.33.0: report maintenance or a lost item from the room card */
+.bdrep{display:flex;gap:6px;flex-wrap:wrap;margin-top:8px;padding-top:8px;border-top:1px dashed var(--line,#e5e7eb)}
+.bdrep .btn{font-size:13px;padding:6px 10px}
+.bdrepi{border:0;background:transparent;font-size:17px;line-height:1;padding:6px;border-radius:10px;cursor:pointer;color:inherit}
+.bdrepi:hover,.bdrepi:focus-visible{background:var(--soft,rgba(124,77,255,.12))}
+.bdrpick{display:grid;gap:10px;margin-top:6px}.bdrpick .btn{justify-content:flex-start;text-align:left;padding:14px;font-size:15px}
 .bdquick .btn{border-left:4px solid var(--bc)}
 .bdmeta{font-size:13px;color:var(--ink-2)}
 .bdfdbtns .bdtog[aria-pressed="true"]{background:#16A34A;border-color:#16A34A;color:#fff}
@@ -5330,8 +5336,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.32.0';
+const APP_VERSION = '1.33.0';
 const CHANGES = [
+  {v: '1.33.0', d: '2026-11-20', en: ['Report from the room card on the Board: housekeepers get Maintenance and Lost item buttons on each of their rooms', 'Maintenance opens the usual order form with the room already filled in. The order goes to Engineer and maintenance gets the alert', 'Lost item saves it in Lost & Found with the room and your name', 'Supervisors and housemen get a small 🔧 on each room row that asks which one'],
+    es: ['Reportar desde la tarjeta del cuarto en el Board: las housekeepers tienen botones de Mantenimiento y Objeto olvidado en cada uno de sus cuartos', 'Mantenimiento abre la orden de siempre con el cuarto ya puesto. La orden va a Engineer y mantenimiento recibe el aviso', 'Objeto olvidado lo guarda en Objetos perdidos con el cuarto y tu nombre', 'Supervisoras y houseman tienen un 🔧 pequeño en cada fila de cuarto que pregunta cuál de los dos']},
   {v: '1.32.0', d: '2026-11-20', en: ['Reorder works on a phone too: on KPI, tap Reorder, move the cards with the arrows or drag one by its bar, then Save', 'Reorder menu on a phone now moves the groups too: open a group above, then move it left or right', 'Each order is kept on that device, so your phone and your computer can be different'],
     es: ['Reordenar ahora funciona en el teléfono: en KPI, toca Reordenar, mueve las tarjetas con las flechas o arrastra una por su barra, y Guardar', 'Ordenar menú en el teléfono ahora también mueve los grupos: abre un grupo arriba y muévelo a la izquierda o a la derecha', 'Cada orden se guarda en ese dispositivo, así que tu teléfono y tu computadora pueden ser distintos']},
   {v: '1.31.0', d: '2026-11-20', en: ['Orders is now called Orders To-do, in the Menu and at the top of its page'],
@@ -5936,7 +5944,8 @@ $('#engList').addEventListener('click', e => {
 });
 $('#engList').addEventListener('keydown', e => { const c = e.target.closest('.engrow'); if (c && (e.key === 'Enter' || e.key === ' ')) { e.preventDefault(); orderDetail(c.dataset.id); } });
 // a new maintenance order: room or area, the problem, urgent or not, who takes it, a photo
-function engNew(){
+function engNew(pre){
+  pre = pre || {};
   const eng = S.staff.filter(s => inGroup(s, 'eng')), rest = S.staff.filter(s => !inGroup(s, 'eng'));
   const opt = s => `<option value="${s.id}">${esc(s.name)}</option>`;
   openModal(`<div data-noi18n><h2>${esc(L2('New maintenance order', 'Nueva orden de mantenimiento'))}</h2>
@@ -5955,6 +5964,7 @@ function engNew(){
     $('#enRoomF').hidden = where !== 'room'; $('#enAreaF').hidden = where !== 'area'; });
   document.querySelectorAll('.encats button').forEach(b => b.onclick = () => { cat = b.dataset.ec;
     document.querySelectorAll('.encats button').forEach(x => x.setAttribute('aria-pressed', x === b)); });
+  if (pre.room) { $('#enRoom').value = pre.room; $('#enRoom').readOnly = true; }
   $('#enPhoto').onchange = () => { const f = $('#enPhoto').files[0]; $('#enPhT').textContent = f ? L2('Photo ✓', 'Foto ✓') : L2('Photo', 'Foto'); };
   $('#enSave').onclick = async () => {
     const room = $('#enRoom').value.trim(), area = $('#enArea').value.trim(), det = $('#enDet').value.trim(), err = $('#enErr');
@@ -5969,6 +5979,7 @@ function engNew(){
       if (f) { try { await call('sc_photo_add', {p_order: r.order_id, p_data: await shrink(f, 1100, .72)}); } catch (e) { toast(esc(L2('Photo not saved: ', 'La foto no se guardó: ') + e.message)); } }
       S.known.set(r.order_id, 'open'); closeModal(); notify([r.order_id]);
       toast(`<span data-noi18n><b>${esc(r.ticket)}</b> ${esc(L2('Order created. Maintenance gets the alert.', 'Orden creada. Mantenimiento recibe el aviso.'))}</span>`, 'new');
+      if (pre.room) { await refresh(); return; }
       ENG.f = 'all'; if (ENG.seg !== 'open') engGo('open'); await refresh();
     } catch (e) { btn.disabled = false; err.textContent = e.message; }
   };
@@ -6685,16 +6696,17 @@ function bdCard(r){
       ${clock ? `<div class="bdclock" data-bdclock="${id}">${bdClock(bdSecs(r))}</div>` : r.mpr != null ? `<div class="bdmpr">MPR <b>${r.mpr} min</b></div>` : ''}
       ${act ? `<div class="bdacts">${act}</div>` : ''}
       ${list.length ? `<div class="bdquick" role="group" aria-label="${esc(L2('Status', 'Estatus'))}">${list.filter(k => k !== st).map(k => `<button class="btn sm" type="button" data-bdq="${k}" data-id="${id}" data-st="${k}">${esc(k === 'ready' ? L2('Back to Ready', 'Volver a Listo') : bdSt(k))}</button>`).join('')}</div>` : ''}
+      <div class="bdrep" role="group" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}"><button class="btn sm" type="button" data-bdrep="eng" data-room="${esc(r.room)}">🔧 ${esc(L2('Maintenance', 'Mantenimiento'))}</button><button class="btn sm" type="button" data-bdrep="lost" data-room="${esc(r.room)}">🧳 ${esc(L2('Lost item', 'Objeto olvidado'))}</button></div>
     </div>`;
 }
 function bdStripHtml(){
   const rooms = BD.rooms || [], go = rooms.filter(bdToStrip), wait = rooms.filter(bdOut).sort((a, b) => (b.verify - a.verify) || bdLateMin(a) - bdLateMin(b) || +a.room - +b.room);
   const done = rooms.filter(r => r.stripped_at).sort((a, b) => bdT(b.stripped_at) - bdT(a.stripped_at)).slice(0, 15);
   return `<div class="card bdstrip"><div class="bdhead"><h3 class="srh">${esc(L2('Vacant, to strip', 'Vacías, por stripear'))}</h3><span class="bdsum">${go.length}</span></div>
-    ${go.length ? go.map(r => `<div class="bdrow bdgo" data-st="dirty"><b class="bdnum">${esc(r.room)}</b><span class="grow">${esc(r.to_name || L2('Not assigned', 'Sin asignar'))}</span><button class="btn pri bdbig" type="button" data-bdact="strip" data-id="${esc(r.id)}">✓ ${esc(L2('Stripped', 'Stripeado'))}</button></div>`).join('')
+    ${go.length ? go.map(r => `<div class="bdrow bdgo" data-st="dirty"><b class="bdnum">${esc(r.room)}</b><span class="grow">${esc(r.to_name || L2('Not assigned', 'Sin asignar'))}</span><button class="bdrepi" type="button" data-bdrep="pick" data-room="${esc(r.room)}" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}" title="${esc(L2('Report maintenance or a lost item', 'Reportar mantenimiento u objeto olvidado'))}">🔧</button><button class="btn pri bdbig" type="button" data-bdact="strip" data-id="${esc(r.id)}">✓ ${esc(L2('Stripped', 'Stripeado'))}</button></div>`).join('')
       : `<div class="small">${esc(L2('Nothing to strip right now. Rooms show here as soon as the guest leaves.', 'No hay nada por stripear ahora. Los cuartos salen aquí en cuanto el huésped sale.'))}</div>`}
     ${wait.length ? `<h3 class="srh bdsub">${esc(L2('Guest still in the room', 'Huésped todavía en el cuarto'))} <span class="bdsum">${wait.length}</span></h3>` + wait.map(r => `<div class="bdrow" data-st="dirty"><b class="bdnum">${esc(r.room)}</b>${bdBadges(r)}<span class="grow"></span><button class="btn sm" type="button" data-bdvac="${esc(r.id)}">${esc(L2('It is vacant', 'Está vacía'))}</button></div>`).join('') : ''}
-    ${done.length ? `<h3 class="srh bdsub">${esc(L2('Stripped today', 'Stripeados hoy'))}</h3>` + done.map(r => `<div class="bdrow done" data-st="${r.status}"><b class="bdnum">${esc(r.room)}</b><span class="grow">${esc((r.stripped_by || '') + ' · ' + fmtTime(T(r.stripped_at)))}</span><span class="bdst" data-st="${r.status}">${esc(bdSt(r.status))}</span></div>`).join('') : ''}
+    ${done.length ? `<h3 class="srh bdsub">${esc(L2('Stripped today', 'Stripeados hoy'))}</h3>` + done.map(r => `<div class="bdrow done" data-st="${r.status}"><b class="bdnum">${esc(r.room)}</b><span class="grow">${esc((r.stripped_by || '') + ' · ' + fmtTime(T(r.stripped_at)))}</span><button class="bdrepi" type="button" data-bdrep="pick" data-room="${esc(r.room)}" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}" title="${esc(L2('Report maintenance or a lost item', 'Reportar mantenimiento u objeto olvidado'))}">🔧</button><span class="bdst" data-st="${r.status}">${esc(bdSt(r.status))}</span></div>`).join('') : ''}
   </div>`;
 }
 // 1.27.0: Salidas de hoy for Front desk, a notepad like Arian's Room Clean: filters with counts, room search, the time left to 11:00,
@@ -6804,7 +6816,7 @@ function bdRow(r, boss){
       + `<button class="bdx" type="button" data-bdrm="${id}" aria-label="${esc(L2('Take off the board', 'Quitar del board'))}">×</button>`
     : `<span class="bdst" data-st="${st}">${esc(bdSt(st))}</span>`;
   const note = st === 'returned' && r.note ? `<div class="bdrnote">↩ ${esc(r.note)}${r.photos ? ` · <button class="linkbtn" type="button" data-bdpics="${id}">${esc(L2(r.photos + (r.photos > 1 ? ' photos' : ' photo'), r.photos + (r.photos > 1 ? ' fotos' : ' foto')))}</button>` : ''}</div>` : '';
-  return `<div class="bdrow" data-st="${r.verify ? 'verify' : st}" data-bdid="${id}"><b class="bdnum">${esc(r.room)}</b><span class="bdkind">${r.kind === 'so' ? 'SO' : 'CO'}</span>${bdBadges(r)}${time}<span class="grow"></span>${ctl}${note}</div>`;
+  return `<div class="bdrow" data-st="${r.verify ? 'verify' : st}" data-bdid="${id}"><b class="bdnum">${esc(r.room)}</b><span class="bdkind">${r.kind === 'so' ? 'SO' : 'CO'}</span>${bdBadges(r)}${time}<span class="grow"></span><button class="bdrepi" type="button" data-bdrep="pick" data-room="${esc(r.room)}" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}" title="${esc(L2('Report maintenance or a lost item', 'Reportar mantenimiento u objeto olvidado'))}">🔧</button>${ctl}${note}</div>`;
 }
 // the red number on the Board: what waits on this person now
 function bdWaiting(d){
@@ -6858,6 +6870,35 @@ async function bdAct(id, act, status, el){
     else if (act === 'return') chime('edit');
     else pip();
   } catch (e) { toast(esc(bdErr(e))); BDPend = false; if (document.activeElement) try { document.activeElement.blur(); } catch {} bdRender(); }
+}
+/* 1.33.0: from the room card, report maintenance (goes to Engineer, the team gets the alert) or a lost item (goes to Lost & found), room already filled in */
+function bdReport(room, what){
+  if (what === 'eng') return engNew({room});
+  if (what === 'lost') return bdLost(room);
+  openModal(`<div data-noi18n><h2>${esc(L2('Room ', 'Cuarto ') + room)}</h2><p class="hint">${esc(L2('What do you want to report?', '¿Qué quieres reportar?'))}</p>
+    <div class="bdrpick"><button class="btn" type="button" id="bdrEng">🔧 ${esc(L2('Maintenance problem', 'Problema de mantenimiento'))}</button><button class="btn" type="button" id="bdrLost">🧳 ${esc(L2('Lost item found', 'Objeto olvidado encontrado'))}</button></div>
+    <div class="btnrow" style="margin-top:12px"><button class="btn" type="button" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  $('#bdrEng').onclick = () => { closeModal(); engNew({room}); };
+  $('#bdrLost').onclick = () => { closeModal(); bdLost(room); };
+}
+function bdLost(room){
+  openModal(`<div data-noi18n><h2>${esc(L2('Lost item · room ', 'Objeto olvidado · cuarto ') + room)}</h2>
+    <div class="field"><label for="blItem">${esc(L2('What did you find', 'Qué encontraste'))}</label><input id="blItem" maxlength="200" autocomplete="off" placeholder="${esc(L2('Phone charger, black jacket', 'Cargador de teléfono, chaqueta negra'))}"></div>
+    <div class="field"><label for="blLoc">${esc(L2('Where in the room (optional)', 'Dónde en el cuarto (opcional)'))}</label><input id="blLoc" maxlength="120" autocomplete="off" placeholder="${esc(L2('Nightstand, bathroom, closet', 'Mesa de noche, baño, closet'))}"></div>
+    <div class="field"><label for="blNotes">${esc(L2('Notes (optional)', 'Notas (opcional)'))}</label><textarea id="blNotes" maxlength="500"></textarea></div>
+    <p class="hint">${esc(L2('It goes to Lost & Found with this room and your name.', 'Va a Objetos perdidos con este cuarto y tu nombre.'))}</p>
+    <div class="err" id="blErr"></div>
+    <div class="btnrow"><button class="btn pri" type="button" id="blSave">${esc(L2('Save item', 'Guardar objeto'))}</button><button class="btn" type="button" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  setTimeout(() => { const i = $('#blItem'); if (i) i.focus(); }, 50);
+  $('#blItem').oninput = () => { $('#blErr').textContent = ''; };
+  $('#blSave').onclick = async () => {
+    const item = $('#blItem').value.trim(), err = $('#blErr');
+    if (!item) { err.textContent = L2('Write what you found.', 'Escribe qué encontraste.'); return; }
+    const btn = $('#blSave'); btn.disabled = true; err.textContent = '';
+    try { await call('sc_lf_add', {p_item: item, p_location: $('#blLoc').value.trim(), p_room: room, p_notes: $('#blNotes').value.trim()});
+      closeModal(); fx('done'); toast(`<span data-noi18n>${esc(L2('Saved in Lost & Found: ', 'Guardado en Objetos perdidos: ') + item + ' · ' + L2('room ', 'cuarto ') + room)}</span>`, 'new'); refresh(); }
+    catch (e) { btn.disabled = false; err.textContent = e.message; }
+  };
 }
 function bdRemove(id){
   const r = (BD.rooms || []).find(x => x.id === id); if (!r) return;
@@ -7001,6 +7042,7 @@ $('#view-board').addEventListener('click', e => {
   const pm = e.target.closest('[data-bdpms]'); if (pm) return bdAct(pm.dataset.bdpms, 'pms', pm.getAttribute('aria-pressed') === 'true' ? 'off' : 'on', pm);
   const rt = e.target.closest('[data-bdret]'); if (rt) return bdReturn(rt.dataset.bdret);
   const pc = e.target.closest('[data-bdpics]'); if (pc) return bdPics(pc.dataset.bdpics);
+  const rp = e.target.closest('[data-bdrep]'); if (rp) return bdReport(rp.dataset.room, rp.dataset.bdrep);
   if (e.target.closest('#bdDeps')) return bdDeps();
   const ff = e.target.closest('[data-bdff]'); if (ff) { BDF = ff.dataset.bdff; BDQ = ''; return bdRender(); }
   const fq = e.target.closest('[data-bdfq]'); if (fq) { BDQ = fq.dataset.bdfq; bdRender(); const i = $('#bdFdQ'); if (i) i.scrollIntoView({block: 'center', behavior: 'smooth'}); return; }
