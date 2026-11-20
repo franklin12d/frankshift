@@ -1893,7 +1893,7 @@ details.kpmore[open] summary{margin-bottom:8px}
     <button role="tab" data-tab="chat" aria-selected="true"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7.9 20A9 9 0 1 0 4 16.1L2 22Z"/></svg></span><span class="tl">Chat</span></button>
     <button role="tab" data-tab="passon" aria-selected="false"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="8" y="2" width="8" height="4" rx="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11h4M12 16h4M8 11h.01M8 16h.01"/></svg><span class="cnt" id="poCnt"></span></span><span class="tl">Pass-on</span></button>
     <button role="tab" data-tab="srep" aria-selected="false" id="srTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><path d="M14 2v6h6"/><path d="M8 13h8M8 17h5"/></svg></span><span class="tl">Shift Report</span></button>
-    <button role="tab" data-tab="orders" aria-selected="false"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/></svg><span class="cnt" id="tabCnt"></span></span><span class="tl">Orders</span></button>
+    <button role="tab" data-tab="orders" aria-selected="false"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m3 17 2 2 4-4"/><path d="m3 7 2 2 4-4"/><path d="M13 6h8M13 12h8M13 18h8"/></svg><span class="cnt" id="tabCnt"></span></span><span class="tl">Orders To-do</span></button>
     <button role="tab" data-tab="eng" aria-selected="false" id="engTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.7 6.3a1 1 0 0 0 0 1.4l1.6 1.6a1 1 0 0 0 1.4 0l3.77-3.77a6 6 0 0 1-7.94 7.94l-6.91 6.91a2.12 2.12 0 0 1-3-3l6.91-6.91a6 6 0 0 1 7.94-7.94l-3.76 3.76z"/></svg><span class="cnt" id="engCnt"></span></span><span class="tl" data-noi18n>Engineer</span></button>
     <button role="tab" data-tab="map" aria-selected="false"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M14.1 6.1 9.9 3.9a2 2 0 0 0-1.8 0L3.6 6.2A1 1 0 0 0 3 7.1v12.3a1 1 0 0 0 1.4.9l3.7-1.9a2 2 0 0 1 1.8 0l4.2 2.2a2 2 0 0 0 1.8 0l4.5-2.3a1 1 0 0 0 .6-.9V5.1a1 1 0 0 0-1.4-.9l-3.7 1.9a2 2 0 0 1-1.8 0Z"/><path d="M9 3.6v15M15 5.6v15"/></svg><span class="cnt" id="mapCnt"></span></span><span class="tl">Map</span></button>
     <button role="tab" data-tab="laundry" aria-selected="false" id="lnTab"><span class="tic"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="4" y="2" width="16" height="20" rx="2"/><path d="M8 6h.01M11 6h.01"/><circle cx="12" cy="13.5" r="5"/><path class="drum" d="M9.3 14c.9-.8 1.8-.8 2.7 0s1.8.8 2.7 0"/></svg></span><span class="tl">Laundry</span><span class="lnst" id="lnSt" data-noi18n></span></button>
@@ -1934,7 +1934,7 @@ details.kpmore[open] summary{margin-bottom:8px}
         <div class="preview" id="preview"></div>
       </form>
     </section>
-    <aside class="col panel" aria-label="Orders">
+    <aside class="col panel" aria-label="Orders To-do">
       <div class="qhead">
         <div><h2>Now serving</h2><div class="sub">Open orders, highest priority first</div></div>
         <div class="big" id="qCount">0</div>
@@ -2192,6 +2192,7 @@ const ES = {
 "Code until": "Código hasta",
 "Chat": "Chat",
 "Orders": "Órdenes",
+"Orders To-do": "Órdenes pendientes",
 "Lost & Found": "Objetos perdidos",
 "Map": "Mapa",
 "‹ Pass-on": "‹ Entregas",
@@ -4055,7 +4056,7 @@ function staffCtl(s){
         <div class="depts"><span>Also alerts for:</span>${DEPTS.map(d => `<label><input type="checkbox" data-dept="${d.id}" ${(s.depts || []).includes(d.id) ? 'checked' : ''}>${d.label}</label>`).join('')}</div>${accessHtml(s)}`;
 }
 /* Menu permissions: managers choose which sections each role, or each person, sees. Chat and Manager always show; the superuser always sees everything */
-const MENU_SECS = [['passon', 'Pass-on', 'Entregas'], ['srep', 'Shift Report', 'Shift Report'], ['orders', 'Orders', 'Órdenes'], ['eng', 'Engineer', 'Engineer'], ['map', 'Map', 'Mapa'],
+const MENU_SECS = [['passon', 'Pass-on', 'Entregas'], ['srep', 'Shift Report', 'Shift Report'], ['orders', 'Orders To-do', 'Órdenes pendientes'], ['eng', 'Engineer', 'Engineer'], ['map', 'Map', 'Mapa'],
   ['laundry', 'Laundry', 'Laundry'], ['punch', 'Missing Punch', 'Missing Punch'], ['dayoff', 'Day off request', 'Day off request'], ['hkplan', 'HK Game Plan', 'HK Game Plan'], ['board', 'Board', 'Board']];
 const MR = {role: 'hk', rules: null};
 function menuSet(d){
@@ -5325,8 +5326,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.30.0';
+const APP_VERSION = '1.31.0';
 const CHANGES = [
+  {v: '1.31.0', d: '2026-11-20', en: ['Orders is now called Orders To-do, in the Menu and at the top of its page'],
+    es: ['Órdenes ahora se llama Órdenes pendientes, en el Menú y arriba en su página']},
   {v: '1.30.0', d: '2026-11-20', en: ['Pass-on: each Shift Report shows its shift by color, on the bar at its left and on its tag: Morning sky blue, Afternoon green, Night Audit amber'],
     es: ['Pass-on: cada Shift Report muestra su turno por color, en la barra de la izquierda y en su etiqueta: Morning azul celeste, Afternoon verde, Night Audit ámbar']},
   {v: '1.29.0', d: '2026-11-20', en: ['Menu: a new Me group holds Missing Punch and Day off request', 'Each group in the Menu has an arrow to show or hide its sections', 'Reorder menu, at the bottom of the Menu: drag the groups and sections (or use the arrows) and press Save. The order is kept on that device for your user only'],
