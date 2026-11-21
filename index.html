@@ -5336,8 +5336,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.33.0';
+const APP_VERSION = '1.34.0';
 const CHANGES = [
+  {v: '1.34.0', d: '2026-11-21', en: ['When a housekeeper marks a room Ready on the Board, the HK supervisors and the hotel manager on shift get a phone alert, even with the app closed', 'The alert says the room, who cleaned it and how many minutes it took, and opens the Board', 'Each finish alerts once. If the room was sent back and finished again, it alerts again'],
+    es: ['Cuando una housekeeper marca un cuarto Listo en el Board, las supervisoras HK y el gerente del hotel en turno reciben un aviso en el teléfono, aunque la app esté cerrada', 'El aviso dice el cuarto, quién lo limpió y cuántos minutos tomó, y abre el Board', 'Cada cuarto terminado avisa una vez. Si lo devolvieron y lo terminan de nuevo, avisa otra vez']},
   {v: '1.33.0', d: '2026-11-20', en: ['Report from the room card on the Board: housekeepers get Maintenance and Lost item buttons on each of their rooms', 'Maintenance opens the usual order form with the room already filled in. The order goes to Engineer and maintenance gets the alert', 'Lost item saves it in Lost & Found with the room and your name', 'Supervisors and housemen get a small 🔧 on each room row that asks which one'],
     es: ['Reportar desde la tarjeta del cuarto en el Board: las housekeepers tienen botones de Mantenimiento y Objeto olvidado en cada uno de sus cuartos', 'Mantenimiento abre la orden de siempre con el cuarto ya puesto. La orden va a Engineer y mantenimiento recibe el aviso', 'Objeto olvidado lo guarda en Objetos perdidos con el cuarto y tu nombre', 'Supervisoras y houseman tienen un 🔧 pequeño en cada fila de cuarto que pregunta cuál de los dos']},
   {v: '1.32.0', d: '2026-11-20', en: ['Reorder works on a phone too: on KPI, tap Reorder, move the cards with the arrows or drag one by its bar, then Save', 'Reorder menu on a phone now moves the groups too: open a group above, then move it left or right', 'Each order is kept on that device, so your phone and your computer can be different'],
@@ -6863,7 +6865,7 @@ async function bdAct(id, act, status, el){
     bdSet(await call('sc_board_act', {p_id: id, p_act: act, p_status: status == null ? null : status}), true);
     const r = (BD.rooms || []).find(x => x.id === id), rn = L2('Room ', 'Cuarto ') + (r ? r.room : '');
     if (act === 'start' || act === 'resume') fx('start');
-    else if (act === 'done') { fx('done'); toast(esc(rn + L2(' sent to inspection', ' enviado a inspección') + (r && r.mpr != null ? ` · ${r.mpr} min` : '')), 'new'); }
+    else if (act === 'done') { fx('done'); fetch(API + '/functions/v1/notify', {method:'POST', headers:{'Content-Type':'application/json', apikey: KEY}, body: JSON.stringify({token: S.token, board_insp: id})}).catch(() => {}); toast(esc(rn + L2(' sent to inspection', ' enviado a inspección') + (r && r.mpr != null ? ` · ${r.mpr} min` : '')), 'new'); }
     else if (act === 'inspect') { fx('done'); toast(esc(rn + ': ' + bdSt('vacant')), 'new'); }
     else if (act === 'strip') { fx('done'); toast(esc(rn + ': ' + bdSt('ready')), 'new'); }
     else if (act === 'vacate') { fx('done'); toast(esc(rn + ': ' + L2('Vacant. The houseman can strip it.', 'Vacía. El houseman ya puede stripearla.')), 'new'); }
