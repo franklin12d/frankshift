@@ -4956,7 +4956,7 @@ $('#forgotBtn').onclick = async () => {
   catch (err) { $('#loginErr').textContent = err.message; }
 };
 function signOut(expired){
-  const t = S.token; S.token = null; S.me = null; ls.del('sc.token'); ls.del('sc.me'); ls.del('sc.kpiOk'); S.kpiOk = null; clearInterval(timer); S.knownLater.clear(); try { const f = $('#mapFrame'); f.removeAttribute('src'); f.dataset.h = ''; } catch {}
+  const t = S.token; S.token = null; S.me = null; authToSW(); ls.del('sc.token'); ls.del('sc.me'); ls.del('sc.kpiOk'); S.kpiOk = null; clearInterval(timer); S.knownLater.clear(); try { const f = $('#mapFrame'); f.removeAttribute('src'); f.dataset.h = ''; } catch {}
   if (t && !expired) rpc('sc_logout', {p_token: t}).catch(() => {});
   S.known.clear(); S.firstLoad = true; showLogin(expired ? ERR.SESSION_EXPIRED : '');
 }
@@ -5056,7 +5056,13 @@ function openSettings(){
 $('#lfBtn').onclick = () => setTab('lost');
 $('#lfBack').onclick = () => setTab('passon');
 $('#roomsBtn').onclick = () => { setTab('rooms'); setTimeout(() => { try { $('#roomInput').focus(); } catch {} }, 50); };
+/* v1.40.0: the alerts' "I'm on it" button runs in the service worker, which can't read localStorage,
+   so the server address and this person's session are kept where it can read them, and removed on sign-out. */
+function authToSW(){
+  try { if (window.caches) caches.open('fs-pref').then(c => S.token ? c.put('fs-auth', new Response(JSON.stringify({api: API, key: KEY, token: S.token}))) : c.delete('fs-auth')).catch(() => {}); } catch {}
+}
 function enterApp(){
+  authToSW();
   $('#login').hidden = true; $('#app').hidden = false;
   $('#sfRole').innerHTML = ROLES.map(r => `<option value="${r.id}">${r.label}</option>`).join('');
   setSoundIcon(); pushState(); checkAlerts(true); refresh(); startPolling(); maybeAlertWizard();
@@ -5757,8 +5763,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.39.0';
+const APP_VERSION = '1.40.0';
 const CHANGES = [
+  {v: '1.40.0', d: '2026-11-22', en: ['Cleaner alerts: short titles with no emojis, like "Urgent · Room 208", and a second line with the hotel, the ticket and how long it has waited', "Each hotel's alerts show its own colored bell: Maingate red, Fundamental green, Highway blue", "On Android, alerts about an open order have I'm on it and Open buttons. I'm on it takes the order without opening the app"],
+    es: ['Alertas más limpias: títulos cortos sin emojis, como "Urgente · Hab. 208", y una segunda línea con el hotel, la orden y cuánto lleva esperando', 'Las alertas de cada hotel traen su campana de color: Maingate rojo, Fundamental verde, Highway azul', 'En Android, las alertas de una orden abierta traen los botones Voy y Abrir. Voy toma la orden sin abrir la app']},
   {v: '1.39.0', d: '2026-11-22', en: ['Positions: each person now has a position made of a department and a level (staff, supervisor, department head, manager). HK supervisors, the front desk supervisor and the chief engineer can manage their own team, only below their level', 'Add someone in one step: position, other hotels and phone, and the start code comes out ready to send by WhatsApp. You can also import a whole list from Excel, CSV or Google Sheets; nobody is added until every row is right', 'Team filters: Not active yet (with Resend code), 30+ days away and Inactive', 'History: every change to an account is kept, who did it and when. Open it on each person or for the whole team', 'Deactivating asks for a reason (quit, let go, end of season, moved hotel) and keeps the date', 'The superuser can edit each position with checkboxes for what it can do and what it sees in the Menu, and Copy a position to make a new one', 'Managers and department heads now use a 6-digit PIN and sign in again every 7 days. If yours has 4 digits, the app asks you once to pick a new one'],
     es: ['Puestos: cada persona ahora tiene un puesto hecho de un departamento y un nivel (operación, supervisor, jefe de departamento, gerente). Las supervisoras de HK, el supervisor de recepción y el jefe de mantenimiento pueden manejar a su propio equipo, solo por debajo de su nivel', 'Agrega a alguien en un paso: puesto, otros hoteles y teléfono, y el código de entrada sale listo para enviar por WhatsApp. También puedes importar una lista completa desde Excel, CSV o Google Sheets; no se agrega a nadie hasta que todas las filas estén bien', 'Filtros del equipo: Pendientes (con Reenviar código), 30+ días sin entrar y Dados de baja', 'Historial: cada cambio a una cuenta queda guardado, quién lo hizo y cuándo. Ábrelo en cada persona o para todo el equipo', 'Dar de baja pide un motivo (renunció, despedido, fin de temporada, se cambió de hotel) y guarda la fecha', 'El superusuario puede editar cada puesto con casillas de lo que puede hacer y lo que ve en el Menú, y Copiar un puesto para hacer uno nuevo', 'Gerentes y jefes de departamento ahora usan un PIN de 6 números y vuelven a entrar cada 7 días. Si el tuyo tiene 4, la app te pide una vez que elijas uno nuevo']},
   {v: '1.38.0', d: '2026-11-22', en: ['Credits by cleaning type: a check-out is worth 1 credit and a stayover 0.5 to start. Managers can change them and set a daily goal per housekeeper', 'The Board adds up each housekeeper’s credits on the Master board and on My rooms, and Assign rooms shows her credits as you mark rooms', 'Supervisors can give each housekeeper an inspector for the day. Her rooms then alert only that inspector when they are ready, or the usual supervisors if the inspector is not on shift'],
