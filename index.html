@@ -3068,6 +3068,29 @@ async function rpc(fn, args){
   return j;
 }
 const call = (fn, args) => rpc(fn, {p_token: S.token, ...args});
+/* Photos live in private storage: the server answers "storage:<path>" and the photos function trades each path for a 6-hour link.
+   Links are kept here and reused, so a list that refreshes does not ask again. */
+const PHURL = new Map();
+async function photoUrls(paths){
+  const now = Date.now(), want = [...new Set(paths)].filter(p => { const c = PHURL.get(p); return !c || c.exp < now + 600000; });
+  for (let i = 0; i < want.length; i += 50) {
+    try {
+      const r = await fetch(API + '/functions/v1/photos', { method:'POST', headers:{'Content-Type':'application/json', apikey: KEY}, body: JSON.stringify({op: 'sign', token: S.token, paths: want.slice(i, i + 50)}) });
+      if (!r.ok) continue;
+      const j = await r.json(); const exp = now + ((j.ttl || 21600) - 120) * 1000;
+      for (const [p, u] of Object.entries(j.urls || {})) PHURL.set(p, {u, exp});
+    } catch {}
+  }
+}
+async function withPhotos(x){
+  const found = [], walk = v => { if (typeof v === 'string') { if (v.startsWith('storage:')) found.push(v.slice(8)); } else if (v && typeof v === 'object') for (const k in v) walk(v[k]); };
+  walk(x); if (!found.length) return x;
+  await photoUrls(found);
+  const fix = v => typeof v === 'string' ? (v.startsWith('storage:') ? ((PHURL.get(v.slice(8)) || {}).u || '') : v)
+    : Array.isArray(v) ? v.map(fix) : v && typeof v === 'object' ? Object.fromEntries(Object.entries(v).map(([k, w]) => [k, fix(w)])) : v;
+  return fix(x);
+}
+const isPhotoSrc = d => typeof d === 'string' && (/^data:image\/(jpeg|png|webp);base64,/.test(d) || d.startsWith(API + '/storage/v1/object/sign/'));
 function notifyStatus(orderId){
   fetch(API + '/functions/v1/notify', { method:'POST', headers:{'Content-Type':'application/json', apikey: KEY}, body: JSON.stringify({token: S.token, status_order: orderId}) }).catch(() => {});
 }
@@ -3155,7 +3178,7 @@ function renderFeed(){
 /* ===== photos in the chat ===== */
 const REACTS = ['\u{1FAE1}','\u{1F44C}','\u{1F44D}','\u{1F44E}','\u{1F44F}','\u2714','\u26A0','\u2620','\u{1F4DD}','\u2757','\u203C','\u2049','\u{1F4AF}','\u2705','\u274E','\u2611'];
 const rxShow = e => (/^[\u2000-\u27ff]$/.test(e) && !['\u2705','\u274E','\u2757'].includes(e)) ? e + '\uFE0F' : e;
-const MPH = new Map(); let mphBusy = false;
+const MPH = new Map(), MPHT = new Map(); let mphBusy = false;
 const EDIT_IC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 20h9"/><path d="M16.5 3.5a2.1 2.1 0 0 1 3 3L7 19l-4 1 1-4Z"/></svg>';
 const canEditMsg = m => !!(S.me && m && (m.staff_id === S.me.id || S.me.role === 'mgr') && (m.body || !m.has_photo));
 const edTag = m => m.edited_at ? `<span class="edtag" title="${esc((m.edited_by || '') + ' · ' + fmtFull(T(m.edited_at)))}">· <span>Edited</span></span>` : '';
@@ -3181,11 +3204,12 @@ function photoHtml(m){
 }
 async function loadMsgPhotos(){
   if (mphBusy || !S.token) return;
+  const old = Date.now() - 5 * 3600000; for (const [k, v] of MPH) if (v && v.startsWith('http') && (MPHT.get(k) || 0) < old) { MPH.delete(k); MPHT.delete(k); }
   const want = S.messages.filter(m => m.has_photo && !MPH.has(m.id)).map(m => m.id);
   if (!want.length) return;
   mphBusy = true; let got = false;
-  try { for (const id of want.slice(-12)) { try { const d = await call('sc_msg_photo', {p_message: id});
-      if (typeof d === 'string' && /^data:image\/(jpeg|png|webp);base64,/.test(d)) { MPH.set(id, d); got = true; } else MPH.set(id, ''); } catch {} } }
+  try { for (const id of want.slice(-12)) { try { const d = await withPhotos(await call('sc_msg_photo', {p_message: id}));
+      if (isPhotoSrc(d)) { MPH.set(id, d); MPHT.set(id, Date.now()); got = true; } else MPH.set(id, ''); } catch {} } }
   finally { mphBusy = false; }
   if (got) renderFeed();
 }
@@ -3959,7 +3983,7 @@ function shrink(file, max, q){
 }
 async function showPhotos(id){
   openModal('<h2>Photos</h2><p class="lead">Loading…</p>');
-  try { const p = await call('sc_photos', {p_order: id});
+  try { const p = await withPhotos(await call('sc_photos', {p_order: id}));
     openModal(`<h2>Photos</h2><div class="photos">${p.map(x => `<figure style="margin:0"><img src="${esc(x.data)}" alt="Order photo"><figcaption class="small">${esc(x.added_by)} · ${fmtTime(T(x.created_at))}</figcaption></figure>`).join('')}</div><div class="btnrow" style="margin-top:12px"><button class="btn" data-close>Close</button></div>`);
   } catch (e) { openModal(`<h2>Photos</h2><p class="err">${esc(e.message)}</p><button class="btn" data-close>Close</button>`); }
 }
@@ -5336,8 +5360,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.34.0';
+const APP_VERSION = '1.35.0';
 const CHANGES = [
+  {v: '1.35.0', d: '2026-11-22', en: ['Photos now live in secure cloud storage instead of the database, so FrankShift stays fast as photos pile up', 'Photos look and work the same: in orders, chat, the Board and the map. Old photos move over by themselves', 'Each photo opens only for staff of its hotel, through a link that expires after 6 hours'],
+    es: ['Las fotos ahora se guardan en un almacenamiento seguro en la nube y no en la base de datos, así FrankShift sigue rápida aunque haya muchas fotos', 'Las fotos se ven y funcionan igual: en órdenes, chat, el Board y el mapa. Las fotos viejas se mudan solas', 'Cada foto se abre solo para el personal de su hotel, con un enlace que vence a las 6 horas']},
   {v: '1.34.0', d: '2026-11-21', en: ['When a housekeeper marks a room Ready on the Board, the HK supervisors and the hotel manager on shift get a phone alert, even with the app closed', 'The alert says the room, who cleaned it and how many minutes it took, and opens the Board', 'Each finish alerts once. If the room was sent back and finished again, it alerts again'],
     es: ['Cuando una housekeeper marca un cuarto Listo en el Board, las supervisoras HK y el gerente del hotel en turno reciben un aviso en el teléfono, aunque la app esté cerrada', 'El aviso dice el cuarto, quién lo limpió y cuántos minutos tomó, y abre el Board', 'Cada cuarto terminado avisa una vez. Si lo devolvieron y lo terminan de nuevo, avisa otra vez']},
   {v: '1.33.0', d: '2026-11-20', en: ['Report from the room card on the Board: housekeepers get Maintenance and Lost item buttons on each of their rooms', 'Maintenance opens the usual order form with the room already filled in. The order goes to Engineer and maintenance gets the alert', 'Lost item saves it in Lost & Found with the room and your name', 'Supervisors and housemen get a small 🔧 on each room row that asks which one'],
@@ -6947,7 +6973,7 @@ async function bdPics(id){
   const r = (BD.rooms || []).find(x => x.id === id);
   openModal(`<div data-noi18n><h2>${esc(L2('Room ', 'Cuarto ') + (r ? r.room : ''))}</h2><p class="hint">${esc(r && r.note || '')}</p><div class="photos" id="bdpBox"><div class="small">…</div></div>
     <div class="btnrow" style="margin-top:12px"><button class="btn" type="button" data-close>${esc(L2('Close', 'Cerrar'))}</button></div></div>`);
-  try { const p = await call('sc_board_photos', {p_id: id}); const box = $('#bdpBox'); if (box) box.innerHTML = p.length ? p.map(x => `<img src="${esc(x.data)}" alt="">`).join('') : `<div class="small">${esc(L2('No photos.', 'Sin fotos.'))}</div>`; }
+  try { const p = await withPhotos(await call('sc_board_photos', {p_id: id})); const box = $('#bdpBox'); if (box) box.innerHTML = p.length ? p.map(x => `<img src="${esc(x.data)}" alt="">`).join('') : `<div class="small">${esc(L2('No photos.', 'Sin fotos.'))}</div>`; }
   catch (e) { const box = $('#bdpBox'); if (box) box.innerHTML = `<div class="small">${esc(bdErr(e))}</div>`; }
 }
 /* Front desk adds the day's check-outs: tap the rooms (or type them); rooms already on the board stay as they are */

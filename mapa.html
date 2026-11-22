@@ -917,6 +917,17 @@ async function rpc(fn,args){
   if(!r.ok){const e=new Error((j&&j.message)||'ERROR');e.code=(j&&j.message)||'ERROR';throw e;}
   return j;
 }
+// photos live in private storage: the server answers "storage:<path>" and the photos function trades it for a 6-hour link (kept and reused)
+const PHURL=new Map();
+async function withPhotos(x){
+  const found=[],walk=v=>{if(typeof v==='string'){if(v.startsWith('storage:'))found.push(v.slice(8));}else if(v&&typeof v==='object')for(const k in v)walk(v[k]);};
+  walk(x);if(!found.length)return x;
+  const now=Date.now(),want=[...new Set(found)].filter(p=>{const c=PHURL.get(p);return !c||c.exp<now+600000;});
+  for(let i=0;i<want.length;i+=50){try{const r=await fetch(API+'/functions/v1/photos',{method:'POST',headers:{'Content-Type':'application/json',apikey:KEY},body:JSON.stringify({op:'sign',token,paths:want.slice(i,i+50)})});
+    if(!r.ok)continue;const j=await r.json(),exp=now+((j.ttl||21600)-120)*1000;for(const[p,u]of Object.entries(j.urls||{}))PHURL.set(p,{u,exp});}catch(e){}}
+  const fix=v=>typeof v==='string'?(v.startsWith('storage:')?((PHURL.get(v.slice(8))||{}).u||''):v):Array.isArray(v)?v.map(fix):v&&typeof v==='object'?Object.fromEntries(Object.entries(v).map(([k,w])=>[k,fix(w)])):v;
+  return fix(x);
+}
 const ERRS={NEED_ASSIGNEE:'Primero elige a quién se asigna.',NOT_ALLOWED:'Solo quien creó la orden o un gerente puede eliminarla.',MAX_PHOTOS:'Esta orden ya tiene el máximo de fotos.',
   BAD_IMAGE:'No se pudo usar esa foto.',NOT_FOUND:'Esta orden ya no existe.',BAD_PLACE:'Ese lugar no es válido.'};
 function gate(msg){gated=true;$('#gateMsg').textContent=msg;$('#gate').hidden=false;}
@@ -954,7 +965,7 @@ async function addEvent(tid,ev){
 }
 let evTimer=null,events=[],evFor=null;
 async function loadEvents(tid){
-  try{const list=await rpc('sc_map_events',{p_order:tid});if(curTicket!==tid)return;events=list||[];evFor=tid;
+  try{const list=await withPhotos(await rpc('sc_map_events',{p_order:tid}));if(curTicket!==tid)return;events=list||[];evFor=tid;
     if(view==='ticket')renderTimeline();}catch(e){if(signedOut(e&&e.code))gate('Tu sesión venció. Entra otra vez en FrankShift y vuelve al mapa.');}
 }
 function watchEvents(tid){stopEvents();events=[];evFor=null;loadEvents(tid);evTimer=setInterval(()=>{if(!document.hidden)loadEvents(tid);},15000);}
