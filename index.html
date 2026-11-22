@@ -1293,6 +1293,27 @@ button.bdstep{cursor:pointer}
 .bdrpics span{position:relative}
 .bdrpics img{width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
 .bdrpics .bdx{position:absolute;top:-8px;right:-8px;width:28px;height:28px}
+/* 1.36.0: inspection with score */
+.bdscore{font:800 12px var(--f-body);padding:3px 8px;border-radius:999px;color:#fff;background:#16A34A;font-variant-numeric:tabular-nums}
+.bdscore[data-lv="mid"]{background:#CA8A04}
+.bdscore[data-lv="low"]{background:#DC2626}
+.btn.bdinsb{background:#CA8A04;border-color:#CA8A04;color:#fff;font-weight:800}
+.bdck{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:6px;margin:8px 0 10px}
+.bdck button{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 12px;border:1px solid #16A34A;border-radius:12px;background:color-mix(in srgb,#16A34A 10%,var(--surface));color:var(--ink);font:700 14px var(--f-body);cursor:pointer;text-align:left}
+.bdck button i{font-style:normal;font-size:17px;color:#16A34A;flex:none}
+.bdck button[aria-pressed="false"]{border-color:#DC2626;background:color-mix(in srgb,#EF4444 14%,var(--surface))}
+.bdck button[aria-pressed="false"] i{color:#DC2626}
+.bdckscore{display:flex;align-items:baseline;gap:8px;margin:2px 0}
+.bdckscore b{font:800 30px var(--f-body);font-variant-numeric:tabular-nums}
+.bdckscore span{font-size:13px;color:var(--ink-2)}
+.bdstats{width:100%;border-collapse:collapse;font-size:13.5px;margin-top:6px}
+.bdstats th{text-align:left;font:700 12px var(--f-body);color:var(--ink-3);padding:6px 4px;border-bottom:1px solid var(--line)}
+.bdstats td{padding:7px 4px;border-bottom:1px solid var(--line);color:var(--ink)}
+.bdstats td.n{text-align:right;font-variant-numeric:tabular-nums}
+.bdfails{display:flex;flex-wrap:wrap;gap:6px;margin-top:6px}
+.bdfails span{font:600 12.5px var(--f-body);padding:4px 10px;border-radius:999px;background:color-mix(in srgb,#EF4444 12%,var(--surface));border:1px solid #FCA5A5;color:var(--ink)}
+.bdrec{display:flex;gap:8px;align-items:center;padding:7px 0;border-bottom:1px solid var(--line);font-size:13.5px;flex-wrap:wrap}
+.bdrec .grow{flex:1;min-width:0;color:var(--ink-2)}
 .bdsnd{width:44px;height:44px;border:1px solid var(--line);border-radius:12px;background:var(--surface);font-size:20px;cursor:pointer;flex:none}
 .bdsnd[aria-pressed="false"]{opacity:.6}
 .bdout,.bdsell{margin-top:12px}
@@ -5360,8 +5381,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.35.0';
+const APP_VERSION = '1.36.0';
 const CHANGES = [
+  {v: '1.36.0', d: '2026-11-22', en: ['Rooms ready to be inspected now have an Inspect button with a 12-point checklist: bed, bathroom, mirrors, dust, floor, trash, towels, amenities, A/C, TV, lights and smell', 'Every item starts as OK. Tap what failed and the score shows right away. Approve to mark the room Vacant/Ready, or Send back with photos and the failed items as the note', 'Each room shows its score, and each housekeeper sees her average on My rooms', 'New Scores button on the Master board: today, 7 or 30 days, each housekeeper’s average, rooms sent back, what fails most and the latest inspections'],
+    es: ['Los cuartos listos para inspección ahora tienen un botón Inspeccionar con una lista de 12 puntos: cama, baño, espejos, polvo, piso, basura, toallas, amenities, A/C, TV, luces y olor', 'Cada punto empieza como bien. Toca lo que falló y el puntaje sale al momento. Aprueba para dejar el cuarto Vacante/Lista, o Devuelve con fotos y lo que falló como nota', 'Cada cuarto muestra su puntaje, y cada housekeeper ve su promedio en Mis cuartos', 'Nuevo botón Puntajes en el Master board: hoy, 7 o 30 días, el promedio de cada housekeeper, cuartos devueltos, lo que más falla y las últimas inspecciones']},
   {v: '1.35.0', d: '2026-11-22', en: ['Photos now live in secure cloud storage instead of the database, so FrankShift stays fast as photos pile up', 'Photos look and work the same: in orders, chat, the Board and the map. Old photos move over by themselves', 'Each photo opens only for staff of its hotel, through a link that expires after 6 hours'],
     es: ['Las fotos ahora se guardan en un almacenamiento seguro en la nube y no en la base de datos, así FrankShift sigue rápida aunque haya muchas fotos', 'Las fotos se ven y funcionan igual: en órdenes, chat, el Board y el mapa. Las fotos viejas se mudan solas', 'Cada foto se abre solo para el personal de su hotel, con un enlace que vence a las 6 horas']},
   {v: '1.34.0', d: '2026-11-21', en: ['When a housekeeper marks a room Ready on the Board, the HK supervisors and the hotel manager on shift get a phone alert, even with the app closed', 'The alert says the room, who cleaned it and how many minutes it took, and opens the Board', 'Each finish alerts once. If the room was sent back and finished again, it alerts again'],
@@ -6613,7 +6636,7 @@ const BD_ERR = {NOT_YOUR_ROOM: ['That room is not yours.', 'Ese cuarto no es tuy
   STILL_OCCUPIED: ['The guest is still in the room. Mark it Vacant first.', 'El huésped sigue en el cuarto. Márcalo Vacía primero.'],
   EXT_PENDING: ['Front desk is still confirming an extension for this room.', 'Front desk todavía confirma una extensión para este cuarto.'],
   NOT_DEPARTURE: ['That room is not a check-out.', 'Ese cuarto no es un check-out.'], BAD_TIME: ['Pick a time from 11:30 AM to 4:00 PM.', 'Elige una hora de 11:30 AM a 4:00 PM.'],
-  NOTE_NEEDED: ['Write what needs fixing.', 'Escribe qué hay que arreglar.'], MAX_PHOTOS: ['Up to 5 photos.', 'Hasta 5 fotos.'], BAD_PHOTO: ['That photo could not be saved. Try another one.', 'Esa foto no se pudo guardar. Prueba con otra.'],
+  NOTE_NEEDED: ['Mark what failed or write what needs fixing.', 'Marca lo que falló o escribe qué hay que arreglar.'], BAD_CHECKLIST: ['The checklist could not be saved. Try again.', 'La lista de revisión no se pudo guardar. Intenta otra vez.'], MAX_PHOTOS: ['Up to 5 photos.', 'Hasta 5 fotos.'], BAD_PHOTO: ['That photo could not be saved. Try another one.', 'Esa foto no se pudo guardar. Prueba con otra.'],
   BAD_ROOM: ['That room number is not valid.', 'Ese número de cuarto no es válido.'], BAD_ROOMS: ['Too many rooms at a time.', 'Demasiados cuartos a la vez.'],
   BAD_DATE: ['Pick a day from yesterday to next week.', 'Elige un día entre ayer y la próxima semana.'], NOT_FOUND: ['That room is no longer on the board.', 'Ese cuarto ya no está en el board.']};
 const bdErr = e => { const m = (e && e.message) || ''; const x = BD_ERR[m]; return x ? L2(x[0], x[1]) : m; };
@@ -6631,6 +6654,9 @@ const bdClock = n => Math.floor(n / 60) + ':' + String(n % 60).padStart(2, '0');
 const bdAvg = list => { const v = list.map(r => r.mpr).filter(x => x != null); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length * 10) / 10 : null; };
 const bdDone = list => list.filter(r => r.status === 'insp' || r.status === 'vacant').length;
 const bdMine = () => ((BD && BD.rooms) || []).filter(r => S.me && r.to === S.me.id);
+const bdLv = n => n >= 90 ? 'hi' : n >= 75 ? 'mid' : 'low';
+const bdScore = n => n == null ? '' : `<span class="bdscore" data-lv="${bdLv(n)}" title="${esc(L2('Inspection score', 'Puntaje de inspección'))}">${n}%</span>`;
+const bdAvgScore = list => { const v = list.map(r => r.score).filter(x => x != null); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
 const bdDay = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString(LANG === 'es' ? 'es-US' : 'en-US', {weekday: 'long', month: 'short', day: 'numeric'}); } catch { return d; } };
 /* 1.24.0: one order for the day. Front desk lists the departures and marks them Vacant (and out of the system), late check out or extension;
    from 11:00 a departure still occupied with no late check out shows To verify; the houseman strips only vacant rooms; the housekeeper cleans;
@@ -6700,7 +6726,7 @@ function bdRank(r){
 const bdLateMin = r => bdLateOn(r) ? +r.late_at.replace(':', '') : 0;
 function bdMineHtml(list){
   const avg = bdAvg(list), sorted = [...list].sort((a, b) => bdRank(a) - bdRank(b) || bdLateMin(a) - bdLateMin(b) || +a.room - +b.room);
-  return `<div class="card bdmine"><div class="bdhead"><h3 class="srh">${esc(L2('My rooms', 'Mis cuartos'))}</h3><span class="bdsum">${esc(L2(`${bdDone(list)} of ${list.length} done`, `${bdDone(list)} de ${list.length} listos`) + (avg != null ? ' · MPR ' + avg + ' min' : ''))}</span></div>
+  return `<div class="card bdmine"><div class="bdhead"><h3 class="srh">${esc(L2('My rooms', 'Mis cuartos'))}</h3><span class="bdsum">${esc(L2(`${bdDone(list)} of ${list.length} done`, `${bdDone(list)} de ${list.length} listos`) + (avg != null ? ' · MPR ' + avg + ' min' : ''))}</span>${bdScore(bdAvgScore(list))}</div>
     ${sorted.map(bdCard).join('')}</div>`;
 }
 function bdCard(r){
@@ -6719,7 +6745,7 @@ function bdCard(r){
   const back = st === 'returned' || (r.note && (st === 'cleaning' || st === 'paused') && r.returns)
     ? `<div class="bdnote"><b>${esc(L2('Sent back', 'Devuelto') + (r.returned_by ? ' · ' + r.returned_by : ''))}</b><span>${esc(r.note || '')}</span>${r.photos ? `<button class="btn sm" type="button" data-bdpics="${id}">${esc(L2(`See ${r.photos} photo${r.photos > 1 ? 's' : ''}`, `Ver ${r.photos} foto${r.photos > 1 ? 's' : ''}`))}</button>` : ''}</div>` : '';
   return `<div class="bdcard" data-st="${st}" data-bdid="${id}">
-      <div class="bdtop"><b class="bdnum">${esc(r.room)}</b><span class="bdkind">${bdKind(r.kind)}</span>${bdBadges(r)}<span class="bdst" data-st="${st}">${esc(bdSt(st))}</span></div>
+      <div class="bdtop"><b class="bdnum">${esc(r.room)}</b><span class="bdkind">${bdKind(r.kind)}</span>${bdBadges(r)}${bdScore(r.score)}<span class="bdst" data-st="${st}">${esc(bdSt(st))}</span></div>
       ${back}
       ${clock ? `<div class="bdclock" data-bdclock="${id}">${bdClock(bdSecs(r))}</div>` : r.mpr != null ? `<div class="bdmpr">MPR <b>${r.mpr} min</b></div>` : ''}
       ${act ? `<div class="bdacts">${act}</div>` : ''}
@@ -6828,9 +6854,9 @@ function bdMasterHtml(){
   const body = !rooms.length ? `<div class="small">${esc(boss ? L2('No rooms on the board yet. Front desk adds the check-outs; then tap Assign rooms.', 'Todavía no hay cuartos en el board. Front desk agrega las salidas; después toca Asignar cuartos.') : L2('No rooms on the board yet.', 'Todavía no hay cuartos en el board.'))}</div>`
     : !shown.length ? `<div class="small">${esc(L2('No rooms at this step.', 'No hay cuartos en este paso.'))}</div>`
     : gs.map(([id, g]) => { const all = rooms.filter(r => (r.to || '') === id), avg = bdAvg(all), now = all.find(r => r.status === 'cleaning');
-        return `<div class="bdgrp"><div class="bdgh"><b>${esc(g.name)}</b><span>${esc(L2(`${bdDone(all)} of ${all.length} done`, `${bdDone(all)} de ${all.length} listos`) + (avg != null ? ' · MPR ' + avg + ' min' : '') + (now ? ' · ' + L2('cleaning ', 'limpiando la ') + now.room : ''))}</span></div>${g.rooms.map(r => bdRow(r, boss)).join('')}</div>`; }).join('');
+        return `<div class="bdgrp"><div class="bdgh"><b>${esc(g.name)}</b><span>${esc(L2(`${bdDone(all)} of ${all.length} done`, `${bdDone(all)} de ${all.length} listos`) + (avg != null ? ' · MPR ' + avg + ' min' : '') + (now ? ' · ' + L2('cleaning ', 'limpiando la ') + now.room : ''))}</span>${bdScore(bdAvgScore(all))}</div>${g.rooms.map(r => bdRow(r, boss)).join('')}</div>`; }).join('');
   const v = rooms.filter(r => r.verify).length;
-  return `<div class="card bdmaster"><div class="bdhead"><h3 class="srh">${esc(boss ? L2('Master board', 'Master board') : L2('All rooms', 'Todos los cuartos'))}</h3>${boss ? `<button class="btn pri sm" type="button" id="bdAssign">${esc(L2('Assign rooms', 'Asignar cuartos'))}</button>` : ''}</div>
+  return `<div class="card bdmaster"><div class="bdhead"><h3 class="srh">${esc(boss ? L2('Master board', 'Master board') : L2('All rooms', 'Todos los cuartos'))}</h3>${boss ? `<button class="btn sm" type="button" id="bdStats">📊 ${esc(L2('Scores', 'Puntajes'))}</button><button class="btn pri sm" type="button" id="bdAssign">${esc(L2('Assign rooms', 'Asignar cuartos'))}</button>` : ''}</div>
     ${cnt('insp') ? `<div class="bdinsp">${esc(L2(`${cnt('insp')} ready to be inspected`, `${cnt('insp')} listos para inspección`))}</div>` : ''}
     ${boss && v && BDView !== 'f:out' ? `<button type="button" class="bdverify" data-bdflow="out">${esc(L2(`${v} check-outs to verify. Tap to see them.`, `${v} salidas por verificar. Toca para verlas.`))}</button>` : ''}
     ${flow ? `<div class="bdday"><span>${esc(L2('Step: ', 'Paso: ') + L2(flow[1], flow[2]))}</span><button class="linkbtn" type="button" data-bdv="all">${esc(L2('See all', 'Ver todos'))}</button></div>` : rooms.length ? chips : ''}${body}</div>`;
@@ -6839,12 +6865,12 @@ function bdRow(r, boss){
   const st = r.status, id = esc(r.id), clock = st === 'cleaning' || st === 'paused';
   const time = clock ? `<span class="bdclock" data-bdclock="${id}">${bdClock(bdSecs(r))}</span>` : r.mpr != null ? `<span class="bdmpr">${r.mpr} min</span>` : '';
   const opts = (['dirty', 'ready', 'insp', 'vacant', 'dnd', 'refused'].includes(st) ? [] : [st]).concat(['dirty', 'ready', 'insp', 'vacant', 'dnd', 'refused']);
-  const ctl = boss ? (st === 'insp' ? `<button class="btn sm bdok" type="button" data-bdact="inspect" data-id="${id}">✓ ${esc(bdSt('vacant'))}</button><button class="btn sm bdback" type="button" data-bdret="${id}">↩ ${esc(L2('Send back', 'Devolver'))}</button>` : '')
+  const ctl = boss ? (st === 'insp' ? `<button class="btn sm bdinsb" type="button" data-bdinsp="${id}">🔍 ${esc(L2('Inspect', 'Inspeccionar'))}</button>` : '')
       + `<select class="bdsel" data-bdset="${id}" data-st="${st}" aria-label="${esc(L2('Status of ', 'Estatus de la ') + r.room)}">${opts.map(k => `<option value="${k}" ${k === st ? 'selected' : ''}>${esc(bdSt(k))}</option>`).join('')}</select>`
       + `<button class="bdx" type="button" data-bdrm="${id}" aria-label="${esc(L2('Take off the board', 'Quitar del board'))}">×</button>`
     : `<span class="bdst" data-st="${st}">${esc(bdSt(st))}</span>`;
   const note = st === 'returned' && r.note ? `<div class="bdrnote">↩ ${esc(r.note)}${r.photos ? ` · <button class="linkbtn" type="button" data-bdpics="${id}">${esc(L2(r.photos + (r.photos > 1 ? ' photos' : ' photo'), r.photos + (r.photos > 1 ? ' fotos' : ' foto')))}</button>` : ''}</div>` : '';
-  return `<div class="bdrow" data-st="${r.verify ? 'verify' : st}" data-bdid="${id}"><b class="bdnum">${esc(r.room)}</b><span class="bdkind">${r.kind === 'so' ? 'SO' : 'CO'}</span>${bdBadges(r)}${time}<span class="grow"></span><button class="bdrepi" type="button" data-bdrep="pick" data-room="${esc(r.room)}" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}" title="${esc(L2('Report maintenance or a lost item', 'Reportar mantenimiento u objeto olvidado'))}">🔧</button>${ctl}${note}</div>`;
+  return `<div class="bdrow" data-st="${r.verify ? 'verify' : st}" data-bdid="${id}"><b class="bdnum">${esc(r.room)}</b><span class="bdkind">${r.kind === 'so' ? 'SO' : 'CO'}</span>${bdBadges(r)}${time}${bdScore(r.score)}<span class="grow"></span><button class="bdrepi" type="button" data-bdrep="pick" data-room="${esc(r.room)}" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}" title="${esc(L2('Report maintenance or a lost item', 'Reportar mantenimiento u objeto olvidado'))}">🔧</button>${ctl}${note}</div>`;
 }
 // the red number on the Board: what waits on this person now
 function bdWaiting(d){
@@ -6969,6 +6995,74 @@ function bdReturn(id){
     } catch (e) { b.disabled = false; $('#bdrErr').textContent = bdErr(e); }
   };
 }
+/* 1.36.0: inspection with score. Every item starts as OK; the supervisor taps what failed.
+   Approve: Vacant/Ready (small failures can still pass). Send back: the failed items become the note, with up to 5 photos */
+const BD_CHECK = [['bed', 'Bed', 'Cama'], ['bath', 'Bathroom', 'Baño'], ['mirrors', 'Mirrors & glass', 'Espejos y vidrios'], ['dust', 'Dust', 'Polvo'],
+  ['floor', 'Floor & vacuum', 'Piso y aspirado'], ['trash', 'Trash', 'Basura'], ['towels', 'Towels', 'Toallas'], ['amenities', 'Amenities', 'Amenities'],
+  ['ac', 'A/C', 'A/C'], ['tv', 'TV & remote', 'TV y control'], ['lights', 'Lights', 'Luces'], ['smell', 'Smell', 'Olor']];
+const bdCheckName = k => { const c = BD_CHECK.find(x => x[0] === k); return c ? L2(c[1], c[2]) : k; };
+function bdInspect(id){
+  const r = (BD.rooms || []).find(x => x.id === id); if (!r) return;
+  const ok = Object.fromEntries(BD_CHECK.map(c => [c[0], true])), pics = [];
+  openModal(`<div data-noi18n><h2>${esc(L2('Inspect room ', 'Inspeccionar el cuarto ') + r.room)}</h2>
+    <p class="hint">${esc((r.to_name || L2('Not assigned', 'Sin asignar')) + ' · ' + bdKind(r.kind) + (r.mpr != null ? ' · ' + r.mpr + ' min' : '') + ' · ' + L2('Tap what failed.', 'Toca lo que falló.'))}</p>
+    <div class="bdckscore"><b id="bdkScore"></b><span id="bdkInfo"></span></div>
+    <div class="bdck" id="bdkList" role="group" aria-label="${esc(L2('Checklist', 'Lista de revisión'))}">${BD_CHECK.map(([k]) => `<button type="button" data-bdck="${k}" aria-pressed="true"><i aria-hidden="true">✓</i>${esc(bdCheckName(k))}</button>`).join('')}</div>
+    <div class="field"><label for="bdkNote">${esc(L2('Note (optional)', 'Nota (opcional)'))}</label><textarea id="bdkNote" rows="2" maxlength="200"></textarea></div>
+    <label class="btn pkphoto"><input type="file" accept="image/*" capture="environment" id="bdkFile" hidden>📷 ${esc(L2('Add photo (up to 5)', 'Agregar foto (hasta 5)'))}</label>
+    <div class="bdrpics" id="bdkPics"></div><div class="err" id="bdkErr"></div>
+    <div class="btnrow" style="margin-top:12px"><button class="btn bdok" type="button" id="bdkPass"></button><button class="btn bdback" type="button" id="bdkBack">↩ ${esc(L2('Send back', 'Devolver'))}</button><button class="btn" type="button" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  const failed = () => BD_CHECK.filter(c => !ok[c[0]]).map(c => c[0]);
+  const score = () => Math.round(100 * (BD_CHECK.length - failed().length) / BD_CHECK.length);
+  const paint = () => {
+    const n = score(), f = failed(); $('#bdkScore').textContent = n + '%'; $('#bdkScore').style.color = n >= 90 ? '#16A34A' : n >= 75 ? '#CA8A04' : '#DC2626';
+    $('#bdkInfo').textContent = f.length ? L2(`${f.length} item${f.length > 1 ? 's' : ''} failed`, `${f.length} ${f.length > 1 ? 'fallaron' : 'falló'}`) : L2('Everything OK', 'Todo bien');
+    $('#bdkPass').textContent = '✓ ' + L2('Approve', 'Aprobar') + ' · ' + n + '%';
+    $('#bdkPics').innerHTML = pics.map((p, i) => `<span><img src="${p}" alt="${esc(L2('Photo ', 'Foto ') + (i + 1))}"><button type="button" class="bdx" data-bdkdel="${i}" aria-label="${esc(L2('Remove photo', 'Quitar foto'))}">×</button></span>`).join('');
+  };
+  paint();
+  $('#bdkList').onclick = e => { const b = e.target.closest('[data-bdck]'); if (!b) return; const k = b.dataset.bdck; ok[k] = !ok[k];
+    b.setAttribute('aria-pressed', ok[k]); b.querySelector('i').textContent = ok[k] ? '✓' : '✗'; $('#bdkErr').textContent = ''; pip(); paint(); };
+  $('#bdkFile').onchange = async e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+    if (pics.length >= 5) { $('#bdkErr').textContent = L2('Up to 5 photos.', 'Hasta 5 fotos.'); return; }
+    try { pics.push(await shrink(f, 1100, .72)); paint(); } catch { $('#bdkErr').textContent = bdErr({message: 'BAD_PHOTO'}); } };
+  $('#bdkPics').onclick = e => { const x = e.target.closest('[data-bdkdel]'); if (x) { pics.splice(+x.dataset.bdkdel, 1); paint(); } };
+  const send = async pass => {
+    const f = failed(), extra = $('#bdkNote').value.trim().replace(/\s+/g, ' ');
+    const note = [f.map(bdCheckName).join(', '), extra].filter(Boolean).join(' · ').slice(0, 300);
+    if (!pass && note.length < 2) { $('#bdkErr').textContent = bdErr({message: 'NOTE_NEEDED'}); return; }
+    const btns = [$('#bdkPass'), $('#bdkBack')]; btns.forEach(b => b.disabled = true);
+    try {
+      bdSet(await call('sc_board_inspect', {p_id: id, p_items: ok, p_pass: pass, p_note: note || null}), true);
+      let bad = 0; for (const p of pics) { try { await call('sc_board_photo_add', {p_id: id, p_data: p}); } catch { bad++; } }
+      if (pics.length) { try { bdSet(await call('sc_board', {p_date: BDDate || null}), true); } catch {} }
+      closeModal(); const n = score();
+      if (pass) { fx('done'); toast(esc(L2('Room ', 'Cuarto ') + r.room + ': ' + bdSt('vacant') + ' · ' + n + '%'), 'new'); }
+      else { chime('edit'); toast(esc(L2('Room ', 'Cuarto ') + r.room + L2(' sent back to ', ' devuelto a ') + (r.to_name || L2('the housekeeper', 'la housekeeper')) + ' · ' + n + '%'
+        + (bad ? L2(` · ${bad} photo(s) not saved`, ` · ${bad} foto(s) no se guardaron`) : '')), 'new'); }
+    } catch (e) { btns.forEach(b => b.disabled = false); $('#bdkErr').textContent = bdErr(e); }
+  };
+  $('#bdkPass').onclick = () => send(true);
+  $('#bdkBack').onclick = () => send(false);
+}
+// scores: each housekeeper's average, rooms sent back, what fails most, the latest inspections
+async function bdStats(days){
+  const tabs = [1, 7, 30].map(d => `<button type="button" data-bdsd="${d}" aria-pressed="${d === days}">${esc(d === 1 ? L2('Today', 'Hoy') : L2(d + ' days', d + ' días'))}</button>`).join('');
+  openModal(`<div data-noi18n><h2>${esc(L2('Inspection scores', 'Puntajes de inspección'))}</h2><div class="bdchips">${tabs}</div><div id="bdsBox"><div class="small">…</div></div>
+    <div class="btnrow" style="margin-top:12px"><button class="btn" type="button" data-close>${esc(L2('Close', 'Cerrar'))}</button></div></div>`);
+  document.querySelectorAll('#modal [data-bdsd]').forEach(b => b.onclick = () => bdStats(+b.dataset.bdsd));
+  let d; try { d = await call('sc_insp_stats', {p_days: days}); } catch (e) { const box = $('#bdsBox'); if (box) box.innerHTML = `<div class="small">${esc(bdErr(e))}</div>`; return; }
+  const box = $('#bdsBox'); if (!box) return;
+  if (!d.n) { box.innerHTML = `<div class="small">${esc(L2('No inspections in these days yet. Tap Inspect on a yellow room to start.', 'Todavía no hay inspecciones en estos días. Toca Inspeccionar en un cuarto amarillo para empezar.'))}</div>`; return; }
+  const when = x => { try { return new Date(x).toLocaleString(LANG === 'es' ? 'es-US' : 'en-US', {month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit'}); } catch { return ''; } };
+  box.innerHTML = `<div class="bdckscore"><b style="color:${d.avg >= 90 ? '#16A34A' : d.avg >= 75 ? '#CA8A04' : '#DC2626'}">${d.avg}%</b><span>${esc(L2(`average · ${d.n} inspections · ${d.n - d.passed} sent back`, `promedio · ${d.n} inspecciones · ${d.n - d.passed} devueltos`))}</span></div>
+    <table class="bdstats"><thead><tr><th>${esc(L2('Housekeeper', 'Housekeeper'))}</th><th class="n">${esc(L2('Score', 'Puntaje'))}</th><th class="n">${esc(L2('Rooms', 'Cuartos'))}</th><th class="n">${esc(L2('Back', 'Devueltos'))}</th><th class="n">MPR</th></tr></thead>
+    <tbody>${d.by_hk.map(h => `<tr><td>${esc(h.name)}</td><td class="n">${bdScore(h.avg)}</td><td class="n">${h.n}</td><td class="n">${h.back}</td><td class="n">${h.mpr != null ? h.mpr : '—'}</td></tr>`).join('')}</tbody></table>
+    ${d.by_item.length ? `<h3 class="srh" style="margin-top:14px">${esc(L2('What fails most', 'Lo que más falla'))}</h3><div class="bdfails">${d.by_item.slice(0, 8).map(i => `<span>${esc(bdCheckName(i.k))} · ${i.n}</span>`).join('')}</div>` : ''}
+    ${d.by_insp.length > 1 ? `<p class="hint" style="margin-top:10px">${esc(L2('Inspected by: ', 'Inspeccionó: ') + d.by_insp.map(i => `${i.name} ${i.n} (${i.avg}%)`).join(' · '))}</p>` : ''}
+    <h3 class="srh" style="margin-top:14px">${esc(L2('Latest', 'Últimas'))}</h3>
+    ${d.recent.map(x => `<div class="bdrec"><b class="bdnum" style="font-size:15px">${esc(x.room)}</b>${bdScore(x.score)}<span class="grow">${esc((x.hk || '—') + ' · ' + (x.passed ? L2('approved', 'aprobado') : L2('sent back', 'devuelto')) + (x.note ? ' · ' + x.note : ''))}</span><span class="small">${esc(x.by + ' · ' + when(x.at))}</span></div>`).join('')}`;
+}
 async function bdPics(id){
   const r = (BD.rooms || []).find(x => x.id === id);
   openModal(`<div data-noi18n><h2>${esc(L2('Room ', 'Cuarto ') + (r ? r.room : ''))}</h2><p class="hint">${esc(r && r.note || '')}</p><div class="photos" id="bdpBox"><div class="small">…</div></div>
@@ -7077,6 +7171,8 @@ $('#view-board').addEventListener('click', e => {
   if (e.target.closest('#bdSnd')) { S.sound = !S.sound; ls.set('sc.sound', S.sound); try { setSoundIcon(); } catch {} if (S.sound) chime('normal'); return bdRender(); }
   const x = e.target.closest('[data-bdrm]'); if (x) return bdRemove(x.dataset.bdrm);
   if (e.target.closest('#bdAssign')) return bdAssign();
+  const ins = e.target.closest('[data-bdinsp]'); if (ins) return bdInspect(ins.dataset.bdinsp);
+  if (e.target.closest('#bdStats')) return bdStats(7);
   if (e.target.closest('[data-bdtoday]')) { BDDate = ''; BD = null; bdRender(); return bdFetch(); }
 });
 $('#view-board').addEventListener('change', e => {
