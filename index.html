@@ -1227,6 +1227,9 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .bdgh{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap}
 .bdgh b{font-size:15px;color:var(--ink)}
 .bdgh span{font-size:12.5px;color:var(--ink-2)}
+.bdinssel{margin-left:auto;border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:4px 6px;font-size:12.5px;max-width:190px}
+.bdgh span.bdinsn{margin-left:auto;color:var(--accent);font-weight:600}
+.bdacr{display:flex;align-items:center;gap:10px;font-size:13px;color:var(--ink-2);margin:-4px 0 10px}.bdacr span{flex:1}
 .bdinsp{background:#FACC15;color:#422006;font:800 14px var(--f-body);padding:8px 12px;border-radius:10px;margin:6px 0 8px}
 .bdchips{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px;margin:6px 0 2px}
 .bdchips button{flex:none;min-height:36px;padding:0 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface-2);color:var(--ink-2);font:600 13px var(--f-body);cursor:pointer;white-space:nowrap}
@@ -5396,8 +5399,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.37.0';
+const APP_VERSION = '1.38.0';
 const CHANGES = [
+  {v: '1.38.0', d: '2026-11-22', en: ['Credits by cleaning type: a check-out is worth 1 credit and a stayover 0.5 to start. Managers can change them and set a daily goal per housekeeper', 'The Board adds up each housekeeper’s credits on the Master board and on My rooms, and Assign rooms shows her credits as you mark rooms', 'Supervisors can give each housekeeper an inspector for the day. Her rooms then alert only that inspector when they are ready, or the usual supervisors if the inspector is not on shift'],
+    es: ['Créditos por tipo de limpieza: un check-out vale 1 crédito y un stayover 0.5 para empezar. Los gerentes pueden cambiarlos y poner una meta diaria por housekeeper', 'El Board suma los créditos de cada housekeeper en el Master board y en Mis cuartos, y Asignar cuartos muestra sus créditos mientras marcas cuartos', 'Las supervisoras pueden darle a cada housekeeper una inspectora para el día. Sus cuartos avisan solo a esa inspectora cuando están listos, o a las supervisoras de siempre si la inspectora no está en turno']},
   {v: '1.37.0', d: '2026-11-22', en: ['New Readings tab in Engineer: pool chlorine, pH, clear water, pool temperature, hot water and the breakfast fridge and freezer, each with its range', 'Fill in what you checked and save. Anything out of range opens an urgent maintenance order, so maintenance and managers get the alert right away', 'History of every round for today, 7 or 30 days, with out-of-range values in red', 'Managers can rename points, change ranges, add new ones or turn off the ones their hotel does not have'],
     es: ['Nueva pestaña Lecturas en Engineer: cloro y pH de la piscina, agua clara, temperatura de la piscina, agua caliente y el refrigerador y congelador del desayuno, cada uno con su rango', 'Llena lo que revisaste y guarda. Lo que salga fuera de rango abre una orden urgente de mantenimiento, así mantenimiento y los gerentes reciben el aviso al momento', 'Historial de cada ronda de hoy, 7 o 30 días, con lo que salió fuera de rango en rojo', 'Los gerentes pueden cambiar nombres y rangos, agregar puntos nuevos o apagar los que su hotel no tiene']},
   {v: '1.36.0', d: '2026-11-22', en: ['Rooms ready to be inspected now have an Inspect button with a 12-point checklist: bed, bathroom, mirrors, dust, floor, trash, towels, amenities, A/C, TV, lights and smell', 'Every item starts as OK. Tap what failed and the score shows right away. Approve to mark the room Vacant/Ready, or Send back with photos and the failed items as the note', 'Each room shows its score, and each housekeeper sees her average on My rooms', 'New Scores button on the Master board: today, 7 or 30 days, each housekeeper’s average, rooms sent back, what fails most and the latest inspections'],
@@ -6755,7 +6760,7 @@ const BD_ST = {dirty: ['To strip', 'Por stripear'], ready: ['Ready to clean', 'L
 const BD_ORDER = ['dirty', 'ready', 'returned', 'cleaning', 'paused', 'insp', 'vacant', 'dnd', 'refused'];
 const bdSt = k => BD_ST[k] ? L2(BD_ST[k][0], BD_ST[k][1]) : k;
 const bdKind = k => k === 'so' ? 'Stayover' : 'Check-out';
-const BD_ERR = {NOT_YOUR_ROOM: ['That room is not yours.', 'Ese cuarto no es tuyo.'], NOT_READY_TO_CLEAN: ['The room is not Ready to clean yet.', 'El cuarto todavía no está Listo para limpiar.'],
+const BD_ERR = {BAD_CREDITS: ['Use numbers: check-out and stayover from 0 to 10, goal from 1 to 100.', 'Usa números: check-out y stayover de 0 a 10, meta de 1 a 100.'], BAD_DATE: ['That date is too far.', 'Esa fecha está muy lejos.'], NOT_YOUR_ROOM: ['That room is not yours.', 'Ese cuarto no es tuyo.'], NOT_READY_TO_CLEAN: ['The room is not Ready to clean yet.', 'El cuarto todavía no está Listo para limpiar.'],
   NOT_CLEANING: ['That room is not being cleaned.', 'Ese cuarto no se está limpiando.'], NOT_PAUSED: ['That room is not paused.', 'Ese cuarto no está en pausa.'],
   NOT_DIRTY: ['That room was already stripped.', 'Ese cuarto ya fue stripeado.'], NOT_READY_FOR_INSPECTION: ['That room is not ready to be inspected.', 'Ese cuarto no está listo para inspección.'],
   SUPERVISOR_ONLY: ['Only the HK supervisor or a manager can do that.', 'Solo la supervisora de HK o un gerente puede hacer eso.'],
@@ -6784,6 +6789,9 @@ const bdDone = list => list.filter(r => r.status === 'insp' || r.status === 'vac
 const bdMine = () => ((BD && BD.rooms) || []).filter(r => S.me && r.to === S.me.id);
 const bdLv = n => n >= 90 ? 'hi' : n >= 75 ? 'mid' : 'low';
 const bdScore = n => n == null ? '' : `<span class="bdscore" data-lv="${bdLv(n)}" title="${esc(L2('Inspection score', 'Puntaje de inspección'))}">${n}%</span>`;
+const bdCr = r => { const c = (BD && BD.credits) || {co: 1, so: .5}; return +(r.kind === 'so' ? c.so : c.co) || 0; };
+const bdCrSum = list => Math.round(list.reduce((a, r) => a + bdCr(r), 0) * 100) / 100;
+const bdCrTxt = n => { const g = BD && BD.credits && BD.credits.goal != null ? +BD.credits.goal : null; return (g ? n + '/' + g : String(n)) + ' ' + L2(n === 1 && !g ? 'credit' : 'credits', n === 1 && !g ? 'crédito' : 'créditos'); };
 const bdAvgScore = list => { const v = list.map(r => r.score).filter(x => x != null); return v.length ? Math.round(v.reduce((a, b) => a + b, 0) / v.length) : null; };
 const bdDay = d => { try { return new Date(d + 'T12:00:00').toLocaleDateString(LANG === 'es' ? 'es-US' : 'en-US', {weekday: 'long', month: 'short', day: 'numeric'}); } catch { return d; } };
 /* 1.24.0: one order for the day. Front desk lists the departures and marks them Vacant (and out of the system), late check out or extension;
@@ -6854,7 +6862,7 @@ function bdRank(r){
 const bdLateMin = r => bdLateOn(r) ? +r.late_at.replace(':', '') : 0;
 function bdMineHtml(list){
   const avg = bdAvg(list), sorted = [...list].sort((a, b) => bdRank(a) - bdRank(b) || bdLateMin(a) - bdLateMin(b) || +a.room - +b.room);
-  return `<div class="card bdmine"><div class="bdhead"><h3 class="srh">${esc(L2('My rooms', 'Mis cuartos'))}</h3><span class="bdsum">${esc(L2(`${bdDone(list)} of ${list.length} done`, `${bdDone(list)} de ${list.length} listos`) + (avg != null ? ' · MPR ' + avg + ' min' : ''))}</span>${bdScore(bdAvgScore(list))}</div>
+  return `<div class="card bdmine"><div class="bdhead"><h3 class="srh">${esc(L2('My rooms', 'Mis cuartos'))}</h3><span class="bdsum">${esc(L2(`${bdDone(list)} of ${list.length} done`, `${bdDone(list)} de ${list.length} listos`) + ' · ' + bdCrTxt(bdCrSum(list)) + (avg != null ? ' · MPR ' + avg + ' min' : ''))}</span>${bdScore(bdAvgScore(list))}</div>
     ${sorted.map(bdCard).join('')}</div>`;
 }
 function bdCard(r){
@@ -6982,7 +6990,10 @@ function bdMasterHtml(){
   const body = !rooms.length ? `<div class="small">${esc(boss ? L2('No rooms on the board yet. Front desk adds the check-outs; then tap Assign rooms.', 'Todavía no hay cuartos en el board. Front desk agrega las salidas; después toca Asignar cuartos.') : L2('No rooms on the board yet.', 'Todavía no hay cuartos en el board.'))}</div>`
     : !shown.length ? `<div class="small">${esc(L2('No rooms at this step.', 'No hay cuartos en este paso.'))}</div>`
     : gs.map(([id, g]) => { const all = rooms.filter(r => (r.to || '') === id), avg = bdAvg(all), now = all.find(r => r.status === 'cleaning');
-        return `<div class="bdgrp"><div class="bdgh"><b>${esc(g.name)}</b><span>${esc(L2(`${bdDone(all)} of ${all.length} done`, `${bdDone(all)} de ${all.length} listos`) + (avg != null ? ' · MPR ' + avg + ' min' : '') + (now ? ' · ' + L2('cleaning ', 'limpiando la ') + now.room : ''))}</span>${bdScore(bdAvgScore(all))}</div>${g.rooms.map(r => bdRow(r, boss)).join('')}</div>`; }).join('');
+        const ib = id && BD.insp_by ? BD.insp_by[id] : null, ins = BD.inspectors || [];
+        const isel = boss && id && ins.length ? `<select class="bdinssel" data-bdins="${esc(id)}" aria-label="${esc(L2('Inspector for ', 'Inspectora de ') + g.name)}"><option value="">${esc(L2('Inspector: any', 'Inspectora: cualquiera'))}</option>${ins.map(t => `<option value="${esc(t.id)}" ${ib && ib.id === t.id ? 'selected' : ''}>🔍 ${esc(t.name)}</option>`).join('')}</select>`
+          : ib ? `<span class="bdinsn">🔍 ${esc(ib.name)}</span>` : '';
+        return `<div class="bdgrp"><div class="bdgh"><b>${esc(g.name)}</b><span>${esc(L2(`${bdDone(all)} of ${all.length} done`, `${bdDone(all)} de ${all.length} listos`) + ' · ' + bdCrTxt(bdCrSum(all)) + (avg != null ? ' · MPR ' + avg + ' min' : '') + (now ? ' · ' + L2('cleaning ', 'limpiando la ') + now.room : ''))}</span>${bdScore(bdAvgScore(all))}${isel}</div>${g.rooms.map(r => bdRow(r, boss)).join('')}</div>`; }).join('');
   const v = rooms.filter(r => r.verify).length;
   return `<div class="card bdmaster"><div class="bdhead"><h3 class="srh">${esc(boss ? L2('Master board', 'Master board') : L2('All rooms', 'Todos los cuartos'))}</h3>${boss ? `<button class="btn sm" type="button" id="bdStats">📊 ${esc(L2('Scores', 'Puntajes'))}</button><button class="btn pri sm" type="button" id="bdAssign">${esc(L2('Assign rooms', 'Asignar cuartos'))}</button>` : ''}</div>
     ${cnt('insp') ? `<div class="bdinsp">${esc(L2(`${cnt('insp')} ready to be inspected`, `${cnt('insp')} listos para inspección`))}</div>` : ''}
@@ -7233,6 +7244,7 @@ function bdAssign(){
   openModal(`<div data-noi18n><h2>${esc(L2('Assign rooms', 'Asignar cuartos'))}</h2>
     <p class="hint">${esc(L2('Check-outs go to the houseman first to strip. Stayovers are Ready to clean right away.', 'Los check-out pasan primero al houseman para stripear. Los stayover quedan Listos para limpiar enseguida.'))}</p>
     <div class="field"><label for="bdaTo">Housekeeper</label><select id="bdaTo">${team.map(t => `<option value="${esc(t.id)}" ${t.id === BDA.to ? 'selected' : ''}>${esc(t.name)}</option>`).join('')}</select></div>
+    <div class="bdacr"><span id="bdaCr"></span>${BD.edit_credits ? `<button class="linkbtn" type="button" id="bdaCrSet">⚙️ ${esc(L2('Credits', 'Créditos'))}</button>` : ''}</div>
     <div class="bdakinds" role="group" aria-label="${esc(L2('Kind of room', 'Tipo de cuarto'))}"><button type="button" data-bdk="co" aria-pressed="true">Check-out</button><button type="button" data-bdk="so" aria-pressed="false">Stayover</button></div>
     <button class="btn sm" type="button" id="bdaDeps" hidden></button>
     <div class="bdawrap" id="bdaGrid"></div>
@@ -7240,6 +7252,7 @@ function bdAssign(){
     <div class="err" id="bdaErr"></div>
     <div class="btnrow" style="margin-top:10px"><button class="btn pri" type="button" id="bdaGo"></button><button class="btn" type="button" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
   bdaGrid();
+  if ($('#bdaCrSet')) $('#bdaCrSet').onclick = bdCredEdit;
   $('#bdaDeps').onclick = () => { bdaFree().forEach(r => BDA.pick.set(r.room, 'co')); bdaGrid(); pip(); };
   $('#bdaTo').onchange = () => { BDA.to = $('#bdaTo').value; BDA.pick.clear(); bdaGrid(); };
   document.querySelectorAll('#modal [data-bdk]').forEach(b => b.onclick = () => { BDA.kind = b.dataset.bdk; document.querySelectorAll('#modal [data-bdk]').forEach(x => x.setAttribute('aria-pressed', x === b)); });
@@ -7268,7 +7281,27 @@ function bdAssign(){
 const bdaFree = () => (BD.rooms || []).filter(r => !r.to && r.kind === 'co' && r.status === 'dirty');
 const bdaOwn = () => new Set((BD.rooms || []).filter(r => r.to === BDA.to).map(r => r.room));
 function bdaBtn(b){ const k = BDA.pick.get(b.dataset.bdr); b.setAttribute('aria-pressed', !!k); if (k) b.dataset.k = k; }
-function bdaGo(){ const b = $('#bdaGo'); if (b) b.textContent = BDA.pick.size ? L2(`Give ${BDA.pick.size} rooms`, `Dar ${BDA.pick.size} cuartos`) : L2('Give rooms', 'Dar cuartos'); }
+function bdaGo(){ const b = $('#bdaGo'); if (b) b.textContent = BDA.pick.size ? L2(`Give ${BDA.pick.size} rooms`, `Dar ${BDA.pick.size} cuartos`) : L2('Give rooms', 'Dar cuartos');
+  const c = $('#bdaCr'); if (!c) return;
+  const has = bdCrSum((BD.rooms || []).filter(r => r.to === BDA.to)), add = bdCrSum([...BDA.pick.values()].map(kind => ({kind})));
+  c.textContent = L2('Has ', 'Tiene ') + bdCrTxt(has) + (add ? L2(' · with the marked rooms: ', ' · con lo marcado: ') + bdCrTxt(Math.round((has + add) * 100) / 100) : ''); }
+// managers: what a check-out and a stayover are worth, and the daily goal per housekeeper
+function bdCredEdit(){
+  const c = BD.credits || {co: 1, so: .5, goal: null}, n = x => x == null ? '' : String(+x);
+  openModal(`<div data-noi18n><h2>${esc(L2('Credits', 'Créditos'))}</h2><p class="hint">${esc(L2('Credits balance the work: a check-out is worth more than a stayover. The Board adds them up for each housekeeper.', 'Los créditos equilibran el trabajo: un check-out vale más que un stayover. El Board los suma para cada housekeeper.'))}</p>
+    <div class="field"><label for="bdcCo">${esc(L2('Check-out', 'Check-out'))}</label><input id="bdcCo" inputmode="decimal" value="${esc(n(c.co))}"></div>
+    <div class="field"><label for="bdcSo">${esc(L2('Stayover', 'Stayover'))}</label><input id="bdcSo" inputmode="decimal" value="${esc(n(c.so))}"></div>
+    <div class="field"><label for="bdcGoal">${esc(L2('Daily goal per housekeeper (optional)', 'Meta diaria por housekeeper (opcional)'))}</label><input id="bdcGoal" inputmode="decimal" value="${esc(n(c.goal))}"></div>
+    <div class="err" id="bdcErr"></div><div class="btnrow"><button class="btn pri" type="button" id="bdcSave">${esc(L2('Save', 'Guardar'))}</button><button class="btn" type="button" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  $('#bdcSave').onclick = async () => {
+    const num = id => { const v = $(id).value.trim().replace(',', '.'); return v === '' ? null : /^\d+(\.\d+)?$/.test(v) ? +v : NaN; };
+    const co = num('#bdcCo'), so = num('#bdcSo'), goal = num('#bdcGoal');
+    if (co == null || so == null || isNaN(co) || isNaN(so) || isNaN(goal) || co > 10 || so > 10 || (goal != null && (goal < 1 || goal > 100))) { $('#bdcErr').textContent = bdErr({message: 'BAD_CREDITS'}); return; }
+    $('#bdcSave').disabled = true;
+    try { bdSet(await call('sc_credit_rules_save', {p_co: co, p_so: so, p_goal: goal, p_date: BD.date}), true); closeModal(); toast(esc(L2('Credits saved', 'Créditos guardados')), 'new'); }
+    catch (e) { $('#bdcSave').disabled = false; $('#bdcErr').textContent = bdErr(e); }
+  };
+}
 function bdaGrid(){
   const box = $('#bdaGrid'); if (!box) return;
   const by = new Map((BD.rooms || []).map(r => [r.room, r])), floors = new Map(), first = n => (n.split(' ')[0] || '').slice(0, 1);
@@ -7306,6 +7339,10 @@ $('#view-board').addEventListener('click', e => {
 $('#view-board').addEventListener('change', e => {
   const t = e.target;
   if (t.matches('[data-bdset]')) { const id = t.dataset.bdset, v = t.value; t.blur(); BDPend = false; return bdAct(id, 'set', v, t); }
+  if (t.matches('[data-bdins]')) { const hk = t.dataset.bdins, v = t.value || null; t.blur(); BDPend = false; t.disabled = true;
+    return call('sc_board_inspector', {p_date: BD.date, p_hk: hk, p_inspector: v}).then(d => { bdSet(d, true); const w = (BD.team.find(x => x.id === hk) || {}).name || '';
+      toast(esc(v ? L2(`${w}'s rooms will alert `, `Los cuartos de ${w} avisarán a `) + ((BD.inspectors.find(x => x.id === v) || {}).name || '') : L2(`${w}'s rooms alert any supervisor`, `Los cuartos de ${w} avisan a cualquier supervisora`)), 'new'); })
+      .catch(err => { t.disabled = false; toast(esc(bdErr(err))); bdRender(); }); }
   if (t.matches('[data-bdlate]')) { const id = t.dataset.bdlate, v = t.value; t.blur(); BDPend = false; return bdAct(id, 'late', v, t); }
   if (t.matches('[data-bdext]')) { const id = t.dataset.bdext, v = t.value; t.blur(); BDPend = false; return bdAct(id, 'ext', v, t); }
   if (t.id === 'bdDate' && t.value) { BDDate = t.value; t.blur(); BD = null; bdRender(); bdFetch(); }
