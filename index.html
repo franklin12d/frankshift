@@ -1514,6 +1514,21 @@ button.bdstep{cursor:pointer}
 .engfind input:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 4px var(--accent-soft)}
 .engcats{max-height:96px;overflow-y:auto}
 .engsum{font-size:13px;color:var(--ink-2);font-weight:600}
+.rdrow{display:flex;align-items:center;gap:10px;padding:10px 0;border-bottom:1px solid var(--line)}
+.rdrow:last-of-type{border-bottom:0}
+.rdrow .t1{font-weight:600;font-size:14.5px}.rdrow .t2{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.rdrow .t2 b.rdout{color:#DC2626}
+.rdin{width:92px;flex:none;border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:9px 10px;font-size:16px;text-align:right}
+.rdin.rdbad{border-color:#DC2626;box-shadow:0 0 0 3px rgba(220,38,38,.15)}
+.rdyn{display:flex;gap:4px;flex:none}.rdyn button{border:1px solid var(--line);background:var(--surface-2);border-radius:10px;padding:8px 12px;font-weight:600;font-size:14px}
+.rdyn button[aria-pressed="true"]{background:var(--accent);border-color:var(--accent);color:#fff}
+.rdyn button[data-rdy="0"][aria-pressed="true"]{background:#DC2626;border-color:#DC2626}
+.rdround{padding:9px 0;border-bottom:1px solid var(--line);font-size:13.5px}.rdround:last-child{border-bottom:0}
+.rdround .t2{font-size:12px;color:var(--ink-3);margin-bottom:3px}
+.rdround span{display:inline-block;margin:2px 10px 2px 0}.rdround span.rdout{color:#DC2626;font-weight:700}
+.rdpts{width:100%;border-collapse:collapse;font-size:13px}.rdpts td{padding:4px 3px;vertical-align:middle}
+.rdpts input,.rdpts select{width:100%;border:1px solid var(--line);background:var(--surface-2);border-radius:8px;padding:7px 6px;font-size:14px}
+.rdpts th{text-align:left;font:700 11.5px var(--f-body);color:var(--ink-3);padding:4px 3px}
 .engday{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-3);margin-top:4px}
 .engrow{cursor:pointer;align-items:center}
 .engrow .engst{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;flex:none;background:var(--surface);color:var(--ink-3)}
@@ -5381,8 +5396,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.36.0';
+const APP_VERSION = '1.37.0';
 const CHANGES = [
+  {v: '1.37.0', d: '2026-11-22', en: ['New Readings tab in Engineer: pool chlorine, pH, clear water, pool temperature, hot water and the breakfast fridge and freezer, each with its range', 'Fill in what you checked and save. Anything out of range opens an urgent maintenance order, so maintenance and managers get the alert right away', 'History of every round for today, 7 or 30 days, with out-of-range values in red', 'Managers can rename points, change ranges, add new ones or turn off the ones their hotel does not have'],
+    es: ['Nueva pestaña Lecturas en Engineer: cloro y pH de la piscina, agua clara, temperatura de la piscina, agua caliente y el refrigerador y congelador del desayuno, cada uno con su rango', 'Llena lo que revisaste y guarda. Lo que salga fuera de rango abre una orden urgente de mantenimiento, así mantenimiento y los gerentes reciben el aviso al momento', 'Historial de cada ronda de hoy, 7 o 30 días, con lo que salió fuera de rango en rojo', 'Los gerentes pueden cambiar nombres y rangos, agregar puntos nuevos o apagar los que su hotel no tiene']},
   {v: '1.36.0', d: '2026-11-22', en: ['Rooms ready to be inspected now have an Inspect button with a 12-point checklist: bed, bathroom, mirrors, dust, floor, trash, towels, amenities, A/C, TV, lights and smell', 'Every item starts as OK. Tap what failed and the score shows right away. Approve to mark the room Vacant/Ready, or Send back with photos and the failed items as the note', 'Each room shows its score, and each housekeeper sees her average on My rooms', 'New Scores button on the Master board: today, 7 or 30 days, each housekeeper’s average, rooms sent back, what fails most and the latest inspections'],
     es: ['Los cuartos listos para inspección ahora tienen un botón Inspeccionar con una lista de 12 puntos: cama, baño, espejos, polvo, piso, basura, toallas, amenities, A/C, TV, luces y olor', 'Cada punto empieza como bien. Toca lo que falló y el puntaje sale al momento. Aprueba para dejar el cuarto Vacante/Lista, o Devuelve con fotos y lo que falló como nota', 'Cada cuarto muestra su puntaje, y cada housekeeper ve su promedio en Mis cuartos', 'Nuevo botón Puntajes en el Master board: hoy, 7 o 30 días, el promedio de cada housekeeper, cuartos devueltos, lo que más falla y las últimas inspecciones']},
   {v: '1.35.0', d: '2026-11-22', en: ['Photos now live in secure cloud storage instead of the database, so FrankShift stays fast as photos pile up', 'Photos look and work the same: in orders, chat, the Board and the map. Old photos move over by themselves', 'Each photo opens only for staff of its hotel, through a link that expires after 6 hours'],
@@ -5887,7 +5904,7 @@ function engRow(o){
 const engChips = (attr, list, cur) => list.map(([v, t]) => `<button type="button" ${attr}="${esc(v)}" aria-pressed="${v === cur}">${esc(t)}</button>`).join('');
 function engSegs(){
   const open = engOpen().length;
-  $('#engSeg').innerHTML = engChips('data-eseg', [['open', L2('Open', 'Abiertas') + (open ? ' ' + open : '')], ['hist', L2('History', 'Historial')], ['find', L2('Search', 'Buscar')], ['top', L2('Frequent', 'Frecuentes')]], ENG.seg);
+  $('#engSeg').innerHTML = engChips('data-eseg', [['open', L2('Open', 'Abiertas') + (open ? ' ' + open : '')], ['hist', L2('History', 'Historial')], ['find', L2('Search', 'Buscar')], ['top', L2('Frequent', 'Frecuentes')], ['read', '📋 ' + L2('Readings', 'Lecturas')]], ENG.seg);
 }
 function renderEng(){
   const open = engOpen();
@@ -5907,6 +5924,8 @@ function renderEng(){
         : ENG.f === 'mine' ? L2('Nothing assigned to you right now.', 'Nada asignado a ti ahora.') : L2('All clear. Maintenance orders from the chat land here.', 'Todo al día. Las órdenes de mantenimiento del chat llegan aquí.'))}</div>`;
     return;
   }
+  if (ENG.seg === 'read') return rdRender(tools, list);
+  list.dataset.rdk = '';
   if (ENG.seg === 'hist') {
     tools.innerHTML = `<div class="filters engf">${engChips('data-ehd', [['1', L2('Today', 'Hoy')], ['7', L2('7 days', '7 días')], ['30', L2('30 days', '30 días')], ['90', L2('90 days', '90 días')]], String(ENG.histDays))}</div>`;
     if (!ENG.hist) { list.innerHTML = `<div class="small" data-noi18n>${esc(L2('Loading…', 'Cargando…'))}</div>`; return; }
@@ -5958,6 +5977,7 @@ async function engLoad(force){
     catch (e) { if (seq === ENG.topSeq) { ENG.top = {days: ENG.topDays, total: 0, rooms: [], cats: []}; toast(esc(e.message)); } }
   }
   if (ENG.seg === 'find' && force) await engSearch();
+  if (ENG.seg === 'read') return rdLoad(force);
   renderEng();
 }
 async function engSearch(){
@@ -5970,8 +5990,112 @@ async function engSearch(){
   catch (e) { if (seq !== ENG.resSeq) return; ENG.res = []; toast(esc(e.message)); }
   renderEng();
 }
+/* Readings: pool and equipment points of the hotel. Anyone logs a round; a value outside its range opens one urgent
+   maintenance order, so maintenance and managers get the urgent alerts until someone takes it. Managers edit the points */
+const RD = {d: null, days: 7, at: 0, seq: 0};
+const rdName = p => LANG === 'es' ? p.es : p.en;
+const rdNum = x => x == null || x === '' ? '' : String(+x);
+const rdRange = p => p.kind === 'yes' ? L2('Yes or No', 'Sí o No') : p.lo != null && p.hi != null ? rdNum(p.lo) + '–' + rdNum(p.hi) + (p.unit ? ' ' + p.unit : '')
+  : p.lo != null ? L2('min ', 'mín. ') + rdNum(p.lo) + (p.unit ? ' ' + p.unit : '') : p.hi != null ? L2('max ', 'máx. ') + rdNum(p.hi) + (p.unit ? ' ' + p.unit : '') : (p.unit || L2('no range', 'sin rango'));
+const rdVal = (p, r) => p.kind === 'yes' ? (r.yes ? L2('Yes', 'Sí') : 'No') : rdNum(r.val) + (p.unit ? ' ' + p.unit : '');
+const rdParse = v => { v = String(v || '').trim().replace(',', '.'); return /^-?\d+(\.\d+)?$/.test(v) ? +v : v === '' ? null : NaN; };
+const rdOut = (p, v) => p.kind === 'yes' ? v === false : v != null && !isNaN(v) && ((p.lo != null && v < +p.lo) || (p.hi != null && v > +p.hi));
+const RD_ERR = {NOTHING_TO_SAVE: ['Type at least one reading.', 'Escribe al menos una lectura.'], BAD_READING: ['Check the numbers: only digits and a decimal point.', 'Revisa los números: solo dígitos y punto decimal.'],
+  NOT_FOUND: ['A point changed meanwhile. Reload and try again.', 'Un punto cambió mientras tanto. Recarga y prueba otra vez.'], MANAGER_ONLY: ['Only managers can change the points.', 'Solo los gerentes pueden cambiar los puntos.'],
+  BAD_RANGE: ['A minimum is higher than its maximum.', 'Un mínimo es mayor que su máximo.'], NAME_NEEDED: ['Every point needs a name.', 'Cada punto necesita un nombre.'], BAD_POINTS: ['Too many points (40 at most).', 'Demasiados puntos (40 como máximo).']};
+const rdErr = e => { const m = RD_ERR[e && e.message]; return m ? L2(m[0], m[1]) : (e && e.message) || 'Error'; };
+async function rdLoad(force){
+  if (!force && RD.d && Date.now() - RD.at < 60e3) return renderEng();
+  const seq = ++RD.seq;
+  try { const r = await call('sc_readings', {p_days: RD.days}); if (seq !== RD.seq) return; RD.d = r; RD.at = Date.now(); }
+  catch (e) { if (seq !== RD.seq) return; RD.d = RD.d || {points: [], list: [], edit: false}; RD.at = Date.now(); toast(esc(rdErr(e))); }
+  renderEng();
+}
+function rdRender(tools, list){
+  const key = RD.at + ':' + RD.days + ':' + LANG;
+  if (list.dataset.rdk === key && list.querySelector('#rdForm')) return; // keep what is being typed
+  tools.innerHTML = `<div class="filters engf">${engChips('data-rdd', [['1', L2('Today', 'Hoy')], ['7', L2('7 days', '7 días')], ['30', L2('30 days', '30 días')]], String(RD.days))}${RD.d && RD.d.edit ? `<button type="button" class="btn sm" id="rdPts">⚙️ ${esc(L2('Points', 'Puntos'))}</button>` : ''}</div>`;
+  if (!RD.d) { list.dataset.rdk = ''; list.innerHTML = `<div class="small" data-noi18n>${esc(L2('Loading…', 'Cargando…'))}</div>`; return; }
+  list.dataset.rdk = key;
+  const pts = RD.d.points.filter(p => p.active), byId = new Map(RD.d.points.map(p => [p.id, p]));
+  const form = pts.length ? pts.map(p => {
+    const l = p.last, lastTxt = l ? L2('last ', 'última ') + rdVal(p, l) + ' · ' + ago(T(l.at)) + (l.by ? ' · ' + l.by : '') : L2('no readings yet', 'sin lecturas aún');
+    const inp = p.kind === 'yes' ? `<div class="rdyn" role="group" aria-label="${esc(rdName(p))}"><button type="button" data-rdy="1" data-rdp="${p.id}" aria-pressed="false">${esc(L2('Yes', 'Sí'))}</button><button type="button" data-rdy="0" data-rdp="${p.id}" aria-pressed="false">No</button></div>`
+      : `<input class="rdin" data-rdp="${p.id}" inputmode="decimal" autocomplete="off" maxlength="8" aria-label="${esc(rdName(p))}" placeholder="${esc(p.unit || '')}">`;
+    return `<div class="rdrow"><div class="grow"><div class="t1">${esc(rdName(p))}</div><div class="t2">${esc(rdRange(p))} · ${l && l.out ? `<b class="rdout">${esc(lastTxt)}</b>` : esc(lastTxt)}</div></div>${inp}</div>`;
+  }).join('') : `<div class="small">${esc(RD.d.edit ? L2('No points yet. Add them with Points.', 'Aún no hay puntos. Agrégalos con Puntos.') : L2('No points yet. A manager adds them.', 'Aún no hay puntos. Un gerente los agrega.'))}</div>`;
+  const rounds = []; RD.d.list.forEach(r => { let g = rounds.find(x => x.id === r.round); if (!g) rounds.push(g = {id: r.round, at: r.at, by: r.by, items: [], ticket: null}); g.items.push(r); if (r.ticket) g.ticket = r.ticket; });
+  const today = dayNY(Date.now()), shown = RD.days === 1 ? rounds.filter(g => dayNY(g.at) === today) : rounds;
+  const outN = shown.filter(g => g.items.some(r => r.out)).length;
+  const hist = shown.length ? shown.map(g => `<div class="rdround"><div class="t2">${esc((dayNY(g.at) === today ? L2('Today', 'Hoy') : fmtDate(T(g.at))) + ' ' + fmtTime(T(g.at)) + (g.by ? ' · ' + g.by : '') + (g.ticket ? ' · ' + L2('order ', 'orden ') + g.ticket : ''))}</div>${g.items.map(r => { const p = byId.get(r.point) || {en: '?', es: '?', kind: r.yes == null ? 'num' : 'yes'};
+      return `<span class="${r.out ? 'rdout' : ''}">${esc((r.out ? '⚠️ ' : '') + rdName(p) + ': ' + rdVal(p, r))}${r.note ? ' <i>' + esc('(' + r.note + ')') + '</i>' : ''}</span>`; }).join('')}</div>`).join('')
+    : `<div class="small">${esc(L2('No readings in these days.', 'No hay lecturas en estos días.'))}</div>`;
+  list.innerHTML = `<div class="card" data-noi18n id="rdForm"><h2>${esc(L2('Take readings', 'Tomar lecturas'))}</h2><p class="hint">${esc(L2('Fill in what you checked and save. Anything out of range opens an urgent maintenance order.', 'Llena lo que revisaste y guarda. Lo que salga fuera de rango abre una orden urgente de mantenimiento.'))}</p>
+      ${form}${pts.length ? `<div class="field" style="margin-top:10px"><label for="rdNote">${esc(L2('Note (optional)', 'Nota (opcional)'))}</label><input id="rdNote" maxlength="200" autocomplete="off"></div>
+      <div class="err" id="rdErr"></div><div class="btnrow"><button type="button" class="btn pri" id="rdSave">${esc(L2('Save readings', 'Guardar lecturas'))}</button></div>` : ''}</div>
+    <div class="card" data-noi18n><h2>${esc(L2('History', 'Historial'))}</h2><div class="engsum" style="margin-bottom:6px">${esc(shown.length + ' ' + L2(shown.length === 1 ? 'round' : 'rounds', shown.length === 1 ? 'ronda' : 'rondas') + (outN ? ' · ' + outN + ' ' + L2('out of range', 'fuera de rango') : ''))}</div>${hist}</div>`;
+  list.querySelectorAll('.rdin').forEach(i => i.oninput = () => { const p = byId.get(i.dataset.rdp), v = rdParse(i.value); i.classList.toggle('rdbad', v !== null && (isNaN(v) || rdOut(p, v))); $('#rdErr').textContent = ''; });
+}
+function rdYes(b){ const g = b.parentElement, on = b.getAttribute('aria-pressed') !== 'true'; g.querySelectorAll('button').forEach(x => x.setAttribute('aria-pressed', 'false')); b.setAttribute('aria-pressed', on); const e = $('#rdErr'); if (e) e.textContent = ''; }
+async function rdSave(btn){
+  const list = $('#engList'), items = [], note = ($('#rdNote') ? $('#rdNote').value : '').trim();
+  let bad = false;
+  list.querySelectorAll('.rdin').forEach(i => { const v = rdParse(i.value); if (v === null) return; if (isNaN(v)) { bad = true; i.classList.add('rdbad'); return; } items.push({p: i.dataset.rdp, v}); });
+  list.querySelectorAll('.rdyn').forEach(g => { const b = g.querySelector('[aria-pressed="true"]'); if (b) items.push({p: b.dataset.rdp, y: b.dataset.rdy === '1'}); });
+  if (bad) { $('#rdErr').textContent = rdErr({message: 'BAD_READING'}); return; }
+  if (!items.length) { $('#rdErr').textContent = rdErr({message: 'NOTHING_TO_SAVE'}); return; }
+  const byId = new Map(RD.d.points.map(p => [p.id, p]));
+  if (note) items.forEach(it => { const p = byId.get(it.p); if (p && rdOut(p, p.kind === 'yes' ? it.y : it.v)) it.n = note; });
+  if (note && !items.some(it => it.n)) items[0].n = note;
+  btn.disabled = true;
+  try {
+    const r = await call('sc_reading_add', {p_items: items});
+    if (r.order_id) { S.known.set(r.order_id, 'open'); notify([r.order_id]); chime('edit');
+      toast(esc(L2('Out of range: ', 'Fuera de rango: ') + r.out.join('; ') + '. ' + L2('Order ', 'Orden ') + r.ticket + L2(' sent to maintenance and managers.', ' enviada a mantenimiento y gerentes.')), 'new'); }
+    else { fx('done'); toast(esc(r.saved + ' ' + L2(r.saved === 1 ? 'reading saved, all in range' : 'readings saved, all in range', r.saved === 1 ? 'lectura guardada, todo en rango' : 'lecturas guardadas, todo en rango')), 'new'); }
+    list.dataset.rdk = ''; await rdLoad(true); if (r.order_id) try { await refresh(); } catch {}
+  } catch (e) { btn.disabled = false; $('#rdErr').textContent = rdErr(e); }
+}
+function rdPoints(){
+  if (!RD.d) return;
+  const rows = RD.d.points.map(p => ({...p}));
+  const unitOf = p => p.unit || '';
+  const draw = () => {
+    $('#rdpBody').innerHTML = rows.map((p, i) => `<tr><td><input data-rpi="${i}" data-rpf="es" value="${esc(p.es || '')}" maxlength="60" aria-label="${esc(L2('Name in Spanish', 'Nombre en español'))}"></td>
+      <td><input data-rpi="${i}" data-rpf="en" value="${esc(p.en || '')}" maxlength="60" aria-label="${esc(L2('Name in English', 'Nombre en inglés'))}"></td>
+      <td><select data-rpi="${i}" data-rpf="kind" aria-label="${esc(L2('Kind', 'Tipo'))}"><option value="num" ${p.kind !== 'yes' ? 'selected' : ''}>${esc(L2('Number', 'Número'))}</option><option value="yes" ${p.kind === 'yes' ? 'selected' : ''}>${esc(L2('Yes/No', 'Sí/No'))}</option></select></td>
+      <td><input data-rpi="${i}" data-rpf="unit" value="${esc(unitOf(p))}" maxlength="10" style="width:56px" aria-label="${esc(L2('Unit', 'Unidad'))}" ${p.kind === 'yes' ? 'disabled' : ''}></td>
+      <td><input data-rpi="${i}" data-rpf="lo" value="${esc(rdNum(p.lo))}" inputmode="decimal" style="width:60px" aria-label="${esc(L2('Minimum', 'Mínimo'))}" ${p.kind === 'yes' ? 'disabled' : ''}></td>
+      <td><input data-rpi="${i}" data-rpf="hi" value="${esc(rdNum(p.hi))}" inputmode="decimal" style="width:60px" aria-label="${esc(L2('Maximum', 'Máximo'))}" ${p.kind === 'yes' ? 'disabled' : ''}></td>
+      <td><input type="checkbox" data-rpi="${i}" data-rpf="active" ${p.active !== false ? 'checked' : ''} aria-label="${esc(L2('On', 'Activo'))}" style="width:auto"></td></tr>`).join('');
+  };
+  openModal(`<div data-noi18n><h2>${esc(L2('Reading points', 'Puntos de lectura'))}</h2>
+    <p class="hint">${esc(L2('Leave min or max empty when there is no limit. A Yes/No point alerts on No. Uncheck a point your hotel does not have.', 'Deja el mínimo o el máximo vacío si no hay límite. Un punto Sí/No avisa cuando es No. Desmarca el punto que tu hotel no tiene.'))}</p>
+    <div class="scroll-x"><table class="rdpts"><thead><tr><th>${esc(L2('Spanish', 'Español'))}</th><th>${esc(L2('English', 'Inglés'))}</th><th>${esc(L2('Kind', 'Tipo'))}</th><th>${esc(L2('Unit', 'Unidad'))}</th><th>${esc(L2('Min', 'Mín.'))}</th><th>${esc(L2('Max', 'Máx.'))}</th><th>${esc(L2('On', 'Activo'))}</th></tr></thead><tbody id="rdpBody"></tbody></table></div>
+    <button type="button" class="btn sm" id="rdpAdd" style="margin-top:8px">+ ${esc(L2('Add point', 'Agregar punto'))}</button><div class="err" id="rdpErr"></div>
+    <div class="btnrow" style="margin-top:12px"><button type="button" class="btn pri" id="rdpSave">${esc(L2('Save', 'Guardar'))}</button><button type="button" class="btn" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  draw();
+  $('#rdpBody').addEventListener('input', e => { const t = e.target, i = t.dataset.rpi; if (i === undefined) return; const p = rows[+i], f = t.dataset.rpf;
+    p[f] = t.type === 'checkbox' ? t.checked : t.value; $('#rdpErr').textContent = ''; if (f === 'kind') draw(); });
+  $('#rdpBody').addEventListener('change', e => { const t = e.target; if (t.dataset.rpf === 'active' || t.dataset.rpf === 'kind') { rows[+t.dataset.rpi][t.dataset.rpf] = t.type === 'checkbox' ? t.checked : t.value; if (t.dataset.rpf === 'kind') draw(); } });
+  $('#rdpAdd').onclick = () => { if (rows.length >= 40) { $('#rdpErr').textContent = rdErr({message: 'BAD_POINTS'}); return; } rows.push({es: '', en: '', kind: 'num', unit: '', lo: null, hi: null, active: true}); draw(); const ins = $('#rdpBody').querySelectorAll('tr:last-child input'); if (ins[0]) ins[0].focus(); };
+  $('#rdpSave').onclick = async () => {
+    const out = [];
+    for (const p of rows) {
+      if (!p.id && !String(p.es || '').trim() && !String(p.en || '').trim()) continue; // empty new row
+      const lo = rdParse(p.lo), hi = rdParse(p.hi);
+      if ((lo !== null && isNaN(lo)) || (hi !== null && isNaN(hi))) { $('#rdpErr').textContent = rdErr({message: 'BAD_READING'}); return; }
+      if (lo !== null && hi !== null && lo > hi) { $('#rdpErr').textContent = rdErr({message: 'BAD_RANGE'}); return; }
+      if (!String(p.es || '').trim() && !String(p.en || '').trim()) { $('#rdpErr').textContent = rdErr({message: 'NAME_NEEDED'}); return; }
+      out.push({id: p.id || null, es: String(p.es || '').trim(), en: String(p.en || '').trim(), kind: p.kind === 'yes' ? 'yes' : 'num', unit: String(p.unit || '').trim(), lo, hi, active: p.active !== false});
+    }
+    $('#rdpSave').disabled = true;
+    try { RD.d = await call('sc_reading_points_save', {p_points: out}); RD.at = Date.now(); closeModal(); toast(esc(L2('Points saved', 'Puntos guardados')), 'new'); $('#engList').dataset.rdk = ''; renderEng(); }
+    catch (e) { $('#rdpSave').disabled = false; $('#rdpErr').textContent = rdErr(e); }
+  };
+}
 function engShow(){ renderEng(); engLoad(); }
-function engGo(seg){ ENG.seg = seg; ls.set('sc.engSeg', seg); $('#engTools').innerHTML = ''; renderEng(); engLoad(); }
+function engGo(seg){ ENG.seg = seg; ls.set('sc.engSeg', seg); $('#engTools').innerHTML = ''; $('#engList').dataset.rdk = ''; renderEng(); engLoad(); }
 function engMap(id){ setTab('map'); openMap(id); }
 $('#engSeg').addEventListener('click', e => { const b = e.target.closest('[data-eseg]'); if (b) engGo(b.dataset.eseg); });
 $('#engTools').addEventListener('click', e => {
@@ -5980,10 +6104,14 @@ $('#engTools').addEventListener('click', e => {
   else if (b.dataset.ehd) { ENG.histDays = +b.dataset.ehd; ENG.hist = null; renderEng(); engLoad(true); }
   else if (b.dataset.etd) { ENG.topDays = +b.dataset.etd; ENG.top = null; renderEng(); engLoad(true); }
   else if (b.dataset.ecat !== undefined) { ENG.cat = b.dataset.ecat; engSearch(); }
+  else if (b.dataset.rdd) { RD.days = +b.dataset.rdd; rdLoad(true); }
+  else if (b.id === 'rdPts') rdPoints();
 });
 $('#engList').addEventListener('click', e => {
   const b = e.target.closest('button');
   if (!b) { const c = e.target.closest('.order, .engrow'); if (c && !String(getSelection && getSelection()).trim()) orderDetail(c.dataset.id); return; }
+  if (b.dataset.rdy !== undefined) return rdYes(b);
+  if (b.id === 'rdSave') return rdSave(b);
   if (b.dataset.engmap) return engMap(b.dataset.engmap);
   if (b.dataset.eroom) return roomHistory(b.dataset.eroom);
   if (b.dataset.eroom2) { ENG.q = b.dataset.eroom2; ENG.cat = ''; ENG.seg = 'find'; ls.set('sc.engSeg', 'find'); $('#engTools').innerHTML = ''; return engSearch(); }
