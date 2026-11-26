@@ -1017,6 +1017,23 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .splog .sprlog{display:flex;gap:10px;align-items:flex-start}
 .splog .sprlog .grow{flex:1;min-width:0;display:flex;flex-direction:column}
 .spnote{font-style:italic}
+/* 1.43.0: supplies inventory */
+.spneed{font:700 11.5px var(--f-body);padding:1px 8px;border-radius:999px;background:var(--urgent-soft);color:var(--urgent);white-space:nowrap}
+.spneed[data-ok]{background:color-mix(in srgb,var(--ok) 14%,var(--surface));color:var(--ok)}
+.stmt h2{margin:0 0 2px}
+.stmt .stsub{font-size:12.5px;color:var(--ink-3);margin:0 0 12px}
+.stmt .stwrap{overflow-x:auto;margin:0 -4px}
+.stmt table{width:100%;border-collapse:collapse;font-size:13px;font-variant-numeric:tabular-nums}
+.stmt th{text-align:left;font:700 11px var(--f-body);text-transform:uppercase;letter-spacing:.03em;color:var(--ink-3);padding:6px 4px;border-bottom:1px solid var(--line)}
+.stmt td{padding:8px 4px;border-bottom:1px solid var(--line);vertical-align:top;color:var(--ink)}
+.stmt td small{display:block;color:var(--ink-3);font-size:11.5px}
+.stmt td.need{font-weight:800;color:var(--urgent)}
+.stmt td.need[data-ok]{color:var(--ok)}
+.stmt .sttot{margin:12px 0 0;padding:10px 12px;border-radius:12px;background:var(--surface-2);font-size:13.5px}
+.stmt .stfoot{font-size:12px;color:var(--ink-3);margin:10px 0 0}
+@media print{body.spprint>*:not(#modal){display:none!important}body.spprint #modal{position:static!important;background:none!important;padding:0!important}
+  body.spprint #modalBody{box-shadow:none!important;max-width:none!important;max-height:none!important;overflow:visible!important;border:0!important}
+  body.spprint .btnrow{display:none!important}body.spprint .stmt *{color:#000!important}}
 .spph{flex:none}
 /* 1.42.0: Request supply */
 #lsBox .lsbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
@@ -5821,8 +5838,9 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.42.1';
+const APP_VERSION = '1.43.0';
 const CHANGES = [
+  {v: '1.43.0', d: '2026-11-26', en: ['Laundry supplies: each product shows Missing or Complete against its target of closed pails in storage', 'New Inventory statement for managers and HK supervisors: open pail, storage, gallons, days it lasts, target and what is missing, with Create order, Share and Print', 'Managers set the storage target per product in Settings'], es: ['Suministros de lavandería: cada producto muestra Faltan o Completo contra su meta de pailas cerradas en almacén', 'Nuevo Estado de inventario para gerentes y supervisoras de HK: paila abierta, almacén, galones, días que alcanza, meta y lo que falta, con Crear orden, Compartir e Imprimir', 'Los gerentes ponen la meta de almacén por producto en Parámetros']},
   {v: '1.42.1', d: '2026-11-26', en: ['Laundry: the machine timers are back at the top, and Supplies moved below them'], es: ['Lavandería: los relojes de las máquinas vuelven arriba y Suministros pasa debajo']},
   {v: '1.42.0', d: '2026-11-26', en: ['Laundry: new Supplies with a level bar for detergent, bleach and softener: green, amber or red, with loads and days left and the closed pails in storage', 'Every washer load takes its dose from the open pail: detergent when Soap is on, bleach when Bleach is on, softener on every washer load', '"I opened a pail" logs the product, the size and a photo of the pail, with who and when. The Supply log keeps them all', 'Pails in storage: log new pails that arrived or count the closed ones', 'When a pail runs out, the app compares its loads with its size and corrects the dose per load by itself', 'Managers set the oz per load, the pail size and when to warn. Managers and HK supervisors get an alert when a product is running low, and can turn it into an order in Orders To-do', 'Request supply: anyone in the laundry room can ask for detergent, bleach, softener or something else. The HK supervisor and the managers get an alert, and can mark it received, cancel it or turn it into an order. The person who asked hears back'],
     es: ['Laundry: nuevo Suministros con una barra de nivel para detergente, bleach y suavizante: verde, ámbar o rojo, con tandas y días que quedan y las pailas cerradas en almacén', 'Cada tanda de lavadora descuenta su dosis de la paila abierta: detergente cuando lleva Jabón, bleach cuando lleva Bleach y suavizante en toda tanda de lavadora', '"Abrí una paila" registra el producto, el tamaño y una foto de la paila, con quién y cuándo. La Bitácora de suministros las guarda todas', 'Pailas en almacén: registra las pailas que llegaron o cuenta las cerradas', 'Cuando una paila se acaba, la app compara sus tandas con su tamaño y corrige sola la dosis por tanda', 'Los gerentes ponen las oz por tanda, el tamaño de la paila y cuándo avisar. Gerentes y supervisoras de HK reciben un aviso cuando un producto se está acabando, y pueden convertirlo en una orden en Orders To-do', 'Pedir suministro: cualquiera en la lavandería puede pedir detergente, bleach, suavizante u otra cosa. La supervisora de HK y los gerentes reciben un aviso, y pueden marcarlo recibido, cancelarlo o convertirlo en orden. Quien pidió recibe la respuesta']},
@@ -6272,6 +6290,10 @@ async function spLoad(quiet){
   try { SP.data = await call('sc_supply'); spRender(); } catch (e) { if (!quiet) toast(esc(e.message)); } finally { SP.busy = false; }
 }
 function spSet(d){ if (d) { SP.data = d; spRender(); } }
+// 1.43.0: storage against its target: "Missing 2" or "Complete"
+const spNeed = i => i.par_pails == null ? '' : i.need > 0
+  ? `<span class="spneed" title="${esc(L2(`Target ${i.par_pails} in storage`, `Meta ${i.par_pails} en almacén`))}">${esc(L2(`Missing ${i.need}`, `Faltan ${i.need}`))}</span>`
+  : `<span class="spneed" data-ok>${esc(L2('Complete', 'Completo'))}</span>`;
 // one product row: name, level bar and what is left
 function spRow(i){
   const lv = i.level, pct = i.pct == null ? 0 : Math.max(0, Math.min(100, i.pct));
@@ -6283,7 +6305,7 @@ function spRow(i){
   }
   bits.push(L2(`${i.reserve} in storage`, `${i.reserve} en almacén`));
   return `<div class="sprow" data-lv="${esc(lv)}"><span class="spico" data-p="${esc(i.product)}">${SP_ICO[i.product] || ''}</span>
-    <div class="spmain"><div class="sptop"><b>${esc(spName(i.product))}</b><span class="splv">${esc(lvTxt)}</span><span class="sppct">${i.open_at ? pct + '%' : ''}</span></div>
+    <div class="spmain"><div class="sptop"><b>${esc(spName(i.product))}</b><span class="splv">${esc(lvTxt)}</span>${spNeed(i)}<span class="sppct">${i.open_at ? pct + '%' : ''}</span></div>
     <div class="spbar" role="meter" aria-label="${esc(spName(i.product))}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${i.open_at ? pct : 0}%"></i></div>
     <div class="spmeta">${esc(i.open_at ? bits.join(' · ') : L2('No open pail registered yet. ', 'Todavía no hay paila abierta registrada. ') + bits.join(' · '))}</div></div></div>`;
 }
@@ -6302,7 +6324,8 @@ function spRender(){
     ${alert}<div class="sprows">${items.map(spRow).join('')}</div>
     ${prov.length ? `<div class="spprov">${esc(L2('Provisional dose for ', 'Dosis provisional para ') + prov.map(i => spName(i.product) + ' ' + spOz(i.oz_per_load) + ' oz').join(', ') + L2('. It corrects itself when the next pail is opened' + (SP.data.can_edit ? ', or set it in Settings.' : '.'), '. Se corrige sola al abrir la siguiente paila' + (SP.data.can_edit ? ', o ponla en Parámetros.' : '.')))}</div>` : ''}
     <div class="btnrow spbtns"><button type="button" class="btn pri" data-spopen>${SP_CAM}${esc(L2('I opened a pail', 'Abrí una paila'))}</button>
-      <button type="button" class="btn" data-spstock>${esc(L2('Pails in storage', 'Pailas en almacén'))}</button></div></div>`;
+      <button type="button" class="btn" data-spstock>${esc(L2('Pails in storage', 'Pailas en almacén'))}</button>
+      ${spBoss() ? `<button type="button" class="btn" data-spstmt>${esc(L2('Inventory statement', 'Estado de inventario'))}</button>` : ''}</div></div>`;
   const log = (SP.data.log || []), shown = SP.all ? log : log.slice(0, 12);
   $('#spLogH').textContent = L2('Supply log', 'Bitácora de suministros');
   $('#spLog').innerHTML = shown.length ? shown.map(spLogRow).join('') + (log.length > 12 && !SP.all ? `<button type="button" class="btn sm" data-spall>${esc(L2('Show more', 'Ver más'))}</button>` : '')
@@ -6413,6 +6436,7 @@ function spParams(p0){
     <p class="small" id="spCalc"></p>
     <div class="grid2"><div class="field"><label for="spWd">${esc(L2('Warn with days left', 'Avisar con días restantes'))}</label><input id="spWd" type="number" inputmode="decimal" step="0.5" min="0" max="30" value="${esc(spOz(i.warn_days))}"></div>
       <div class="field"><label for="spWp">${esc(L2('Warn with pails in storage', 'Avisar con pailas en almacén'))}</label><input id="spWp" type="number" inputmode="numeric" min="0" max="20" value="${esc(i.warn_pails)}"></div></div>
+    <div class="field"><label for="spPar">${esc(L2('Target in storage (closed pails)', 'Meta en almacén (pailas cerradas)'))}</label><input id="spPar" type="number" inputmode="numeric" min="0" max="99" value="${esc(i.par_pails == null ? 3 : i.par_pails)}"></div>
     <label class="lnchk"><input type="checkbox" id="spAuto"${i.auto_adjust ? ' checked' : ''}> ${esc(L2('Correct the dose by itself when a pail runs out', 'Corregir la dosis sola cuando se acabe una paila'))}</label>
     <p class="small">${esc(L2('Ecolab does not publish a fixed dose per load: the technician sets each pump. Ask for the pump settings and put them here, or let the app learn from each pail.', 'Ecolab no publica una dosis fija por tanda: el técnico calibra cada bomba. Pídele los ajustes y ponlos aquí, o deja que la app aprenda de cada paila.'))}${i.updated_by ? esc(L2(` Last change by ${lnShort(i.updated_by)}.`, ` Último cambio: ${lnShort(i.updated_by)}.`)) : ''}</p>
     <div class="err" id="spErr"></div>
@@ -6424,16 +6448,57 @@ function spParams(p0){
   $('#spGo').onclick = async () => {
     $('#spGo').disabled = true;
     try { spSet(await call('sc_supply_params', {p_product: p, p_oz_per_load: +$('#spDose').value, p_pail_oz: +$('#spPail').value,
-        p_warn_days: +$('#spWd').value, p_warn_pails: Math.round(+$('#spWp').value), p_auto: $('#spAuto').checked})); closeModal();
+        p_warn_days: +$('#spWd').value, p_warn_pails: Math.round(+$('#spWp').value), p_auto: $('#spAuto').checked, p_par: Math.round(+$('#spPar').value)})); closeModal();
       toast(`<b>${esc(spName(p))}</b> <span>${esc(L2('settings saved.', 'parámetros guardados.'))}</span>`); }
     catch (err) { $('#spGo').disabled = false; $('#spErr').textContent = spErr(err); }
   };
 }
-// a housekeeping order in Orders To-do with what is running low
-async function spOrder(){
-  const lows = spLows(); if (!lows.length) return;
-  const room = SP.data.room === 'HWY' ? 'Highway' : 'Maingate/Fundamental';
-  const det = L2('Order laundry supplies (' + room + '): ', 'Pedir suministros de lavandería (' + room + '): ')
+// 1.43.0: inventory statement: what is on hand, what the target is and what is missing, ready to print, share or turn into an order
+const spRoomName = () => SP.data && SP.data.room === 'HWY' ? 'Highway' : 'Maingate/Fundamental';
+const spGal = g => (Math.round(+g * 10) / 10).toString();
+function spStmtText(){
+  const items = SP.data.items || [], when = new Date();
+  const lines = [L2('Laundry supplies inventory', 'Inventario de suministros de lavandería') + ' · ' + spRoomName(),
+    fmtDate(+when) + ' ' + fmtTime(+when) + ' · ' + L2('by ', 'por ') + (S.me ? S.me.name : ''), ''];
+  items.forEach(i => lines.push(spName(i.product) + ': ' + (i.open_at ? L2(`open pail ${i.pct}%`, `paila abierta ${i.pct}%`) + ', ' : '')
+    + L2(`${i.reserve} closed in storage`, `${i.reserve} ${i.reserve === 1 ? 'cerrada' : 'cerradas'} en almacén`) + ' (' + spGal(i.gal_all) + ' gal)'
+    + (i.days_all != null ? ' · ' + L2(`lasts about ${Math.round(i.days_all)} days`, `alcanza unos ${Math.round(i.days_all)} días`) : '')
+    + ' · ' + L2(`target ${i.par_pails}`, `meta ${i.par_pails}`) + ' · ' + (i.need > 0 ? L2(`MISSING ${i.need}`, `FALTAN ${i.need}`) : L2('complete', 'completo'))));
+  const need = items.filter(i => i.need > 0);
+  lines.push('', need.length ? L2('To order: ', 'Hay que pedir: ') + need.map(i => `${i.need} × ${spName(i.product)} (${spSize(i.pail_oz)})`).join(', ') : L2('Nothing to order.', 'No hace falta pedir nada.'));
+  return lines.join('\n');
+}
+function spStmt(){
+  if (!SP.data) return;
+  const items = SP.data.items || [], need = items.filter(i => i.need > 0), now = Date.now();
+  const cnt = i => i.count_at ? L2(`${i.count_kind === 'count' ? 'Counted' : 'Received'} ${fmtDate(Date.parse(i.count_at))} · ${lnShort(i.count_by)}`, `${i.count_kind === 'count' ? 'Conteo' : 'Recibido'} ${fmtDate(Date.parse(i.count_at))} · ${lnShort(i.count_by)}`) : L2('Storage not counted yet', 'Almacén sin contar');
+  const rows = items.map(i => `<tr><td><b>${esc(spName(i.product))}</b><small>${esc(spSize(i.pail_oz))} · ${esc(cnt(i))}</small></td>
+    <td>${i.open_at ? esc(i.pct + '%') + `<small>${esc(spGal(i.gal_open))} gal</small>` : '–'}</td>
+    <td>${esc(String(i.reserve))}<small>${esc(spGal(i.gal_all))} gal ${esc(L2('total', 'en total'))}</small></td>
+    <td>${i.days_all != null ? esc(L2(`${Math.round(i.days_all)} days`, `${Math.round(i.days_all)} días`)) : '–'}<small>${esc(L2(`${i.week_loads} loads/week`, `${i.week_loads} tandas/sem`))}</small></td>
+    <td>${esc(String(i.par_pails))}</td>
+    <td class="need"${i.need > 0 ? '' : ' data-ok'}>${i.need > 0 ? esc(String(i.need)) : '✓'}</td></tr>`).join('');
+  openModal(`<div class="stmt" data-noi18n><h2>${esc(L2('Inventory statement', 'Estado de inventario'))}</h2>
+    <p class="stsub">${esc(L2('Laundry', 'Lavandería') + ' ' + spRoomName() + ' · ' + fmtDate(now) + ' ' + fmtTime(now) + ' · ' + (S.me ? S.me.name : ''))}</p>
+    <div class="stwrap"><table><thead><tr><th>${esc(L2('Product', 'Producto'))}</th><th>${esc(L2('Open', 'Abierta'))}</th><th>${esc(L2('Storage', 'Almacén'))}</th><th>${esc(L2('Lasts', 'Alcanza'))}</th><th>${esc(L2('Target', 'Meta'))}</th><th>${esc(L2('Missing', 'Falta'))}</th></tr></thead><tbody>${rows}</tbody></table></div>
+    <div class="sttot">${need.length ? `<b>${esc(L2('To order: ', 'Hay que pedir: '))}</b>${esc(need.map(i => `${i.need} × ${spName(i.product)} (${spSize(i.pail_oz)})`).join(', '))}` : `<b>${esc(L2('Storage is complete.', 'El almacén está completo.'))}</b>`}</div>
+    <p class="stfoot">${esc(L2('From what the team logs: pails opened, pails received, storage counts and each washer load. Count the storage now and then to keep it exact.', 'Sale de lo que registra el equipo: pailas abiertas, pailas recibidas, conteos del almacén y cada tanda de lavadora. Cuenta el almacén de vez en cuando para que quede exacto.'))}${SP.data.can_edit ? esc(L2(' The target is set in Settings.', ' La meta se pone en Parámetros.')) : ''}</p>
+    <div class="btnrow">${need.length ? `<button class="btn pri" id="stOrd">${esc(L2('Create order', 'Crear orden'))}</button>` : ''}
+      <button class="btn" id="stShare">${esc(L2('Share', 'Compartir'))}</button><button class="btn" id="stPrint">${esc(L2('Print', 'Imprimir'))}</button><button class="btn" data-close>${esc(L2('Close', 'Cerrar'))}</button></div></div>`);
+  $('#stPrint').onclick = () => { document.body.classList.add('spprint'); const off = () => { document.body.classList.remove('spprint'); window.removeEventListener('afterprint', off); }; window.addEventListener('afterprint', off); window.print(); setTimeout(off, 60000); };
+  $('#stShare').onclick = async () => {
+    const txt = spStmtText();
+    if (navigator.share) { try { await navigator.share({title: 'FrankShift', text: txt}); return; } catch (e) { if (e && e.name === 'AbortError') return; } }
+    try { await navigator.clipboard.writeText(txt); toast(esc(L2('Copied. Paste it where you need it.', 'Copiado. Pégalo donde lo necesites.'))); } catch { toast(esc(L2('Could not copy it.', 'No se pudo copiar.'))); }
+  };
+  if (need.length) $('#stOrd').onclick = () => spOrder(L2(`Order laundry supplies (${spRoomName()}): `, `Pedir suministros de lavandería (${spRoomName()}): `)
+    + need.map(i => `${i.need} × ${spName(i.product)} (${spSize(i.pail_oz)})`).join(', ') + L2(` to reach the storage target.`, ` para completar la meta del almacén.`));
+}
+// a housekeeping order in Orders To-do with what is running low (or the text the statement passes)
+async function spOrder(text){
+  const lows = spLows(); if (!text && !lows.length) return;
+  const room = spRoomName();
+  const det = typeof text === 'string' ? text : L2('Order laundry supplies (' + room + '): ', 'Pedir suministros de lavandería (' + room + '): ')
     + lows.map(i => spName(i.product) + ' · ' + (i.days_all != null ? L2(`about ${Math.round(i.days_all)} days left`, `quedan unos ${Math.round(i.days_all)} días`) + ', ' : '') + L2(`${i.reserve} in storage`, `${i.reserve} en almacén`)).join('; ');
   openModal(`<div data-noi18n><h2>${esc(L2('Create order', 'Crear orden'))}</h2><p class="lead">${esc(L2('It goes to Orders To-do for Housekeeping.', 'Va a Orders To-do de Housekeeping.'))}</p>
     <div class="field"><label for="spOd">${esc(L2('What is needed', 'Qué se necesita'))}</label><textarea id="spOd" maxlength="500">${esc(det)}</textarea></div><div class="err" id="spErr"></div>
@@ -6451,7 +6516,8 @@ async function spPhoto(id){
   catch (err) { openModal(`<div data-noi18n><p class="err">${esc(err.message)}</p><button class="btn" data-close>${esc(L2('Close', 'Cerrar'))}</button></div>`); }
 }
 $('#view-laundry').addEventListener('click', e => {
-  const t = e.target.closest('[data-spopen],[data-spstock],[data-spparams],[data-sporder],[data-spphoto],[data-spall]'); if (!t) return;
+  const t = e.target.closest('[data-spopen],[data-spstock],[data-spparams],[data-sporder],[data-spphoto],[data-spall],[data-spstmt]'); if (!t) return;
+  if (t.hasAttribute('data-spstmt')) return spStmt();
   if (t.hasAttribute('data-spopen')) spOpen(); else if (t.hasAttribute('data-spstock')) spStock();
   else if (t.hasAttribute('data-spparams')) spParams(); else if (t.hasAttribute('data-sporder')) spOrder();
   else if (t.hasAttribute('data-spphoto')) spPhoto(t.dataset.spphoto); else { SP.all = true; spRender(); }
