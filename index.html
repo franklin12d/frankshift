@@ -972,6 +972,61 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .hpk .hk{width:20px;height:20px;flex:none;color:var(--hotel)}
 .hpk button[aria-checked="false"] .hk{visibility:hidden}
 
+/* 1.42.0: Laundry supplies */
+.tabs .spst{font:700 11px var(--f-body);padding:2px 8px;border-radius:999px;white-space:nowrap;flex:none;background:var(--urgent-soft);color:var(--urgent)}
+.tabs .spst:empty{display:none}
+.spcard{margin:0 0 12px}
+.sphead{display:flex;align-items:flex-start;gap:10px;margin-bottom:10px}
+.sphead h2{margin:0}
+.sphead .sub{font-size:12.5px;color:var(--ink-3);margin-top:2px}
+.spgear{display:inline-flex;align-items:center;gap:6px}
+.spgear svg{width:16px;height:16px}
+.sprows{display:grid;gap:12px}
+@media (min-width:900px){.sprows{grid-template-columns:repeat(3,minmax(0,1fr))}}
+.sprow{display:flex;gap:10px;align-items:flex-start;min-width:0;--lv:var(--ink-3)}
+.sprow[data-lv="green"]{--lv:var(--ok)}
+.sprow[data-lv="amber"]{--lv:var(--high)}
+.sprow[data-lv="red"]{--lv:var(--urgent)}
+.spico{width:38px;height:38px;border-radius:12px;display:grid;place-items:center;flex:none;background:var(--accent-soft);color:var(--accent)}
+.spico svg{width:22px;height:22px}
+.spico.sm{width:30px;height:30px;border-radius:10px}
+.spico.sm svg{width:17px;height:17px}
+.spmain{flex:1;min-width:0}
+.sptop{display:flex;align-items:baseline;gap:8px}
+.sptop b{font-size:15px;color:var(--ink)}
+.splv{font:700 11.5px var(--f-body);color:var(--lv);background:color-mix(in srgb,var(--lv) 14%,var(--surface));padding:1px 8px;border-radius:999px}
+.sppct{margin-left:auto;font:800 16px var(--f-body);font-variant-numeric:tabular-nums;color:var(--lv)}
+.spbar{height:12px;border-radius:999px;background:var(--surface-2);border:1px solid var(--line);overflow:hidden;margin:6px 0 4px}
+.spbar i{display:block;height:100%;border-radius:999px;background:var(--lv);transition:width .4s}
+.spmeta{font-size:12.5px;color:var(--ink-2)}
+.spalert{display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:12px;background:var(--urgent-soft);color:var(--urgent);margin:0 0 12px}
+.spalert>div{flex:1;min-width:0;display:flex;flex-direction:column;gap:2px}
+.spalert span{font-size:12.5px;color:var(--ink-2)}
+.spprov{font-size:12px;color:var(--ink-3);margin-top:10px}
+.spbtns{margin-top:12px}
+.spbtns .btn svg,.spshot svg,.spph svg{width:18px;height:18px;vertical-align:-4px;margin-right:6px}
+.sppick button{display:inline-flex;align-items:center;gap:6px}
+.sppick button svg{width:18px;height:18px}
+.spsizes{margin-bottom:8px}
+.spshot{display:flex;justify-content:center;align-items:center;margin:8px 0}
+.spthumb{display:block;max-width:100%;max-height:200px;border-radius:12px;margin:0 auto 10px;border:1px solid var(--line)}
+.spbig{display:block;max-width:100%;border-radius:12px;margin-bottom:12px}
+.spqty{display:flex;align-items:center;gap:8px;margin-bottom:6px}
+.spqty input{width:80px;text-align:center;font:700 20px var(--f-body);min-height:44px;border:1px solid var(--line);border-radius:12px;background:var(--surface);color:var(--ink)}
+.spqty .btn{min-width:48px;font-size:20px}
+.splog .sprlog{display:flex;gap:10px;align-items:flex-start}
+.splog .sprlog .grow{flex:1;min-width:0;display:flex;flex-direction:column}
+.spnote{font-style:italic}
+.spph{flex:none}
+/* 1.42.0: Request supply */
+#lsBox .lsbar{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:8px}
+#lsBox .lsbar h2{margin:0}
+.lsrow{display:flex;justify-content:space-between;gap:10px;align-items:flex-start;flex-wrap:wrap;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-bottom:8px;background:var(--surface)}
+.lsrow[data-st="open"]{border-left:4px solid #F59E0B}
+.lsrow[data-st="received"]{opacity:.8}
+.lsrow[data-st="cancelled"]{opacity:.6}
+.lsst{display:inline-block;margin-left:6px;font-size:12px;font-weight:600;padding:1px 8px;border-radius:999px;background:var(--surface-2)}
+.lsrow .btnrow{flex-shrink:0;margin:0}
 /* v1.3.0: Laundry */
 .tabs .lnst{font:600 11.5px var(--f-body);padding:2px 8px;border-radius:999px;white-space:nowrap;flex:none}
 .tabs .lnst:empty{display:none}
@@ -2068,9 +2123,12 @@ details.kpmore[open] summary{margin-bottom:8px}
   <section class="view" id="view-dash" data-noi18n hidden aria-label="Dashboard"><div id="dashBody"></div></section>
 
   <section class="view" id="view-laundry" hidden data-noi18n aria-label="Laundry"><div class="inner">
+    <div id="spBox"></div>
+    <div class="card" id="lsBox" data-noi18n><div class="lsbar"><h2 id="lsH">Supply requests</h2><button type="button" class="btn pri sm" data-lsask="">Request supply</button></div><div id="lsList"></div></div>
     <div class="lnshare" id="lnShare" hidden></div>
     <div class="lngrid" id="lnGrid"><div class="small">…</div></div>
     <div class="card lnhist"><h2 id="lnHistH">Last loads</h2><div id="lnHist"></div></div>
+    <div class="card lnhist splog"><h2 id="spLogH">Supply log</h2><div id="spLog"></div></div>
   </div></section>
 
   <section class="view" id="view-eng" hidden aria-label="Engineer"><div class="inner">
@@ -5330,7 +5388,7 @@ function setTab(t){
   if (t === 'punch') setTimeout(mpShow);
   if (t === 'dayoff') setTimeout(dyShow);
   if (t === 'hkplan') setTimeout(hkShow);
-  if (t === 'laundry') setTimeout(() => { lnRender(); lnLoad(); });
+  if (t === 'laundry') setTimeout(() => { lnRender(); lnLoad(); spRender(); spLoad(); lsRender(); lsLoad(true); });
   if (t === 'eng') setTimeout(engShow);
   if (t === 'map') openMap();
   if (t === 'passon') { loadPassons(); markRead(); }
@@ -5763,8 +5821,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.40.0';
+const APP_VERSION = '1.42.0';
 const CHANGES = [
+  {v: '1.42.0', d: '2026-11-26', en: ['Laundry: new Supplies with a level bar for detergent, bleach and softener: green, amber or red, with loads and days left and the closed pails in storage', 'Every washer load takes its dose from the open pail: detergent when Soap is on, bleach when Bleach is on, softener on every washer load', '"I opened a pail" logs the product, the size and a photo of the pail, with who and when. The Supply log keeps them all', 'Pails in storage: log new pails that arrived or count the closed ones', 'When a pail runs out, the app compares its loads with its size and corrects the dose per load by itself', 'Managers set the oz per load, the pail size and when to warn. Managers and HK supervisors get an alert when a product is running low, and can turn it into an order in Orders To-do', 'Request supply: anyone in the laundry room can ask for detergent, bleach, softener or something else. The HK supervisor and the managers get an alert, and can mark it received, cancel it or turn it into an order. The person who asked hears back'],
+    es: ['Laundry: nuevo Suministros con una barra de nivel para detergente, bleach y suavizante: verde, ámbar o rojo, con tandas y días que quedan y las pailas cerradas en almacén', 'Cada tanda de lavadora descuenta su dosis de la paila abierta: detergente cuando lleva Jabón, bleach cuando lleva Bleach y suavizante en toda tanda de lavadora', '"Abrí una paila" registra el producto, el tamaño y una foto de la paila, con quién y cuándo. La Bitácora de suministros las guarda todas', 'Pailas en almacén: registra las pailas que llegaron o cuenta las cerradas', 'Cuando una paila se acaba, la app compara sus tandas con su tamaño y corrige sola la dosis por tanda', 'Los gerentes ponen las oz por tanda, el tamaño de la paila y cuándo avisar. Gerentes y supervisoras de HK reciben un aviso cuando un producto se está acabando, y pueden convertirlo en una orden en Orders To-do', 'Pedir suministro: cualquiera en la lavandería puede pedir detergente, bleach, suavizante u otra cosa. La supervisora de HK y los gerentes reciben un aviso, y pueden marcarlo recibido, cancelarlo o convertirlo en orden. Quien pidió recibe la respuesta']},
   {v: '1.40.0', d: '2026-11-22', en: ['Cleaner alerts: short titles with no emojis, like "Urgent · Room 208", and a second line with the hotel, the ticket and how long it has waited', "Each hotel's alerts show its own colored bell: Maingate red, Fundamental green, Highway blue", "On Android, alerts about an open order have I'm on it and Open buttons. I'm on it takes the order without opening the app"],
     es: ['Alertas más limpias: títulos cortos sin emojis, como "Urgente · Hab. 208", y una segunda línea con el hotel, la orden y cuánto lleva esperando', 'Las alertas de cada hotel traen su campana de color: Maingate rojo, Fundamental verde, Highway azul', 'En Android, las alertas de una orden abierta traen los botones Voy y Abrir. Voy toma la orden sin abrir la app']},
   {v: '1.39.0', d: '2026-11-22', en: ['Positions: each person now has a position made of a department and a level (staff, supervisor, department head, manager). HK supervisors, the front desk supervisor and the chief engineer can manage their own team, only below their level', 'Add someone in one step: position, other hotels and phone, and the start code comes out ready to send by WhatsApp. You can also import a whole list from Excel, CSV or Google Sheets; nobody is added until every row is right', 'Team filters: Not active yet (with Resend code), 30+ days away and Inactive', 'History: every change to an account is kept, who did it and when. Open it on each person or for the whole team', 'Deactivating asks for a reason (quit, let go, end of season, moved hotel) and keeps the date', 'The superuser can edit each position with checkboxes for what it can do and what it sees in the Menu, and Copy a position to make a new one', 'Managers and department heads now use a 6-digit PIN and sign in again every 7 days. If yours has 4 digits, the app asks you once to pick a new one'],
@@ -6183,6 +6243,315 @@ $('#view-laundry').addEventListener('click', e => {
   }
 });
 if (S.token && S.me) setTimeout(() => lnLoad(true), 1500);
+
+/* ===== 1.42.0: Laundry supplies: pail log with photo, store reserve, level bars per load, manager parameters ===== */
+const SP = {data: null, busy: false, all: false};
+const SP_P = [['det', 'Detergent', 'Detergente'], ['bleach', 'Bleach', 'Bleach'], ['soft', 'Softener', 'Suavizante']];
+const SP_SIZES = [[640, '5 gal'], [320, '2.5 gal'], [128, '1 gal']];
+const spName = p => { const x = SP_P.find(r => r[0] === p); return x ? L2(x[1], x[2]) : p; };
+const spOz = n => (Math.round(+n * 100) / 100).toString();
+const spMl = n => Math.round(+n * 29.5735);
+const spSize = oz => { const s = SP_SIZES.find(r => r[0] === +oz); return s ? s[1] : spOz(oz) + ' oz'; };
+const spItem = p => ((SP.data && SP.data.items) || []).find(i => i.product === p);
+const spLows = () => ((SP.data && SP.data.items) || []).filter(i => i.low);
+const spBoss = () => !!(S.me && ['mgr', 'sub', 'sup'].includes(S.me.role));
+const SP_ICO = {
+  det: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M6 8h12l-1 12a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1z"/><path d="M5 8h14"/><path d="M9 8V6a3 3 0 0 1 6 0v2"/><path d="M10 14h4"/></svg>',
+  bleach: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M10 2h4v3h-4z"/><path d="M8 7h8l1 3v10a1 1 0 0 1-1 1H8a1 1 0 0 1-1-1V10z"/><path d="M10 14l4 4M14 14l-4 4"/></svg>',
+  soft: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3s6 6.5 6 11a6 6 0 0 1-12 0c0-4.5 6-11 6-11z"/><path d="M9.5 15a2.5 2.5 0 0 0 2.5 2.5"/></svg>'};
+const SP_CAM = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M4 8h3l2-3h6l2 3h3v11H4z"/><circle cx="12" cy="13" r="3.5"/></svg>';
+const SP_GEAR = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.7 1.7 0 0 0 .3 1.8l.1.1a2 2 0 1 1-2.8 2.8l-.1-.1a1.7 1.7 0 0 0-1.8-.3 1.7 1.7 0 0 0-1 1.5V21a2 2 0 1 1-4 0v-.1a1.7 1.7 0 0 0-1.1-1.5 1.7 1.7 0 0 0-1.8.3l-.1.1a2 2 0 1 1-2.8-2.8l.1-.1a1.7 1.7 0 0 0 .3-1.8 1.7 1.7 0 0 0-1.5-1H3a2 2 0 1 1 0-4h.1a1.7 1.7 0 0 0 1.5-1.1 1.7 1.7 0 0 0-.3-1.8l-.1-.1a2 2 0 1 1 2.8-2.8l.1.1a1.7 1.7 0 0 0 1.8.3H9a1.7 1.7 0 0 0 1-1.5V3a2 2 0 1 1 4 0v.1a1.7 1.7 0 0 0 1 1.5 1.7 1.7 0 0 0 1.8-.3l.1-.1a2 2 0 1 1 2.8 2.8l-.1.1a1.7 1.7 0 0 0-.3 1.8V9a1.7 1.7 0 0 0 1.5 1H21a2 2 0 1 1 0 4h-.1a1.7 1.7 0 0 0-1.5 1z"/></svg>';
+const SP_ERR = {PHOTO_REQUIRED: ['Take a photo of the pail first.', 'Primero toma la foto de la paila.'], PHOTO_TOO_BIG: ['That photo is too big. Try again.', 'Esa foto es muy grande. Inténtalo otra vez.'],
+  MANAGER_ONLY: ['Only managers can change this.', 'Solo los gerentes pueden cambiar esto.'], BAD_QTY: ['Check the number of pails.', 'Revisa el número de pailas.'],
+  BAD_DOSE: ['Oz per load must be more than 0 and up to 64.', 'Las oz por tanda deben ser más de 0 y hasta 64.'], BAD_SIZE: ['Pail size must be 32 to 2000 oz.', 'El tamaño de la paila debe ser de 32 a 2000 oz.'],
+  BAD_WARN: ['Check the warning numbers.', 'Revisa los números del aviso.']};
+const spErr = e => { const k = Object.keys(SP_ERR).find(x => String(e && e.message).includes(x)); return k ? L2(...SP_ERR[k]) : (e && e.message) || ''; };
+async function spLoad(quiet){
+  if (!S.token || !S.me || SP.busy) return; SP.busy = true;
+  try { SP.data = await call('sc_supply'); spRender(); } catch (e) { if (!quiet) toast(esc(e.message)); } finally { SP.busy = false; }
+}
+function spSet(d){ if (d) { SP.data = d; spRender(); } }
+// one product row: name, level bar and what is left
+function spRow(i){
+  const lv = i.level, pct = i.pct == null ? 0 : Math.max(0, Math.min(100, i.pct));
+  const lvTxt = {green: L2('Good', 'Bien'), amber: L2('Getting low', 'Bajando'), red: L2('Running out', 'Se acaba'), none: L2('Not set', 'Sin registrar')}[lv] || '';
+  const bits = [];
+  if (i.open_at) {
+    bits.push(L2(`about ${i.loads_left} loads`, `unas ${i.loads_left} tandas`));
+    if (i.days_all != null) bits.push(L2(`about ${Math.round(i.days_all)} days`, `unos ${Math.round(i.days_all)} días`));
+  }
+  bits.push(L2(`${i.reserve} in storage`, `${i.reserve} en almacén`));
+  return `<div class="sprow" data-lv="${esc(lv)}"><span class="spico" data-p="${esc(i.product)}">${SP_ICO[i.product] || ''}</span>
+    <div class="spmain"><div class="sptop"><b>${esc(spName(i.product))}</b><span class="splv">${esc(lvTxt)}</span><span class="sppct">${i.open_at ? pct + '%' : ''}</span></div>
+    <div class="spbar" role="meter" aria-label="${esc(spName(i.product))}" aria-valuemin="0" aria-valuemax="100" aria-valuenow="${pct}"><i style="width:${i.open_at ? pct : 0}%"></i></div>
+    <div class="spmeta">${esc(i.open_at ? bits.join(' · ') : L2('No open pail registered yet. ', 'Todavía no hay paila abierta registrada. ') + bits.join(' · '))}</div></div></div>`;
+}
+function spRender(){
+  spMenu();
+  const box = $('#spBox'); if (!box || $('#view-laundry').hidden) return;
+  if (!SP.data) { box.innerHTML = `<div class="card spcard"><div class="small">${esc(L2('Loading supplies…', 'Cargando suministros…'))}</div></div>`; return; }
+  const items = SP.data.items || [], lows = spLows(), prov = items.filter(i => !i.dose_measured);
+  const alert = lows.length ? `<div class="spalert" role="alert"><div><b>${esc(lows.map(i => spName(i.product)).join(', ') + L2(lows.length > 1 ? ' running low' : ' running low', lows.length > 1 ? ': se están acabando' : ': se está acabando'))}</b>
+      <span>${esc(lows.map(i => spName(i.product) + ' · ' + (i.days_all != null ? L2(`about ${Math.round(i.days_all)} days`, `unos ${Math.round(i.days_all)} días`) + ' · ' : '') + L2(`${i.reserve} in storage`, `${i.reserve} en almacén`)).join('  |  '))}</span></div>
+      ${spBoss() ? `<button type="button" class="btn sm" data-sporder>${esc(L2('Create order', 'Crear orden'))}</button>`
+        : `<button type="button" class="btn sm" data-lsask="${esc(lows[0].product)}">${esc(L2('Request', 'Pedir'))}</button>`}</div>` : '';
+  box.innerHTML = `<div class="card spcard"><div class="sphead"><div class="grow"><h2>${esc(L2('Supplies', 'Suministros'))}</h2>
+      <div class="sub">${esc(L2('Each washer load takes its dose from the open pail', 'Cada tanda de lavadora descuenta su dosis de la paila abierta'))}</div></div>
+      ${SP.data.can_edit ? `<button type="button" class="btn sm spgear" data-spparams aria-label="${esc(L2('Settings', 'Parámetros'))}">${SP_GEAR}<span>${esc(L2('Settings', 'Parámetros'))}</span></button>` : ''}</div>
+    ${alert}<div class="sprows">${items.map(spRow).join('')}</div>
+    ${prov.length ? `<div class="spprov">${esc(L2('Provisional dose for ', 'Dosis provisional para ') + prov.map(i => spName(i.product) + ' ' + spOz(i.oz_per_load) + ' oz').join(', ') + L2('. It corrects itself when the next pail is opened' + (SP.data.can_edit ? ', or set it in Settings.' : '.'), '. Se corrige sola al abrir la siguiente paila' + (SP.data.can_edit ? ', o ponla en Parámetros.' : '.')))}</div>` : ''}
+    <div class="btnrow spbtns"><button type="button" class="btn pri" data-spopen>${SP_CAM}${esc(L2('I opened a pail', 'Abrí una paila'))}</button>
+      <button type="button" class="btn" data-spstock>${esc(L2('Pails in storage', 'Pailas en almacén'))}</button></div></div>`;
+  const log = (SP.data.log || []), shown = SP.all ? log : log.slice(0, 12);
+  $('#spLogH').textContent = L2('Supply log', 'Bitácora de suministros');
+  $('#spLog').innerHTML = shown.length ? shown.map(spLogRow).join('') + (log.length > 12 && !SP.all ? `<button type="button" class="btn sm" data-spall>${esc(L2('Show more', 'Ver más'))}</button>` : '')
+    : `<div class="small">${esc(L2('Nothing logged yet. When you open a pail, tap "I opened a pail" and take the photo.', 'Nada registrado todavía. Cuando abras una paila, toca "Abrí una paila" y toma la foto.'))}</div>`;
+}
+function spLogRow(g){
+  const who = lnShort(g.by), p = spName(g.product), when = lnWhen(lnT(g.at));
+  let what = '', more = '';
+  if (g.kind === 'open') {
+    what = L2(`${who} opened a ${spSize(g.pail_oz)} pail of ${p}`, `${who} abrió una paila de ${p} de ${spSize(g.pail_oz)}`);
+    if (g.loads != null) more = L2(`Last pail: ${g.loads} loads`, `Paila anterior: ${g.loads} tandas`) + (g.prev_empty === false ? L2(', not empty yet', ', no estaba vacía') : '')
+      + (g.dose_after != null && +g.dose_after !== +g.dose_before ? L2(` · dose ${spOz(g.dose_before)} → ${spOz(g.dose_after)} oz per load`, ` · dosis ${spOz(g.dose_before)} → ${spOz(g.dose_after)} oz por tanda`) : '');
+  } else if (g.kind === 'receive') what = L2(`${who} received ${g.qty} ${g.qty > 1 ? 'pails' : 'pail'} of ${p}`, `${who} recibió ${g.qty} ${g.qty > 1 ? 'pailas' : 'paila'} de ${p}`);
+  else if (g.kind === 'count') what = L2(`${who} counted ${g.qty} closed ${g.qty === 1 ? 'pail' : 'pails'} of ${p} in storage`, `${who} contó ${g.qty} ${g.qty === 1 ? 'paila cerrada' : 'pailas cerradas'} de ${p} en almacén`);
+  else if (g.kind === 'params') what = L2(`${who} changed the settings for ${p}: ${spOz(g.dose_after)} oz per load, ${spSize(g.pail_oz)} pail`, `${who} cambió los parámetros de ${p}: ${spOz(g.dose_after)} oz por tanda, paila de ${spSize(g.pail_oz)}`);
+  else if (g.kind === 'request') what = L2(`${who} asked for more ${p}`, `${who} pidió más ${p}`) + (g.qty ? ` (${g.qty})` : '');
+  return `<div class="lnrow sprlog" data-k="${esc(g.kind)}"><span class="spico sm" data-p="${esc(g.product)}">${SP_ICO[g.product] || ''}</span><div class="grow"><b>${lnHot(g)}${esc(what)}</b>
+    <span>${esc(when + (more ? ' · ' + more : ''))}</span>${g.note ? `<span class="spnote">${esc(g.note)}</span>` : ''}</div>
+    ${g.has_photo ? `<button type="button" class="btn sm spph" data-spphoto="${esc(g.id)}" aria-label="${esc(L2('See photo', 'Ver foto'))}">${SP_CAM}${esc(L2('Photo', 'Foto'))}</button>` : ''}</div>`;
+}
+function spMenu(){
+  const tab = $('#lnTab'); if (!tab) return;
+  let d = $('#spSt'); if (!d) { d = document.createElement('span'); d.id = 'spSt'; d.className = 'spst'; d.setAttribute('data-noi18n', ''); tab.appendChild(d); }
+  const n = spBoss() ? spLows().length : 0, t = n ? L2('Low supply', 'Suministro bajo') : '';
+  if (d.textContent !== t) d.textContent = t;
+}
+const spPills = (sel, attr) => `<div class="lnlins sppick" role="group">${SP_P.map(r => `<button type="button" ${attr}="${r[0]}" aria-pressed="${r[0] === sel}">${SP_ICO[r[0]]}${esc(L2(r[1], r[2]))}</button>`).join('')}</div>`;
+const spPick = (attr, cb) => document.querySelectorAll(`[${attr}]`).forEach(b => b.onclick = () => {
+  document.querySelectorAll(`[${attr}]`).forEach(x => x.setAttribute('aria-pressed', x === b)); if (cb) cb(b.getAttribute(attr)); });
+const spPicked = attr => { const b = document.querySelector(`[${attr}][aria-pressed="true"]`); return b ? b.getAttribute(attr) : null; };
+// "I opened a pail": product, size, the photo (required) and whether the last one ran out
+function spOpen(p0){
+  const last = ls.get('sc.spOpen', {p: 'det', oz: 640});
+  let photo = null;
+  openModal(`<div data-noi18n><h2>${esc(L2('I opened a pail', 'Abrí una paila'))}</h2><p class="lead">${esc(L2('Which product?', '¿Qué producto?'))}</p>
+    ${spPills(p0 || last.p, 'data-spp')}
+    <p class="lead">${esc(L2('Pail size', 'Tamaño de la paila'))}</p>
+    <div class="lnmins spsizes" role="group">${SP_SIZES.map(r => `<button type="button" data-spsz="${r[0]}" aria-pressed="${r[0] === +last.oz}">${esc(r[1])}</button>`).join('')}</div>
+    <div class="field"><label for="spOz">${esc(L2('Ounces in the pail', 'Onzas en la paila'))}</label><input id="spOz" type="number" inputmode="decimal" min="32" max="2000" value="${esc(last.oz)}"></div>
+    <div id="spPrev"></div>
+    <label class="btn spshot"><input type="file" accept="image/*" capture="environment" id="spFile" hidden>${SP_CAM}<span id="spShotT">${esc(L2('Take the photo of the pail', 'Tomar la foto de la paila'))}</span></label>
+    <img id="spThumb" class="spthumb" alt="" hidden>
+    <div class="field"><label for="spNote">${esc(L2('Note (optional)', 'Nota (opcional)'))}</label><input id="spNote" maxlength="300"></div>
+    <div class="err" id="spErr"></div>
+    <div class="btnrow"><button class="btn pri" id="spGo">${esc(L2('Save', 'Guardar'))}</button><button class="btn" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  const prev = p => { const i = spItem(p); $('#spPrev').innerHTML = i && i.open_at ? `<p class="lead">${esc(L2(`Was the last pail of ${spName(p)} empty? It had ${i.loads} loads.`, `¿La paila anterior de ${spName(p)} quedó vacía? Llevaba ${i.loads} tandas.`))}</p>
+      <div class="lnmins" role="group"><button type="button" data-spempty="1" aria-pressed="true">${esc(L2('Yes, empty', 'Sí, vacía'))}</button><button type="button" data-spempty="0" aria-pressed="false">${esc(L2('No, still had some', 'No, le quedaba'))}</button></div>` : '';
+    spPick('data-spempty'); };
+  spPick('data-spp', prev); prev(spPicked('data-spp'));
+  spPick('data-spsz', v => { $('#spOz').value = v; });
+  $('#spOz').addEventListener('input', () => document.querySelectorAll('[data-spsz]').forEach(b => b.setAttribute('aria-pressed', +b.dataset.spsz === +$('#spOz').value)));
+  $('#spFile').onchange = async e => {
+    const f = e.target.files && e.target.files[0]; if (!f) return;
+    try { photo = await shrink(f, 1100, .7); $('#spThumb').src = photo; $('#spThumb').hidden = false; $('#spShotT').textContent = L2('Retake photo', 'Repetir foto'); $('#spErr').textContent = ''; }
+    catch (err) { $('#spErr').textContent = err.message; }
+  };
+  $('#spGo').onclick = async () => {
+    const p = spPicked('data-spp'), oz = +$('#spOz').value;
+    if (!p) { $('#spErr').textContent = L2('Pick the product.', 'Elige el producto.'); return; }
+    if (!(oz >= 32 && oz <= 2000)) { $('#spErr').textContent = L2(...SP_ERR.BAD_SIZE); return; }
+    if (!photo) { $('#spErr').textContent = L2(...SP_ERR.PHOTO_REQUIRED); return; }
+    const em = spPicked('data-spempty');
+    $('#spGo').disabled = true;
+    try {
+      spSet(await call('sc_supply_open', {p_product: p, p_pail_oz: oz, p_photo: photo, p_prev_empty: em == null ? true : em === '1', p_note: $('#spNote').value.trim() || null}));
+      ls.set('sc.spOpen', {p, oz}); closeModal(); fx('done');
+      toast(`<b>${esc(spName(p))}</b> <span>${esc(L2('new pail logged.', 'paila nueva registrada.'))}</span>`);
+    } catch (err) { $('#spGo').disabled = false; $('#spErr').textContent = spErr(err); }
+  };
+}
+// pails that arrived, or a count of the closed pails in storage
+function spStock(p0){
+  let photo = null, qty = 1;
+  openModal(`<div data-noi18n><h2>${esc(L2('Pails in storage', 'Pailas en almacén'))}</h2>
+    <div class="lnmins" role="group"><button type="button" data-spk="receive" aria-pressed="true">${esc(L2('New pails arrived', 'Llegaron pailas'))}</button><button type="button" data-spk="count" aria-pressed="false">${esc(L2('I counted storage', 'Conté el almacén'))}</button></div>
+    <p class="lead">${esc(L2('Which product?', '¿Qué producto?'))}</p>${spPills(p0 || 'det', 'data-spp')}
+    <p class="lead" id="spQtyH"></p>
+    <div class="spqty"><button type="button" class="btn" data-spq="-1" aria-label="-1">−</button><input id="spQty" type="number" inputmode="numeric" min="0" max="99" value="1"><button type="button" class="btn" data-spq="1" aria-label="+1">+</button></div>
+    <p class="small" id="spNow"></p>
+    <label class="btn spshot"><input type="file" accept="image/*" capture="environment" id="spFile" hidden>${SP_CAM}<span id="spShotT">${esc(L2('Photo (optional)', 'Foto (opcional)'))}</span></label>
+    <img id="spThumb" class="spthumb" alt="" hidden>
+    <div class="field"><label for="spNote">${esc(L2('Note (optional)', 'Nota (opcional)'))}</label><input id="spNote" maxlength="300"></div>
+    <div class="err" id="spErr"></div>
+    <div class="btnrow"><button class="btn pri" id="spGo">${esc(L2('Save', 'Guardar'))}</button><button class="btn" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  const upd = () => { const k = spPicked('data-spk'), i = spItem(spPicked('data-spp'));
+    $('#spQtyH').textContent = k === 'receive' ? L2('How many closed pails arrived?', '¿Cuántas pailas cerradas llegaron?') : L2('How many closed pails are in storage now?', '¿Cuántas pailas cerradas hay ahora en almacén?');
+    $('#spNow').textContent = i ? L2(`Right now the app has ${i.reserve} in storage.`, `Ahora la app tiene ${i.reserve} en almacén.`) : ''; };
+  spPick('data-spk', upd); spPick('data-spp', upd); upd();
+  document.querySelectorAll('[data-spq]').forEach(b => b.onclick = () => { $('#spQty').value = Math.max(0, Math.min(99, (+$('#spQty').value || 0) + +b.dataset.spq)); });
+  $('#spFile').onchange = async e => { const f = e.target.files && e.target.files[0]; if (!f) return;
+    try { photo = await shrink(f, 1100, .7); $('#spThumb').src = photo; $('#spThumb').hidden = false; $('#spShotT').textContent = L2('Retake photo', 'Repetir foto'); } catch (err) { $('#spErr').textContent = err.message; } };
+  $('#spGo').onclick = async () => {
+    const k = spPicked('data-spk'), p = spPicked('data-spp'); qty = Math.round(+$('#spQty').value);
+    if (!(qty >= (k === 'receive' ? 1 : 0) && qty <= 99)) { $('#spErr').textContent = L2(...SP_ERR.BAD_QTY); return; }
+    $('#spGo').disabled = true;
+    try { spSet(await call('sc_supply_stock', {p_product: p, p_kind: k, p_qty: qty, p_photo: photo, p_note: $('#spNote').value.trim() || null})); closeModal();
+      toast(`<b>${esc(spName(p))}</b> <span>${esc(L2('storage updated.', 'almacén actualizado.'))}</span>`); }
+    catch (err) { $('#spGo').disabled = false; $('#spErr').textContent = spErr(err); }
+  };
+}
+// managers only: oz per load, pail size, when to warn, auto adjust
+function spParams(p0){
+  const p = p0 || 'det', i = spItem(p); if (!i) return;
+  openModal(`<div data-noi18n><h2>${esc(L2('Supply settings', 'Parámetros de suministros'))}</h2><p class="lead">${esc(L2('Only managers can change these. They apply to this laundry room.', 'Solo los gerentes pueden cambiarlos. Aplican a esta lavandería.'))}</p>
+    ${spPills(p, 'data-sppp')}
+    <div class="grid2"><div class="field"><label for="spDose">${esc(L2('Oz per load', 'Oz por tanda'))}</label><input id="spDose" type="number" inputmode="decimal" step="0.1" min="0.1" max="64" value="${esc(spOz(i.oz_per_load))}"></div>
+      <div class="field"><label for="spPail">${esc(L2('Oz per pail', 'Oz por paila'))}</label><input id="spPail" type="number" inputmode="decimal" min="32" max="2000" value="${esc(spOz(i.pail_oz))}"></div></div>
+    <p class="small" id="spCalc"></p>
+    <div class="grid2"><div class="field"><label for="spWd">${esc(L2('Warn with days left', 'Avisar con días restantes'))}</label><input id="spWd" type="number" inputmode="decimal" step="0.5" min="0" max="30" value="${esc(spOz(i.warn_days))}"></div>
+      <div class="field"><label for="spWp">${esc(L2('Warn with pails in storage', 'Avisar con pailas en almacén'))}</label><input id="spWp" type="number" inputmode="numeric" min="0" max="20" value="${esc(i.warn_pails)}"></div></div>
+    <label class="lnchk"><input type="checkbox" id="spAuto"${i.auto_adjust ? ' checked' : ''}> ${esc(L2('Correct the dose by itself when a pail runs out', 'Corregir la dosis sola cuando se acabe una paila'))}</label>
+    <p class="small">${esc(L2('Ecolab does not publish a fixed dose per load: the technician sets each pump. Ask for the pump settings and put them here, or let the app learn from each pail.', 'Ecolab no publica una dosis fija por tanda: el técnico calibra cada bomba. Pídele los ajustes y ponlos aquí, o deja que la app aprenda de cada paila.'))}${i.updated_by ? esc(L2(` Last change by ${lnShort(i.updated_by)}.`, ` Último cambio: ${lnShort(i.updated_by)}.`)) : ''}</p>
+    <div class="err" id="spErr"></div>
+    <div class="btnrow"><button class="btn pri" id="spGo">${esc(L2('Save', 'Guardar'))}</button><button class="btn" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  const calc = () => { const d = +$('#spDose').value, o = +$('#spPail').value;
+    $('#spCalc').textContent = d > 0 && o > 0 ? L2(`${spOz(d)} oz (${spMl(d)} ml) per load = about ${Math.floor(o / d)} loads per pail.`, `${spOz(d)} oz (${spMl(d)} ml) por tanda = unas ${Math.floor(o / d)} tandas por paila.`) : ''; };
+  ['#spDose', '#spPail'].forEach(s => $(s).addEventListener('input', calc)); calc();
+  spPick('data-sppp', v => spParams(v));
+  $('#spGo').onclick = async () => {
+    $('#spGo').disabled = true;
+    try { spSet(await call('sc_supply_params', {p_product: p, p_oz_per_load: +$('#spDose').value, p_pail_oz: +$('#spPail').value,
+        p_warn_days: +$('#spWd').value, p_warn_pails: Math.round(+$('#spWp').value), p_auto: $('#spAuto').checked})); closeModal();
+      toast(`<b>${esc(spName(p))}</b> <span>${esc(L2('settings saved.', 'parámetros guardados.'))}</span>`); }
+    catch (err) { $('#spGo').disabled = false; $('#spErr').textContent = spErr(err); }
+  };
+}
+// a housekeeping order in Orders To-do with what is running low
+async function spOrder(){
+  const lows = spLows(); if (!lows.length) return;
+  const room = SP.data.room === 'HWY' ? 'Highway' : 'Maingate/Fundamental';
+  const det = L2('Order laundry supplies (' + room + '): ', 'Pedir suministros de lavandería (' + room + '): ')
+    + lows.map(i => spName(i.product) + ' · ' + (i.days_all != null ? L2(`about ${Math.round(i.days_all)} days left`, `quedan unos ${Math.round(i.days_all)} días`) + ', ' : '') + L2(`${i.reserve} in storage`, `${i.reserve} en almacén`)).join('; ');
+  openModal(`<div data-noi18n><h2>${esc(L2('Create order', 'Crear orden'))}</h2><p class="lead">${esc(L2('It goes to Orders To-do for Housekeeping.', 'Va a Orders To-do de Housekeeping.'))}</p>
+    <div class="field"><label for="spOd">${esc(L2('What is needed', 'Qué se necesita'))}</label><textarea id="spOd" maxlength="500">${esc(det)}</textarea></div><div class="err" id="spErr"></div>
+    <div class="btnrow"><button class="btn pri" id="spGo">${esc(L2('Create order', 'Crear orden'))}</button><button class="btn" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  $('#spGo').onclick = async () => {
+    $('#spGo').disabled = true;
+    try { await call('sc_order_new', {p_category: 'housekeeping', p_room: null, p_details: $('#spOd').value.trim(), p_urgent: false}); closeModal(); toast(esc(L2('Order created in Orders To-do.', 'Orden creada en Orders To-do.'))); }
+    catch (err) { $('#spGo').disabled = false; $('#spErr').textContent = err.message; }
+  };
+}
+async function spPhoto(id){
+  openModal(`<div data-noi18n><h2>${esc(L2('Photo', 'Foto'))}</h2><p class="lead">${esc(L2('Loading…', 'Cargando…'))}</p></div>`);
+  try { const r = await call('sc_supply_photo', {p_id: id});
+    openModal(`<div data-noi18n><h2>${esc(L2('Photo', 'Foto'))}</h2>${r && r.data ? `<img class="spbig" src="${esc(r.data)}" alt="">` : `<p class="lead">${esc(L2('Photo not found.', 'No se encontró la foto.'))}</p>`}<div class="btnrow"><button class="btn" data-close>${esc(L2('Close', 'Cerrar'))}</button></div></div>`); }
+  catch (err) { openModal(`<div data-noi18n><p class="err">${esc(err.message)}</p><button class="btn" data-close>${esc(L2('Close', 'Cerrar'))}</button></div>`); }
+}
+$('#view-laundry').addEventListener('click', e => {
+  const t = e.target.closest('[data-spopen],[data-spstock],[data-spparams],[data-sporder],[data-spphoto],[data-spall]'); if (!t) return;
+  if (t.hasAttribute('data-spopen')) spOpen(); else if (t.hasAttribute('data-spstock')) spStock();
+  else if (t.hasAttribute('data-spparams')) spParams(); else if (t.hasAttribute('data-sporder')) spOrder();
+  else if (t.hasAttribute('data-spphoto')) spPhoto(t.dataset.spphoto); else { SP.all = true; spRender(); }
+});
+// fresh numbers: every minute on the Laundry screen; every 10 minutes for managers and supervisors (for the menu tag)
+setInterval(() => {
+  if (!S.token || !S.me || document.visibilityState !== 'visible') return;
+  SP.n = (SP.n || 0) + 1; if (S.tab === 'laundry' || (spBoss() && SP.n % 10 === 0)) spLoad(true);
+}, 60000);
+if (S.token && S.me) setTimeout(() => spLoad(true), 2500);
+
+/* ===== 1.42.0: Laundry · Request supply (manual ask from the laundry room; alerts the HK supervisor and managers) ===== */
+const LS = {data: null, busy: false};
+const LS_PROD = [['det', 'Detergent', 'Detergente'], ['bleach', 'Bleach', 'Bleach'], ['soft', 'Softener', 'Suavizante'], ['other', 'Other', 'Otro']];
+const lsName = r => r.product === 'other' ? (r.product_other || L2('Other', 'Otro')) : L2(...LS_PROD.find(p => p[0] === r.product).slice(1));
+const lsWhen = v => { const ms = new Date(v).getTime(), today = new Date(ms).toDateString() === new Date().toDateString(); return (today ? '' : fmtDate(ms) + ', ') + fmtTime(ms); };
+const lsPost = body => fetch(API + '/functions/v1/notify', {method: 'POST', headers: {'Content-Type': 'application/json', apikey: KEY}, body: JSON.stringify({token: S.token, ...body})}).catch(() => {});
+
+async function lsLoad(quiet){
+  if (!S.token || !S.me || LS.busy) return; LS.busy = true;
+  try { LS.data = await call('sc_supply_requests', {p_days: 14}); lsRender(); }
+  catch (e) { if (!quiet) toast(esc(e.message)); } finally { LS.busy = false; }
+}
+function lsRender(){
+  const box = $('#lsList'); if (!box) return;
+  $('#lsH').textContent = L2('Supply requests', 'Pedidos de suministro');
+  const ask = $('#lsBox [data-lsask=""]'); if (ask) ask.textContent = L2('Request supply', 'Pedir suministro');
+  if (!LS.data) { box.innerHTML = `<div class="small">${esc(L2('Loading…', 'Cargando…'))}</div>`; return; }
+  const it = LS.data.items || [], boss = LS.data.can_handle;
+  if (!it.length) { box.innerHTML = `<div class="small">${esc(L2('No requests in the last 14 days.', 'Sin pedidos en los últimos 14 días.'))}</div>`; return; }
+  box.innerHTML = it.map(r => {
+    const open = r.status === 'open';
+    const st = open ? (r.ticket ? L2('Ordered · ', 'Ordenado · ') + r.ticket : L2('Pending', 'Pendiente')) : r.status === 'received' ? L2('Received', 'Recibido') : L2('Cancelled', 'Cancelado');
+    const meta = esc(L2('Asked by ', 'Pidió ') + lnShort(r.by) + ' · ' + lsWhen(r.at))
+      + (r.asks > 1 ? ' · ' + esc(L2(`asked ${r.asks} times`, `pedido ${r.asks} veces`)) : '')
+      + (r.level_pct != null ? ' · ' + esc(L2('level ', 'nivel ') + Math.round(r.level_pct) + '%') : '')
+      + (!open && r.handled_by ? '<br>' + esc((r.status === 'received' ? L2('Received by ', 'Recibido por ') : L2('Cancelled by ', 'Cancelado por ')) + lnShort(r.handled_by) + ' · ' + lsWhen(r.handled_at)) : '');
+    const btns = !open ? '' : (boss ? `<button type="button" class="btn pri" data-lsdo="received" data-id="${esc(r.id)}">${esc(L2('Received', 'Recibido'))}</button>`
+        + (r.order_id ? '' : `<button type="button" class="btn" data-lsdo="order" data-id="${esc(r.id)}">${esc(L2('Create order', 'Crear orden'))}</button>`) : '')
+      + (boss || r.by_id === LS.data.me ? `<button type="button" class="btn" data-lsdo="cancel" data-id="${esc(r.id)}">${esc(L2('Cancel', 'Cancelar'))}</button>` : '');
+    return `<div class="lsrow" data-st="${esc(r.status)}"><div style="min-width:0"><b>${esc(lsName(r))}${r.qty ? ' · ' + esc(r.qty) : ''}</b>
+      <span class="lsst">${esc(st)}</span><div class="lnmeta">${meta}</div>${r.note ? `<div class="lnmeta">“${esc(r.note)}”</div>` : ''}
+      ${r.handled_note ? `<div class="lnmeta">“${esc(r.handled_note)}”</div>` : ''}</div>${btns ? `<div class="btnrow">${btns}</div>` : ''}</div>`;
+  }).join('');
+}
+function lsAsk(pre){
+  let prod = pre || '';
+  openModal(`<div data-noi18n><h2>${esc(L2('Request supply', 'Pedir suministro'))}</h2>
+    <p class="lead">${esc(L2('Your supervisor and the managers get an alert right away.', 'Tu supervisora y los gerentes reciben un aviso al instante.'))}</p>
+    <div class="chips" id="lsProd">${LS_PROD.map(p => `<button type="button" data-p="${p[0]}" aria-pressed="${p[0] === prod}">${esc(L2(p[1], p[2]))}</button>`).join('')}</div>
+    <input id="lsOther" maxlength="60" placeholder="${esc(L2('What is it? (e.g. dryer sheets)', '¿Qué es? (ej. hojas de secadora)'))}" hidden>
+    <label>${esc(L2('How much (optional)', 'Cuánto (opcional)'))}<input id="lsQty" maxlength="40" placeholder="${esc(L2('e.g. 2 buckets', 'ej. 2 pailas'))}"></label>
+    <label>${esc(L2('Note (optional)', 'Nota (opcional)'))}<textarea id="lsNote" maxlength="300" rows="2"></textarea></label>
+    <div class="btnrow"><button class="btn pri" id="lsGo" disabled>${esc(L2('Send request', 'Enviar pedido'))}</button><button class="btn" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  const sync = () => { $('#lsProd').querySelectorAll('[data-p]').forEach(b => b.setAttribute('aria-pressed', b.dataset.p === prod));
+    $('#lsOther').hidden = prod !== 'other'; $('#lsGo').disabled = !prod || (prod === 'other' && !$('#lsOther').value.trim()); };
+  $('#lsProd').onclick = e => { const b = e.target.closest('[data-p]'); if (b) { prod = b.dataset.p; sync(); if (prod === 'other') $('#lsOther').focus(); } };
+  $('#lsOther').oninput = sync; sync();
+  $('#lsGo').onclick = async () => {
+    $('#lsGo').disabled = true;
+    const lvl = prod !== 'other' && typeof window.lsLevel === 'function' ? window.lsLevel(prod) : null;
+    try {
+      const j = await call('sc_supply_request', {p_product: prod, p_other: $('#lsOther').value || null, p_qty: $('#lsQty').value || null,
+        p_note: $('#lsNote').value || null, p_level: lvl == null ? null : Number(lvl)});
+      closeModal();
+      if (j.alert) lsPost({supply_req: j.request.id});
+      toast(esc(j.again && !j.alert ? L2('Already requested a few minutes ago. We will remind them if it is still pending in 30 minutes.', 'Ya se pidió hace unos minutos. Si sigue pendiente en 30 minutos se vuelve a avisar.')
+        : j.again ? L2('Reminder sent to your supervisor and managers.', 'Recordatorio enviado a tu supervisora y gerentes.')
+        : L2('Request sent to your supervisor and managers.', 'Pedido enviado a tu supervisora y gerentes.')), 'new');
+      lsLoad(true);
+    } catch (e) { $('#lsGo').disabled = false; toast(esc(e.message)); }
+  };
+}
+async function lsDo(id, act){
+  const r = (LS.data.items || []).find(x => x.id === id); if (!r) return;
+  const run = async note => {
+    try {
+      const j = await call('sc_supply_handle', {p_id: id, p_action: act, p_note: note || null});
+      if (act === 'order' && j.order_id) { notify([j.order_id]); toast(esc(L2('Order created in Orders To-do', 'Orden creada en Orders To-do') + (j.request.ticket ? ' · ' + j.request.ticket : '')), 'new'); }
+      else { lsPost({supply_done: id}); toast(esc(act === 'received' ? L2('Marked received', 'Marcado recibido') : L2('Request cancelled', 'Pedido cancelado'))); }
+      lsLoad(true);
+    } catch (e) { toast(esc(e.message)); }
+  };
+  if (act === 'cancel' && r.by_id === LS.data.me && !LS.data.can_handle) return run(null);
+  const t = act === 'received' ? [L2('Mark received', 'Marcar recibido'), L2('Received', 'Recibido')] : act === 'order' ? [L2('Create an order', 'Crear una orden'), L2('Create order', 'Crear orden')] : [L2('Cancel request', 'Cancelar pedido'), L2('Cancel it', 'Cancelarlo')];
+  openModal(`<div data-noi18n><h2>${esc(t[0] + ' · ' + lsName(r))}</h2>
+    ${act === 'order' ? `<p class="lead">${esc(L2('It goes to Orders To-do for housekeeping. The request stays pending until someone marks it received.', 'Va a Orders To-do para housekeeping. El pedido sigue pendiente hasta que alguien lo marque recibido.'))}</p>` : ''}
+    <label>${esc(L2('Note (optional)', 'Nota (opcional)'))}<textarea id="lsHNote" maxlength="300" rows="2"></textarea></label>
+    <div class="btnrow"><button class="btn pri" id="lsHGo">${esc(t[1])}</button><button class="btn" data-close>${esc(L2('Back', 'Volver'))}</button></div></div>`);
+  $('#lsHGo').onclick = () => { const n = $('#lsHNote').value; closeModal(); run(n); };
+}
+$('#view-laundry').addEventListener('click', e => {
+  const a = e.target.closest('[data-lsask]'), d = e.target.closest('[data-lsdo]');
+  if (a) lsAsk(a.dataset.lsask);
+  else if (d) lsDo(d.dataset.id, d.dataset.lsdo);
+});
+// the level the supply bar shows, sent with the request and shown in the alert
+window.lsLevel = p => { const i = spItem(p); return i && i.open_at ? i.pct : null; };
+// fresh list: every minute on the Laundry screen
+setInterval(() => { if (S.token && S.me && document.visibilityState === 'visible' && S.tab === 'laundry') lsLoad(true); }, 60000);
+if (S.token && S.me) setTimeout(() => lsLoad(true), 3000);
 
 /* ===== v1.2: one-time start codes ===== */
 const untilTxt = u => new Date(u).toLocaleString(LANG === 'es' ? 'es-US' : 'en-US', {weekday:'short', month:'short', day:'numeric', hour:'numeric', minute:'2-digit', timeZone: TZ});
