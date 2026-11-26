@@ -2123,11 +2123,11 @@ details.kpmore[open] summary{margin-bottom:8px}
   <section class="view" id="view-dash" data-noi18n hidden aria-label="Dashboard"><div id="dashBody"></div></section>
 
   <section class="view" id="view-laundry" hidden data-noi18n aria-label="Laundry"><div class="inner">
-    <div id="spBox"></div>
-    <div class="card" id="lsBox" data-noi18n><div class="lsbar"><h2 id="lsH">Supply requests</h2><button type="button" class="btn pri sm" data-lsask="">Request supply</button></div><div id="lsList"></div></div>
     <div class="lnshare" id="lnShare" hidden></div>
     <div class="lngrid" id="lnGrid"><div class="small">…</div></div>
     <div class="card lnhist"><h2 id="lnHistH">Last loads</h2><div id="lnHist"></div></div>
+    <div id="spBox"></div>
+    <div class="card" id="lsBox" data-noi18n><div class="lsbar"><h2 id="lsH">Supply requests</h2><button type="button" class="btn pri sm" data-lsask="">Request supply</button></div><div id="lsList"></div></div>
     <div class="card lnhist splog"><h2 id="spLogH">Supply log</h2><div id="spLog"></div></div>
   </div></section>
 
@@ -5821,8 +5821,9 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.42.0';
+const APP_VERSION = '1.42.1';
 const CHANGES = [
+  {v: '1.42.1', d: '2026-11-26', en: ['Laundry: the machine timers are back at the top, and Supplies moved below them'], es: ['Lavandería: los relojes de las máquinas vuelven arriba y Suministros pasa debajo']},
   {v: '1.42.0', d: '2026-11-26', en: ['Laundry: new Supplies with a level bar for detergent, bleach and softener: green, amber or red, with loads and days left and the closed pails in storage', 'Every washer load takes its dose from the open pail: detergent when Soap is on, bleach when Bleach is on, softener on every washer load', '"I opened a pail" logs the product, the size and a photo of the pail, with who and when. The Supply log keeps them all', 'Pails in storage: log new pails that arrived or count the closed ones', 'When a pail runs out, the app compares its loads with its size and corrects the dose per load by itself', 'Managers set the oz per load, the pail size and when to warn. Managers and HK supervisors get an alert when a product is running low, and can turn it into an order in Orders To-do', 'Request supply: anyone in the laundry room can ask for detergent, bleach, softener or something else. The HK supervisor and the managers get an alert, and can mark it received, cancel it or turn it into an order. The person who asked hears back'],
     es: ['Laundry: nuevo Suministros con una barra de nivel para detergente, bleach y suavizante: verde, ámbar o rojo, con tandas y días que quedan y las pailas cerradas en almacén', 'Cada tanda de lavadora descuenta su dosis de la paila abierta: detergente cuando lleva Jabón, bleach cuando lleva Bleach y suavizante en toda tanda de lavadora', '"Abrí una paila" registra el producto, el tamaño y una foto de la paila, con quién y cuándo. La Bitácora de suministros las guarda todas', 'Pailas en almacén: registra las pailas que llegaron o cuenta las cerradas', 'Cuando una paila se acaba, la app compara sus tandas con su tamaño y corrige sola la dosis por tanda', 'Los gerentes ponen las oz por tanda, el tamaño de la paila y cuándo avisar. Gerentes y supervisoras de HK reciben un aviso cuando un producto se está acabando, y pueden convertirlo en una orden en Orders To-do', 'Pedir suministro: cualquiera en la lavandería puede pedir detergente, bleach, suavizante u otra cosa. La supervisora de HK y los gerentes reciben un aviso, y pueden marcarlo recibido, cancelarlo o convertirlo en orden. Quien pidió recibe la respuesta']},
   {v: '1.40.0', d: '2026-11-22', en: ['Cleaner alerts: short titles with no emojis, like "Urgent · Room 208", and a second line with the hotel, the ticket and how long it has waited', "Each hotel's alerts show its own colored bell: Maingate red, Fundamental green, Highway blue", "On Android, alerts about an open order have I'm on it and Open buttons. I'm on it takes the order without opening the app"],
