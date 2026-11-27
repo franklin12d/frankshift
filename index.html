@@ -1380,6 +1380,18 @@ button.bdstep{cursor:pointer}
 .bdfix{display:flex;flex-wrap:wrap;gap:6px;margin:4px 0 10px}
 .bdfix .btn[aria-pressed="true"]{background:#EA580C;border-color:#EA580C;color:#fff}
 .bdrpics{display:flex;gap:8px;flex-wrap:wrap;margin-top:8px}
+/* 1.45.0: room check-out (photos + detail) */
+.bco2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:4px 0 10px}
+.bco2 .btn{min-height:52px;font-size:15px;justify-content:center}
+.bco2 .btn[data-bco="ok"][aria-pressed="true"]{background:#16A34A;border-color:#16A34A;color:#fff}
+.bco2 .btn[data-bco="det"][aria-pressed="true"]{background:#EA580C;border-color:#EA580C;color:#fff}
+.bcoeng{display:flex;align-items:center;gap:10px;font-size:15px;padding:10px 12px;border:1px solid var(--line);border-radius:12px;margin-top:4px}
+.bcoeng input{width:22px;height:22px}
+.bdhkn{flex-basis:100%;font-size:13px;color:var(--ink-2)}
+.bdhkn b{color:#C2410C}
+.bdhkbox{background:color-mix(in srgb,#635BFF 10%,var(--surface));border:1px solid color-mix(in srgb,#635BFF 40%,var(--line));border-radius:12px;padding:10px 12px;margin:0 0 10px;font-size:14px}
+.bdhkbox .bdrpics img{width:88px;height:88px}
+.photos h3{grid-column:1/-1;margin:6px 0 0;font-size:14px}
 .bdrpics span{position:relative}
 .bdrpics img{width:76px;height:76px;object-fit:cover;border-radius:10px;border:1px solid var(--line)}
 .bdrpics .bdx{position:absolute;top:-8px;right:-8px;width:28px;height:28px}
@@ -5839,8 +5851,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.44.0';
+const APP_VERSION = '1.45.0';
 const CHANGES = [
+  {v: '1.45.0', d: '2026-11-27', en: ['Board: tapping Ready opens a short room check-out. The housekeeper adds photos of how the room was left (up to 5) and marks Everything OK or a detail with a note', 'A detail can also create a maintenance order for that room in one step', 'The HK supervisor sees the detail and the photos on the room and while inspecting. The housekeeper\'s photos stay if the room is sent back'],
+    es: ['Board: al tocar Listo se abre una salida del cuarto. La housekeeper agrega fotos de cómo quedó el cuarto (hasta 5) y marca Todo bien o un detalle con nota', 'Un detalle también puede crear una orden de mantenimiento para ese cuarto en un paso', 'La supervisora de HK ve el detalle y las fotos en el cuarto y al inspeccionar. Las fotos de la housekeeper se quedan si el cuarto se devuelve']},
   {v: '1.44.0', d: '2026-11-27', en: ['Board: the HK supervisor can change an assigned room between Check-out and Stayover right in the list, without taking it off and assigning it again', 'The housekeeper stays the same. A room not started yet moves to the right step: a check-out waits to be stripped, a stayover is Ready to clean', 'If the room was already started or done, only the type and its credits change; time and inspection stay'],
     es: ['Board: la supervisora de HK puede cambiar un cuarto asignado entre Check-out y Stayover directo en la lista, sin borrarlo y asignarlo otra vez', 'La housekeeper se queda igual. Un cuarto que no se ha empezado pasa al paso correcto: el check-out espera a ser stripeado y el stayover queda Listo para limpiar', 'Si el cuarto ya se empezó o terminó, solo cambian el tipo y sus créditos; el tiempo y la inspección se quedan']},
   {v: '1.43.0', d: '2026-11-26', en: ['Laundry supplies: each product shows Missing or Complete against its target of closed pails in storage', 'New Inventory statement for managers and HK supervisors: open pail, storage, gallons, days it lasts, target and what is missing, with Create order, Share and Print', 'Managers set the storage target per product in Settings'], es: ['Suministros de lavandería: cada producto muestra Faltan o Completo contra su meta de pailas cerradas en almacén', 'Nuevo Estado de inventario para gerentes y supervisoras de HK: paila abierta, almacén, galones, días que alcanza, meta y lo que falta, con Crear orden, Compartir e Imprimir', 'Los gerentes ponen la meta de almacén por producto en Parámetros']},
@@ -7785,7 +7799,7 @@ function bdRow(r, boss){
       + `<select class="bdsel" data-bdset="${id}" data-st="${st}" aria-label="${esc(L2('Status of ', 'Estatus de la ') + r.room)}">${opts.map(k => `<option value="${k}" ${k === st ? 'selected' : ''}>${esc(bdSt(k))}</option>`).join('')}</select>`
       + `<button class="bdx" type="button" data-bdrm="${id}" aria-label="${esc(L2('Take off the board', 'Quitar del board'))}">×</button>`
     : `<span class="bdst" data-st="${st}">${esc(bdSt(st))}</span>`;
-  const note = st === 'returned' && r.note ? `<div class="bdrnote">↩ ${esc(r.note)}${r.photos ? ` · <button class="linkbtn" type="button" data-bdpics="${id}">${esc(L2(r.photos + (r.photos > 1 ? ' photos' : ' photo'), r.photos + (r.photos > 1 ? ' fotos' : ' foto')))}</button>` : ''}</div>` : '';
+  const note = (st === 'returned' && r.note ? `<div class="bdrnote">↩ ${esc(r.note)}${r.photos ? ` · <button class="linkbtn" type="button" data-bdpics="${id}">${esc(L2(r.photos + (r.photos > 1 ? ' photos' : ' photo'), r.photos + (r.photos > 1 ? ' fotos' : ' foto')))}</button>` : ''}</div>` : '') + bdHkLine(r);
   return `<div class="bdrow" data-st="${r.verify ? 'verify' : st}" data-bdid="${id}"><b class="bdnum">${esc(r.room)}</b>${boss ? `<select class="bdkind" data-bdkind="${id}" aria-label="${esc(L2('Check-out or Stayover, room ', 'Check-out o Stayover, cuarto ') + r.room)}">${['co', 'so'].map(k => `<option value="${k}" ${r.kind === k ? 'selected' : ''}>${bdKind(k)}</option>`).join('')}</select>` : `<span class="bdkind">${r.kind === 'so' ? 'SO' : 'CO'}</span>`}${bdBadges(r)}${time}${bdScore(r.score)}<span class="grow"></span><button class="bdrepi" type="button" data-bdrep="pick" data-room="${esc(r.room)}" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}" title="${esc(L2('Report maintenance or a lost item', 'Reportar mantenimiento u objeto olvidado'))}">🔧</button>${ctl}${note}</div>`;
 }
 // the red number on the Board: what waits on this person now
@@ -7815,6 +7829,7 @@ function bdSet(d, quiet){
       if (back.length) toast(esc(L2('Sent back to fix: ', 'Devuelto para corregir: ') + list(back)), 'new');
       if (ver.length) toast(esc(L2('To verify (past check-out time): ', 'Por verificar (pasó la hora de salida): ') + list(ver)), 'new');
       if (rest.length) toast(esc((d.boss ? L2('Ready to be inspected: ', 'Listo para inspección: ') : d.strip ? L2('Vacant, ready to strip: ', 'Vacía, lista para stripear: ') : L2('Ready to clean: ', 'Listo para limpiar: ')) + list(rest)), 'new');
+      if (d.boss) rest.filter(r => r.status === 'insp' && r.hk_note).forEach(r => toast(esc(L2('Detail in room ', 'Detalle en el cuarto ') + r.room + ': ' + r.hk_note), 'new'));
       chime(back.length || ver.length ? 'edit' : 'normal');
     }
   }
@@ -7882,6 +7897,74 @@ function bdLost(room){
     catch (e) { btn.disabled = false; err.textContent = e.message; }
   };
 }
+/* 1.45.0: room check-out. Ready opens it: photos of how the room was left (optional, up to 5) and Everything OK or a detail.
+   A detail goes to the supervisor with the room; it can also open a maintenance order for that room (Engineer gets the alert) */
+const BD_DET = [['Something broken or damaged', 'Algo roto o dañado'], ['Something missing', 'Falta algo'], ['Stain on sheets, towels or carpet', 'Mancha en sábanas, toallas o alfombra'],
+  ['Maintenance', 'Mantenimiento'], ['Pests', 'Plagas'], ['Smell or smoke', 'Olor o humo'], ['Other', 'Otro']];
+function bdCheckout(id){
+  const r = (BD.rooms || []).find(x => x.id === id); if (!r) return;
+  const pics = []; let det = false;
+  openModal(`<div data-noi18n><h2>${esc(L2('Room check-out · ', 'Salida del cuarto · ') + r.room)}</h2>
+    <p class="hint">${esc(L2('Before it goes to inspection: photos of how you left it, and any detail.', 'Antes de mandarlo a inspección: fotos de cómo quedó y si hay algún detalle.'))}</p>
+    <label class="btn pkphoto"><input type="file" accept="image/*" capture="environment" id="bcoFile" hidden>📷 ${esc(L2('Photos of how it was left (up to 5)', 'Fotos de cómo quedó (hasta 5)'))}</label>
+    <div class="bdrpics" id="bcoPics"></div>
+    <div class="field" style="margin-top:12px"><label>${esc(L2('Any detail in the room?', '¿Algún detalle en el cuarto?'))}</label>
+      <div class="bco2" role="group"><button type="button" class="btn" data-bco="ok" aria-pressed="true">✓ ${esc(L2('Everything OK', 'Todo bien'))}</button><button type="button" class="btn" data-bco="det" aria-pressed="false">⚠ ${esc(L2('There is a detail', 'Hay un detalle'))}</button></div></div>
+    <div id="bcoDet" hidden>
+      <div class="bdfix" role="group" aria-label="${esc(L2('Quick picks', 'Opciones rápidas'))}">${BD_DET.map(([en, es]) => `<button type="button" class="btn sm" data-bcod="${esc(L2(en, es))}" data-k="${esc(en)}" aria-pressed="false">${esc(L2(en, es))}</button>`).join('')}</div>
+      <div class="field"><label for="bcoNote">${esc(L2('What is it', 'Qué pasa'))}</label><textarea id="bcoNote" rows="2" maxlength="250" placeholder="${esc(L2('Lamp by the bed does not turn on', 'La lámpara de la cama no prende'))}"></textarea></div>
+      <label class="bcoeng"><input type="checkbox" id="bcoEng"> 🔧 ${esc(L2('Also create a maintenance order for this room', 'Crear también una orden de mantenimiento para este cuarto'))}</label>
+    </div>
+    <div class="err" id="bcoErr"></div>
+    <div class="btnrow" style="margin-top:12px"><button class="btn bdready bdbig" type="button" id="bcoGo">✓ ${esc(L2('Send to inspection', 'Enviar a inspección'))}</button><button class="btn" type="button" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  const paint = () => { $('#bcoPics').innerHTML = pics.map((p, i) => `<span><img src="${p}" alt="${esc(L2('Photo ', 'Foto ') + (i + 1))}"><button type="button" class="bdx" data-bcodel="${i}" aria-label="${esc(L2('Remove photo', 'Quitar foto'))}">×</button></span>`).join(''); };
+  document.querySelectorAll('#modal [data-bco]').forEach(b => b.onclick = () => { det = b.dataset.bco === 'det';
+    document.querySelectorAll('#modal [data-bco]').forEach(x => x.setAttribute('aria-pressed', x === b)); $('#bcoDet').hidden = !det; $('#bcoErr').textContent = ''; pip();
+    if (det) setTimeout(() => { const t = $('#bcoNote'); if (t) t.focus(); }, 50); });
+  document.querySelectorAll('#modal [data-bcod]').forEach(b => b.onclick = () => {
+    const on = b.getAttribute('aria-pressed') !== 'true'; b.setAttribute('aria-pressed', on); $('#bcoErr').textContent = '';
+    if (b.dataset.k === 'Maintenance' && on) $('#bcoEng').checked = true; pip(); });
+  $('#bcoFile').onchange = async e => { const f = e.target.files && e.target.files[0]; e.target.value = ''; if (!f) return;
+    if (pics.length >= 5) { $('#bcoErr').textContent = L2('Up to 5 photos.', 'Hasta 5 fotos.'); return; }
+    try { pics.push(await shrink(f, 1100, .7)); paint(); $('#bcoErr').textContent = ''; } catch { $('#bcoErr').textContent = bdErr({message: 'BAD_PHOTO'}); } };
+  $('#bcoPics').onclick = e => { const x = e.target.closest('[data-bcodel]'); if (x) { pics.splice(+x.dataset.bcodel, 1); paint(); } };
+  $('#bcoGo').onclick = async () => {
+    const chips = [...document.querySelectorAll('#modal [data-bcod][aria-pressed="true"]')].map(b => b.dataset.bcod), extra = $('#bcoNote').value.trim().replace(/\s+/g, ' ');
+    const note = det ? [chips.join(', '), extra].filter(Boolean).join(' · ').slice(0, 300) : '', eng = det && $('#bcoEng').checked;
+    if (det && note.length < 2) { $('#bcoErr').textContent = L2('Tap what it is or write it.', 'Toca qué es o escríbelo.'); return; }
+    const b = $('#bcoGo'); b.disabled = true; $('#bcoErr').textContent = '';
+    let bad = 0;
+    for (const p of pics) { try { await call('sc_board_hk_photo_add', {p_id: id, p_data: p}); } catch { bad++; } }
+    try { bdSet(await call('sc_board_checkout', {p_id: id, p_note: note || null}), true); }
+    catch (e) { b.disabled = false; $('#bcoErr').textContent = bdErr(e); if (pics.length - bad > 0) pics.length = 0, paint(); return; }
+    let ord = null;
+    if (eng) { try { ord = await call('sc_eng_new', {p_room: r.room, p_place: null, p_cat: 'Otro', p_details: note, p_urgent: false, p_guest: false, p_assignee: null});
+      S.known.set(ord.order_id, 'open'); notify([ord.order_id]); } catch (e) { toast(esc(L2('The maintenance order was not created: ', 'La orden de mantenimiento no se creó: ') + e.message)); } }
+    closeModal(); fx('done');
+    fetch(API + '/functions/v1/notify', {method:'POST', headers:{'Content-Type':'application/json', apikey: KEY}, body: JSON.stringify({token: S.token, board_insp: id})}).catch(() => {});
+    const n = (BD.rooms || []).find(x => x.id === id), mpr = n && n.mpr != null ? ` · ${n.mpr} min` : '';
+    toast(`<span data-noi18n>${esc(L2('Room ', 'Cuarto ') + r.room + L2(' sent to inspection', ' enviado a inspección') + mpr
+      + (pics.length - bad ? L2(` · ${pics.length - bad} photo${pics.length - bad > 1 ? 's' : ''}`, ` · ${pics.length - bad} foto${pics.length - bad > 1 ? 's' : ''}`) : '')
+      + (note ? L2(' · detail reported', ' · detalle reportado') : '') + (bad ? L2(` · ${bad} photo(s) not saved`, ` · ${bad} foto(s) no se guardaron`) : ''))}${ord ? ` · <b>${esc(ord.ticket)}</b> ${esc(L2('maintenance order', 'orden de mantenimiento'))}` : ''}</span>`, 'new');
+  };
+}
+// the housekeeper's check-out, on the supervisor's row: detail and number of photos
+function bdHkLine(r){
+  if (!(r.hk_note || r.hk_photos) || ['dirty', 'ready'].includes(r.status)) return '';
+  const id = esc(r.id), n = r.hk_photos || 0;
+  return `<div class="bdhkn">${r.hk_note ? `<b>⚠ ${esc(r.hk_note)}</b>` : ''}${r.hk_note && n ? ' · ' : ''}${n ? `<button class="linkbtn" type="button" data-bdpics="${id}">📷 ${esc(L2(n + (n > 1 ? ' photos' : ' photo'), n + (n > 1 ? ' fotos' : ' foto')))}</button>` : ''}</div>`;
+}
+function bdHkBox(r){
+  if (!(r.hk_note || r.hk_photos)) return '';
+  return `<div class="bdhkbox">${r.hk_note ? `<div><b>⚠ ${esc(L2('Detail from ', 'Detalle de ') + (r.hk_note_by || r.to_name || L2('the housekeeper', 'la housekeeper')))}:</b> ${esc(r.hk_note)}</div>` : `<div><b>✓ ${esc(L2('Housekeeper: everything OK', 'Housekeeper: todo bien'))}</b></div>`}
+    ${r.hk_photos ? `<div class="bdrpics" id="bdkHk"><span class="small">${esc(L2('Loading photos…', 'Cargando fotos…'))}</span></div>` : ''}</div>`;
+}
+async function bdHkLoad(r){
+  if (!r.hk_photos) return;
+  try { const p = (await withPhotos(await call('sc_board_photos', {p_id: r.id}))).filter(x => x.kind === 'hk'), box = $('#bdkHk');
+    if (box) box.innerHTML = p.map(x => `<a href="${esc(x.data)}" target="_blank" rel="noopener"><img src="${esc(x.data)}" alt="${esc(L2('Room photo', 'Foto del cuarto'))}"></a>`).join(''); }
+  catch { const box = $('#bdkHk'); if (box) box.innerHTML = `<span class="small">${esc(L2('Photos could not be loaded.', 'No se pudieron cargar las fotos.'))}</span>`; }
+}
 function bdRemove(id){
   const r = (BD.rooms || []).find(x => x.id === id); if (!r) return;
   openModal(`<div data-noi18n><h2>${esc(L2('Take room ', 'Quitar el cuarto ') + r.room + L2(' off the board?', ' del board?'))}</h2>
@@ -7934,12 +8017,14 @@ function bdInspect(id){
   const ok = Object.fromEntries(BD_CHECK.map(c => [c[0], true])), pics = [];
   openModal(`<div data-noi18n><h2>${esc(L2('Inspect room ', 'Inspeccionar el cuarto ') + r.room)}</h2>
     <p class="hint">${esc((r.to_name || L2('Not assigned', 'Sin asignar')) + ' · ' + bdKind(r.kind) + (r.mpr != null ? ' · ' + r.mpr + ' min' : '') + ' · ' + L2('Tap what failed.', 'Toca lo que falló.'))}</p>
+    ${bdHkBox(r)}
     <div class="bdckscore"><b id="bdkScore"></b><span id="bdkInfo"></span></div>
     <div class="bdck" id="bdkList" role="group" aria-label="${esc(L2('Checklist', 'Lista de revisión'))}">${BD_CHECK.map(([k]) => `<button type="button" data-bdck="${k}" aria-pressed="true"><i aria-hidden="true">✓</i>${esc(bdCheckName(k))}</button>`).join('')}</div>
     <div class="field"><label for="bdkNote">${esc(L2('Note (optional)', 'Nota (opcional)'))}</label><textarea id="bdkNote" rows="2" maxlength="200"></textarea></div>
     <label class="btn pkphoto"><input type="file" accept="image/*" capture="environment" id="bdkFile" hidden>📷 ${esc(L2('Add photo (up to 5)', 'Agregar foto (hasta 5)'))}</label>
     <div class="bdrpics" id="bdkPics"></div><div class="err" id="bdkErr"></div>
     <div class="btnrow" style="margin-top:12px"><button class="btn bdok" type="button" id="bdkPass"></button><button class="btn bdback" type="button" id="bdkBack">↩ ${esc(L2('Send back', 'Devolver'))}</button><button class="btn" type="button" data-close>${esc(L2('Cancel', 'Cancelar'))}</button></div></div>`);
+  bdHkLoad(r);
   const failed = () => BD_CHECK.filter(c => !ok[c[0]]).map(c => c[0]);
   const score = () => Math.round(100 * (BD_CHECK.length - failed().length) / BD_CHECK.length);
   const paint = () => {
@@ -7995,7 +8080,11 @@ async function bdPics(id){
   const r = (BD.rooms || []).find(x => x.id === id);
   openModal(`<div data-noi18n><h2>${esc(L2('Room ', 'Cuarto ') + (r ? r.room : ''))}</h2><p class="hint">${esc(r && r.note || '')}</p><div class="photos" id="bdpBox"><div class="small">…</div></div>
     <div class="btnrow" style="margin-top:12px"><button class="btn" type="button" data-close>${esc(L2('Close', 'Cerrar'))}</button></div></div>`);
-  try { const p = await withPhotos(await call('sc_board_photos', {p_id: id})); const box = $('#bdpBox'); if (box) box.innerHTML = p.length ? p.map(x => `<img src="${esc(x.data)}" alt="">`).join('') : `<div class="small">${esc(L2('No photos.', 'Sin fotos.'))}</div>`; }
+  try { const p = await withPhotos(await call('sc_board_photos', {p_id: id})); const box = $('#bdpBox'); if (!box) return;
+    const hk = p.filter(x => x.kind === 'hk'), ret = p.filter(x => x.kind !== 'hk'), img = x => `<img src="${esc(x.data)}" alt="">`;
+    box.innerHTML = !p.length ? `<div class="small">${esc(L2('No photos.', 'Sin fotos.'))}</div>`
+      : !hk.length ? ret.map(img).join('')
+      : (ret.length ? `<h3>${esc(L2('Supervisor', 'Supervisora'))}</h3>` + ret.map(img).join('') : '') + `<h3>${esc(L2('How the housekeeper left it', 'Cómo lo dejó la housekeeper'))}${hk[0].added_by ? ' · ' + esc(hk[0].added_by) : ''}</h3>` + hk.map(img).join(''); }
   catch (e) { const box = $('#bdpBox'); if (box) box.innerHTML = `<div class="small">${esc(bdErr(e))}</div>`; }
 }
 /* Front desk adds the day's check-outs: tap the rooms (or type them); rooms already on the board stay as they are */
@@ -8105,7 +8194,7 @@ function bdaGrid(){
   if (dp) { dp.hidden = !free.length; dp.textContent = L2(`Pick the ${free.length} check-outs from Front desk with no housekeeper`, `Elegir las ${free.length} salidas de Front desk sin housekeeper`); }
 }
 $('#view-board').addEventListener('click', e => {
-  const a = e.target.closest('[data-bdact]'); if (a) return bdAct(a.dataset.id, a.dataset.bdact, null, a);
+  const a = e.target.closest('[data-bdact]'); if (a) return a.dataset.bdact === 'done' ? bdCheckout(a.dataset.id) : bdAct(a.dataset.id, a.dataset.bdact, null, a);
   const v = e.target.closest('[data-bdv]'); if (v) { BDView = v.dataset.bdv; return bdRender(); }
   const fl = e.target.closest('[data-bdflow]'); if (fl && fl.tagName === 'BUTTON') { BDView = BDView === 'f:' + fl.dataset.bdflow ? 'all' : 'f:' + fl.dataset.bdflow; pip(); return bdRender(); }
   const q = e.target.closest('[data-bdq]'); if (q) return bdAct(q.dataset.id, 'set', q.dataset.bdq, q);
