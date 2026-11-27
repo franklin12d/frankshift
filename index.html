@@ -1292,6 +1292,7 @@ header.top .brand .bt.hpkon{cursor:pointer}
 .bdnum{font:800 22px var(--f-body);color:var(--ink);min-width:3.2ch;font-variant-numeric:tabular-nums}
 .bdrow .bdnum{font-size:17px}
 .bdkind{font:700 11.5px var(--f-body);padding:2px 8px;border-radius:999px;background:var(--surface-2);color:var(--ink-2);border:1px solid var(--line)}
+select.bdkind{min-height:34px;padding:0 6px;font:700 12.5px var(--f-body);color:var(--ink);cursor:pointer;max-width:120px}
 .bdst{font:700 12px var(--f-body);padding:4px 10px;border-radius:999px;color:#fff;background:var(--bc)}
 .bdtop .bdst{margin-left:auto}
 .bdst[data-st="insp"]{color:#422006;background:#FACC15}
@@ -5838,8 +5839,10 @@ window.matchMedia('(min-width:900px)').addEventListener('change', () => { if (S.
 { const d = +ls.get('sc.dashDays'); if (d === 7 || d === 30) DASH.days = d; }
 
 /* ===== v1.1: version, what's new, update banner, offline banner ===== */
-const APP_VERSION = '1.43.0';
+const APP_VERSION = '1.44.0';
 const CHANGES = [
+  {v: '1.44.0', d: '2026-11-27', en: ['Board: the HK supervisor can change an assigned room between Check-out and Stayover right in the list, without taking it off and assigning it again', 'The housekeeper stays the same. A room not started yet moves to the right step: a check-out waits to be stripped, a stayover is Ready to clean', 'If the room was already started or done, only the type and its credits change; time and inspection stay'],
+    es: ['Board: la supervisora de HK puede cambiar un cuarto asignado entre Check-out y Stayover directo en la lista, sin borrarlo y asignarlo otra vez', 'La housekeeper se queda igual. Un cuarto que no se ha empezado pasa al paso correcto: el check-out espera a ser stripeado y el stayover queda Listo para limpiar', 'Si el cuarto ya se empezó o terminó, solo cambian el tipo y sus créditos; el tiempo y la inspección se quedan']},
   {v: '1.43.0', d: '2026-11-26', en: ['Laundry supplies: each product shows Missing or Complete against its target of closed pails in storage', 'New Inventory statement for managers and HK supervisors: open pail, storage, gallons, days it lasts, target and what is missing, with Create order, Share and Print', 'Managers set the storage target per product in Settings'], es: ['Suministros de lavandería: cada producto muestra Faltan o Completo contra su meta de pailas cerradas en almacén', 'Nuevo Estado de inventario para gerentes y supervisoras de HK: paila abierta, almacén, galones, días que alcanza, meta y lo que falta, con Crear orden, Compartir e Imprimir', 'Los gerentes ponen la meta de almacén por producto en Parámetros']},
   {v: '1.42.1', d: '2026-11-26', en: ['Laundry: the machine timers are back at the top, and Supplies moved below them'], es: ['Lavandería: los relojes de las máquinas vuelven arriba y Suministros pasa debajo']},
   {v: '1.42.0', d: '2026-11-26', en: ['Laundry: new Supplies with a level bar for detergent, bleach and softener: green, amber or red, with loads and days left and the closed pails in storage', 'Every washer load takes its dose from the open pail: detergent when Soap is on, bleach when Bleach is on, softener on every washer load', '"I opened a pail" logs the product, the size and a photo of the pail, with who and when. The Supply log keeps them all', 'Pails in storage: log new pails that arrived or count the closed ones', 'When a pail runs out, the app compares its loads with its size and corrects the dose per load by itself', 'Managers set the oz per load, the pail size and when to warn. Managers and HK supervisors get an alert when a product is running low, and can turn it into an order in Orders To-do', 'Request supply: anyone in the laundry room can ask for detergent, bleach, softener or something else. The HK supervisor and the managers get an alert, and can mark it received, cancel it or turn it into an order. The person who asked hears back'],
@@ -7544,7 +7547,7 @@ const BD_ERR = {BAD_CREDITS: ['Use numbers: check-out and stayover from 0 to 10,
   EXT_PENDING: ['Front desk is still confirming an extension for this room.', 'Front desk todavía confirma una extensión para este cuarto.'],
   NOT_DEPARTURE: ['That room is not a check-out.', 'Ese cuarto no es un check-out.'], BAD_TIME: ['Pick a time from 11:30 AM to 4:00 PM.', 'Elige una hora de 11:30 AM a 4:00 PM.'],
   NOTE_NEEDED: ['Mark what failed or write what needs fixing.', 'Marca lo que falló o escribe qué hay que arreglar.'], BAD_CHECKLIST: ['The checklist could not be saved. Try again.', 'La lista de revisión no se pudo guardar. Intenta otra vez.'], MAX_PHOTOS: ['Up to 5 photos.', 'Hasta 5 fotos.'], BAD_PHOTO: ['That photo could not be saved. Try another one.', 'Esa foto no se pudo guardar. Prueba con otra.'],
-  BAD_ROOM: ['That room number is not valid.', 'Ese número de cuarto no es válido.'], BAD_ROOMS: ['Too many rooms at a time.', 'Demasiados cuartos a la vez.'],
+  BAD_KIND: ['Pick Check-out or Stayover.', 'Elige Check-out o Stayover.'], BAD_ROOM: ['That room number is not valid.', 'Ese número de cuarto no es válido.'], BAD_ROOMS: ['Too many rooms at a time.', 'Demasiados cuartos a la vez.'],
   BAD_DATE: ['Pick a day from yesterday to next week.', 'Elige un día entre ayer y la próxima semana.'], NOT_FOUND: ['That room is no longer on the board.', 'Ese cuarto ya no está en el board.']};
 const bdErr = e => { const m = (e && e.message) || ''; const x = BD_ERR[m]; return x ? L2(x[0], x[1]) : m; };
 let BD = null, BDDate = '', BDBusy = false, BDOff = 0, BDView = 'all', BDN = 0, BDA = null, BDSeen = null, BDPend = false;
@@ -7783,7 +7786,7 @@ function bdRow(r, boss){
       + `<button class="bdx" type="button" data-bdrm="${id}" aria-label="${esc(L2('Take off the board', 'Quitar del board'))}">×</button>`
     : `<span class="bdst" data-st="${st}">${esc(bdSt(st))}</span>`;
   const note = st === 'returned' && r.note ? `<div class="bdrnote">↩ ${esc(r.note)}${r.photos ? ` · <button class="linkbtn" type="button" data-bdpics="${id}">${esc(L2(r.photos + (r.photos > 1 ? ' photos' : ' photo'), r.photos + (r.photos > 1 ? ' fotos' : ' foto')))}</button>` : ''}</div>` : '';
-  return `<div class="bdrow" data-st="${r.verify ? 'verify' : st}" data-bdid="${id}"><b class="bdnum">${esc(r.room)}</b><span class="bdkind">${r.kind === 'so' ? 'SO' : 'CO'}</span>${bdBadges(r)}${time}${bdScore(r.score)}<span class="grow"></span><button class="bdrepi" type="button" data-bdrep="pick" data-room="${esc(r.room)}" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}" title="${esc(L2('Report maintenance or a lost item', 'Reportar mantenimiento u objeto olvidado'))}">🔧</button>${ctl}${note}</div>`;
+  return `<div class="bdrow" data-st="${r.verify ? 'verify' : st}" data-bdid="${id}"><b class="bdnum">${esc(r.room)}</b>${boss ? `<select class="bdkind" data-bdkind="${id}" aria-label="${esc(L2('Check-out or Stayover, room ', 'Check-out o Stayover, cuarto ') + r.room)}">${['co', 'so'].map(k => `<option value="${k}" ${r.kind === k ? 'selected' : ''}>${bdKind(k)}</option>`).join('')}</select>` : `<span class="bdkind">${r.kind === 'so' ? 'SO' : 'CO'}</span>`}${bdBadges(r)}${time}${bdScore(r.score)}<span class="grow"></span><button class="bdrepi" type="button" data-bdrep="pick" data-room="${esc(r.room)}" aria-label="${esc(L2('Report for room ', 'Reportar en el cuarto ') + r.room)}" title="${esc(L2('Report maintenance or a lost item', 'Reportar mantenimiento u objeto olvidado'))}">🔧</button>${ctl}${note}</div>`;
 }
 // the red number on the Board: what waits on this person now
 function bdWaiting(d){
@@ -7837,6 +7840,18 @@ async function bdAct(id, act, status, el){
     else if (act === 'return') chime('edit');
     else pip();
   } catch (e) { toast(esc(bdErr(e))); BDPend = false; if (document.activeElement) try { document.activeElement.blur(); } catch {} bdRender(); }
+}
+/* 1.44.0: the supervisor changes an assigned room between Check-out and Stayover without taking it off the board.
+   Not started yet: a stayover turned check-out goes back to To strip; a check-out turned stayover is Ready to clean.
+   Already started or done: only the type (and its credits) changes; time, inspection and photos stay */
+async function bdKindSet(id, kind, el){
+  if (el) el.disabled = true;
+  try {
+    bdSet(await call('sc_board_kind', {p_id: id, p_kind: kind}), true);
+    const r = (BD.rooms || []).find(x => x.id === id); pip();
+    if (r) toast(esc(L2('Room ', 'Cuarto ') + r.room + L2(' is now a ', ' ahora es ') + bdKind(r.kind) + ': ' + bdSt(r.status)
+      + (['dirty', 'ready'].includes(r.status) ? '' : L2('. Time and inspection stay as they were.', '. El tiempo y la inspección se quedan como estaban.'))), 'new');
+  } catch (e) { toast(esc(bdErr(e))); BDPend = false; bdRender(); }
 }
 /* 1.33.0: from the room card, report maintenance (goes to Engineer, the team gets the alert) or a lost item (goes to Lost & found), room already filled in */
 function bdReport(room, what){
@@ -8113,6 +8128,7 @@ $('#view-board').addEventListener('click', e => {
 $('#view-board').addEventListener('change', e => {
   const t = e.target;
   if (t.matches('[data-bdset]')) { const id = t.dataset.bdset, v = t.value; t.blur(); BDPend = false; return bdAct(id, 'set', v, t); }
+  if (t.matches('[data-bdkind]')) { const id = t.dataset.bdkind, v = t.value; t.blur(); BDPend = false; return bdKindSet(id, v, t); }
   if (t.matches('[data-bdins]')) { const hk = t.dataset.bdins, v = t.value || null; t.blur(); BDPend = false; t.disabled = true;
     return call('sc_board_inspector', {p_date: BD.date, p_hk: hk, p_inspector: v}).then(d => { bdSet(d, true); const w = (BD.team.find(x => x.id === hk) || {}).name || '';
       toast(esc(v ? L2(`${w}'s rooms will alert `, `Los cuartos de ${w} avisarán a `) + ((BD.inspectors.find(x => x.id === v) || {}).name || '') : L2(`${w}'s rooms alert any supervisor`, `Los cuartos de ${w} avisan a cualquier supervisora`)), 'new'); })
